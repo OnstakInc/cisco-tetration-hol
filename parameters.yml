@@ -1,0 +1,13 @@
+---
+aws_access_key: ""
+aws_secret_key: ""
+aws_region: "us-east-2"
+availability_zone: "a"
+
+student_count: 1
+student_prefix: "cisco_student"
+global_stack_name: "cisco-hol-lab-global"
+
+aws_vpc_id: "vpc-07e7ba44fadc5c271"
+aws_subnet_range: "172.40.0.0/16"
+email_address: raheel.anwar@onstak.com
