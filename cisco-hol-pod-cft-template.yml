@@ -144,6 +144,9 @@ Parameters:
   GuacamoleImageID:
     Type: String
     Description: Please enter Image Id for Guacamole
+  EKSWorkerImageID:
+    Type: String
+    Description: Please enter Image Id for EKS Worker Node
 
 Resources:
 
@@ -295,6 +298,8 @@ Resources:
           Value: !Sub "${Region}"
         - Key: AppSDLC
           Value: Lab
+        - Key: !Sub "kubernetes.io/cluster/${StudentName}-eks-cluster-${Region}"
+          Value: 'owned'
   
   CiscoHOLPrivateSecurityGroup:
     Type: AWS::EC2::SecurityGroup
@@ -361,6 +366,8 @@ Resources:
           Value: !Sub "${Region}"
         - Key: AppSDLC
           Value: Lab
+        - Key: !Sub "kubernetes.io/cluster/${StudentName}-eks-cluster-${Region}"
+          Value: 'owned'
 
   # Provision EC2 Instances
   # ASAv Firewall Server
@@ -900,23 +907,6 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "cisco-hol-${StudentName}-ec2-attacker-${Region}${Subnet02AvailabilityZone}"
-        - Key: Org
-          Value: Tetration
-        - Key: Geo
-          Value: US
-        - Key: Cloud
-          Value: AWS
-        - Key: Region
-          Value: !Sub "${Region}"
-        #- Key: AppSDLC
-        #  Value: Lab
-        #- Key: AppGroup
-        #  Value: Common
-        #- Key: AppName
-        #  Value: Ansible
-        #- Key: AppCluster
-        #  Value: Ansible
-        
       UserData:
         Fn::Base64: !Sub |
           !/bin/bash
@@ -1175,6 +1165,118 @@ Resources:
       Principal: events.amazonaws.com
       SourceArn: !Sub ${LambdaSchedule.Arn}
   
+  # Create IAM Role For EKS Cluster
+  EKSClusterInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - eks.amazonaws.com
+          Action:
+            - sts:AssumeRole
+      Path: "/"
+      RoleName: !Join [ "-", [ !Ref 'AWS::StackName', "EKS-Cluster-Role" ] ]
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+        - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
+        - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
+  
+  # Create IAM Role For EKS Worker Node
+  EKSWorkerInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      RoleName: !Join [ "-", [ !Ref 'AWS::StackName', "EKS-Worker-Role" ] ]
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+
+  # Attache IAM Role EKS Cluster
+  EKSClusterInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+      - !Ref EKSClusterInstanceRole
+    
+  # Attache IAM Role EKS Worker
+  EKSWorkerInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+      - !Ref EKSWorkerInstanceRole
+  
+  # Create EKS Cluster
+  EKSCluster:
+    Type: "AWS::EKS::Cluster"
+    Properties:
+      Name: !Sub "${StudentName}-eks-cluster-${Region}"
+      ResourcesVpcConfig:
+        SecurityGroupIds:
+          - !Ref CiscoHOLWebSecurityGroup
+          - !Ref CiscoHOLPublicSecurityGroup
+        SubnetIds:
+          - !Ref CiscoHOLSubnet01
+          - !Ref CiscoHOLSubnet02
+      RoleArn: !GetAtt EKSClusterInstanceRole.Arn
+  
+  # Node Launch Configuration
+  EKSWorkerNodeLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      AssociatePublicIpAddress: 'True'
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 20
+            VolumeType: gp2
+            DeleteOnTermination: true
+      IamInstanceProfile: !Ref EKSWorkerInstanceProfile
+      ImageId: !Ref EKSWorkerImageID
+      InstanceType: t2.medium
+      # KeyName: !Ref KeyName
+      SecurityGroups:
+        - !Ref CiscoHOLPublicSecurityGroup
+      UserData: !Base64
+        "Fn::Sub": |
+          #!/bin/bash
+          set -o xtrace
+          /etc/eks/bootstrap.sh --apiserver-endpoint '${EKSCluster.Endpoint}' --b64-cluster-ca '${EKSCluster.CertificateAuthorityData}' '${EKSCluster}'
+          /opt/aws/bin/cfn-signal --exit-code $? --stack  ${AWS::StackName} --resource NodeGroup --region ${AWS::Region}     
+  
+  # Node Provision
+  EKSWorkerNodeGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      DesiredCapacity: 1
+      LaunchConfigurationName: !Ref EKSWorkerNodeLaunchConfig
+      MinSize: 1
+      MaxSize: 2
+      VPCZoneIdentifier:
+        - !Ref CiscoHOLSubnet01
+      Tags:
+      - Key: Name
+        PropagateAtLaunch: "true"
+        Value: !Sub "${StudentName}-eks-worker-${Region}"
+      - Key: !Sub kubernetes.io/cluster/${StudentName}-eks-cluster-${Region}
+        Value: owned
+        PropagateAtLaunch: "true"
+
   # # VPC Flow Log Role
   # Role:
   #   Type: 'AWS::IAM::Role'
@@ -1220,6 +1322,20 @@ Outputs:
   CiscoHOLStudentPassword:
     Description: Student Account Password
     Value: !Ref StudentPassword
+
+  # EKS Cluster Outputs
+  EKSClusterName:
+    Description: EKS Cluster Name
+    Value: !Ref EKSCluster
+  EKSClusterEndpoint:
+    Description: EKS Cluster Endpoint
+    Value: !GetAtt EKSCluster.Endpoint
+  EKSClusterCertificate:
+    Description: EKS Cluster Endpoint
+    Value: !GetAtt EKSCluster.CertificateAuthorityData
+  EKSWorkerIAMRoleArn:
+    Description: EKS Worker Node IAM Role
+    Value: !GetAtt EKSWorkerInstanceRole.Arn
 
   CiscoHOLPublicSubnet01:
     Description: Public Subnet Cidr Block

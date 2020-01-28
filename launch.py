@@ -126,11 +126,6 @@ try:
 
     print(f'INFO: {STUDENTS_LIST}')
 
-    for s in STUDENTS_LIST:
-        print(s['public_subnet_01'])
-        print(s['public_subnet_02'])
-        print(s['private_subnet'])
-
 except:
     print(f'ERROR: Invalid Subnet! Please provide a valid subnet range...')
     exit(1)
@@ -248,7 +243,7 @@ for student in STUDENTS_LIST:
             {'ParameterKey': 'Win10DBAImageID', 'ParameterValue': params['dba_ami']},
             {'ParameterKey': 'AttackerImageID', 'ParameterValue': params['attack_server_ami']},
             {'ParameterKey': 'GuacamoleImageID', 'ParameterValue': params['guacamole_ami']},
-
+            {'ParameterKey': 'EKSWorkerImageID', 'ParameterValue': params['eks_worker_ami']}
         ]
 
         print('INFO:', aws_parameters)

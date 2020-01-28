@@ -26,3 +26,4 @@ user_ami: ami-0da00f363f93add92
 dba_ami: ami-08192725122d93c22
 attack_server_ami: ami-09b253f6574754048
 guacamole_ami: ami-04e70edcc169673d7
+eks_worker_ami: ami-00c0ebc8b70d7e97c
