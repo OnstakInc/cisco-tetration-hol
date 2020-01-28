@@ -13,90 +13,176 @@ Metadata:
         Label:
           default: "Network Configuration"
         Parameters:
-          - VpcId
-          - PublicRouteTableId
+          - VpcID
+          - InternetGatewayId
           - PrivateRouteTableId
-          - SubnetPrivateCidrBlock
-          - SubnetPrivateAvailabilityZone
-          - SubnetPublicCidrBlock
-          - SubnetPublicAvailabilityZone
-          - RegionParameter
+          - Subnet01CidrBlock
+          - Subnet01AvailabilityZone
+          - Subnet02CidrBlock
+          - Subnet02AvailabilityZone
+          - Subnet03CidrBlock
+          - Subnet03AvailabilityZone
+          - Region
+      -
+        Label:
+          default: "AMI ID's"
+        Parameters:
+          - ASAvImageID
+          - LDAPImageID
+          - MSSCImageID
+          - MSSQLImageID
+          - IISImageID
+          - MySQLImageID
+          - ApacheImageID
+          - AnsibleImageID
+          - TetrationDataIngestImageID
+          - TetrationEdgeImageID
+          - Win10UserImageID
+          - Win10DBAImageID
+          - AttackerImageID
+          - GuacamoleImageID 
     ParameterLabels:
       StudentName:
         default: "Your Name"
       StudentPassword:
         default: "Password"
-      VpcId:
+      VpcID:
         default: "VPC ID"
-      PublicRouteTableId:
-        default: "Public Route Table Id"
+      InternetGatewayId:
+        default: "Internet Gateway Id"
       PrivateRouteTableId:
         default: "Private Route Table Id"
-      SubnetPrivateCidrBlock:
+      Subnet01CidrBlock:
         default: "Subnet 1 Cidr Block"
-      SubnetPrivateAvailabilityZone:
+      Subnet01AvailabilityZone:
         default: "Subnet 1 Availability Zone"
-      SubnetPublicCidrBlock:
+      Subnet02CidrBlock:
         default: "Subnet 2 Cidr Block"
-      SubnetPublicAvailabilityZone:
+      Subnet02AvailabilityZone:
         default: "Subnet 2 Availability Zone"
-      RegionParameter:
+      Subnet03CidrBlock:
+        default: "Subnet 3 Cidr Block"
+      Subnet03AvailabilityZone:
+        default: "Subnet 3 Availability Zone"
+      Region:
         default: "Region of VPC"
 
 Parameters:
   StudentName:
     Type: String
-    Default: student123
-    Description: Please enter your name
+    Description: Please enter student name
   StudentPassword:
     NoEcho: True
     Type: String
-    Default: student123
-    Description: Please enter your password
-  VpcId:
+    Description: Please enter password
+  VpcID:
     Type: String
-    Default: vpc-07e7ba44fadc5c271
     Description: Please enter the VPC Id
-  PublicRouteTableId:
+  InternetGatewayId:
     Type: String
-    Default: rtb-0f02b9937c4201309
-    Description: Please enter the Public Route Table Id
-  PrivateRouteTableId:
+    Description: Please enter the Internet Gateway Id
+  Subnet01CidrBlock:
     Type: String
-    Default: rtb-0c2ae658709749f4c
-    Description: Please enter the Private Route Table Id
-  SubnetPrivateCidrBlock:
-    Type: String
-    Default: 172.40.1.0/24
     Description: Please enter the Cidr Block for 1st Subnet
-  SubnetPublicCidrBlock:
+  Subnet02CidrBlock:
     Type: String
-    Default: 172.40.2.0/24
     Description: Please enter the Cidr Block for 2nd Subnet
-  RegionParameter:
+  Subnet03CidrBlock:
     Type: String
-    Default: us-east-2
+    Description: Please enter the Cidr Block for 3rd Subnet
+  Region:
+    Type: String
     Description: Please enter the Region in which VPC is present
-  SubnetPrivateAvailabilityZone:
+  Subnet01AvailabilityZone:
     Type: String
-    Default: a
     Description: Please enter the AZ for 1st Subnet
-  SubnetPublicAvailabilityZone:
+  Subnet02AvailabilityZone:
     Type: String
-    Default: a
     Description: Please enter the AZ for 2nd Subnet
+  Subnet03AvailabilityZone:
+    Type: String
+    Description: Please enter the AZ for 3rd Subnet
+  ASAvImageID:
+    Type: String
+    Description: Please enter Image Id for ASAv
+  LDAPImageID:
+    Type: String
+    Description: Please enter Image Id for Active Directory
+  MSSCImageID:
+    Type: String
+    Description: Please enter Image Id for MS System Center
+  MSSQLImageID:
+    Type: String
+    Description: Please enter Image Id for MS Sql
+  IISImageID:
+    Type: String
+    Description: Please enter Image Id for IIS
+  MySQLImageID:
+    Type: String
+    Description: Please enter Image Id for MySql
+  ApacheImageID:
+    Type: String
+    Description: Please enter Image Id for Apache
+  AnsibleImageID:
+    Type: String
+    Description: Please enter Image Id for Ansible
+  TetrationDataIngestImageID:
+    Type: String
+    Description: Please enter Image Id for Tetration Data Ingest
+  TetrationEdgeImageID:
+    Type: String
+    Description: Please enter Image Id for Tetration Edge
+  Win10UserImageID:
+    Type: String
+    Description: Please enter Image Id for Win10 User
+  Win10DBAImageID:
+    Type: String
+    Description: Please enter Image Id for Win10 DBA
+  AttackerImageID:
+    Type: String
+    Description: Please enter Image Id for Mire-based Attacker
+  GuacamoleImageID:
+    Type: String
+    Description: Please enter Image Id for Guacamole
 
 Resources:
+
+  # Create Public Route Table
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VpcID
+      Tags:
+      - Key: Name
+        Value: !Sub "cisco-hol-${StudentName}-public-rt-${Region}"
+  
+  # Create Private Route Table  
+  PrivateRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VpcID
+      Tags:
+      - Key: Name
+        Value: !Sub "cisco-hol-${StudentName}-private-rt-${Region}"
+  
+  # Public Defalut Route 
+  PublicDefaultRoute: 
+   Type: AWS::EC2::Route
+   Properties:
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref InternetGatewayId
+      RouteTableId: !Ref PublicRouteTable
+    
   # Subnets
-  CiscoHOLSubnetPrivate:
+  CiscoHOLSubnet01:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId: !Ref VpcId
-      CidrBlock: !Ref SubnetPrivateCidrBlock
-      AvailabilityZone: !Sub "${RegionParameter}${SubnetPrivateAvailabilityZone}"
+      VpcId: !Ref VpcID
+      CidrBlock: !Ref Subnet01CidrBlock
+      AvailabilityZone: !Sub "${Region}${Subnet01AvailabilityZone}"
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-subnet-${RegionParameter}${SubnetPrivateAvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-public-subnet-01-${Region}${Subnet01AvailabilityZone}"
         - Key: Org
           Value: Tetration
         - Key: Geo
@@ -104,19 +190,19 @@ Resources:
         - Key: Cloud
           Value: AWS
         - Key: Region
-          Value: !Sub "${RegionParameter}"
+          Value: !Sub "${Region}"
         - Key: AppSDLC
           Value: Lab
 
-  CiscoHOLSubnetPublic:
+  CiscoHOLSubnet02:
     Type: AWS::EC2::Subnet
     Properties:
-      VpcId: !Ref VpcId
-      CidrBlock: !Ref SubnetPublicCidrBlock
-      AvailabilityZone: !Sub "${RegionParameter}${SubnetPublicAvailabilityZone}"
+      VpcId: !Ref VpcID
+      CidrBlock: !Ref Subnet02CidrBlock
+      AvailabilityZone: !Sub "${Region}${Subnet02AvailabilityZone}"
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-subnet-${RegionParameter}${SubnetPublicAvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-public-subnet-02-${Region}${Subnet02AvailabilityZone}"
         - Key: Org
           Value: Tetration
         - Key: Geo
@@ -124,35 +210,64 @@ Resources:
         - Key: Cloud
           Value: AWS
         - Key: Region
-          Value: !Sub "${RegionParameter}"
+          Value: !Sub "${Region}"
         - Key: AppSDLC
           Value: Lab
-  
+
+  CiscoHOLSubnet03:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref VpcID
+      CidrBlock: !Ref Subnet03CidrBlock
+      AvailabilityZone: !Sub "${Region}${Subnet03AvailabilityZone}"
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-private-subnet-${Region}${Subnet03AvailabilityZone}"
+        - Key: Org
+          Value: Tetration
+        - Key: Geo
+          Value: US
+        - Key: Cloud
+          Value: AWS
+        - Key: Region
+          Value: !Sub "${Region}"
+        - Key: AppSDLC
+          Value: Lab
 
   # Route Table Associations
   CiscoHOLRouteTableAssociation01:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties: 
-      RouteTableId: !Ref PublicRouteTableId
-      SubnetId: !Ref CiscoHOLSubnetPrivate
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref CiscoHOLSubnet01
       
   CiscoHOLRouteTableAssociation02:
     Type: AWS::EC2::SubnetRouteTableAssociation
     Properties: 
-      RouteTableId: !Ref PrivateRouteTableId
-      SubnetId: !Ref CiscoHOLSubnetPublic
+      RouteTableId: !Ref PublicRouteTable
+      SubnetId: !Ref CiscoHOLSubnet02
+
+  CiscoHOLRouteTableAssociation03:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties: 
+      RouteTableId: !Ref PrivateRouteTable
+      SubnetId: !Ref CiscoHOLSubnet03
       
   # Security Groups
   CiscoHOLPublicSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      VpcId: !Ref VpcId
+      VpcId: !Ref VpcID
       GroupDescription: !Sub "Cisco HOL Public Security Group For ${StudentName}"
       SecurityGroupIngress:
         - IpProtocol: -1
           FromPort: 0
           ToPort: 65535
-          CidrIp: !Ref SubnetPrivateCidrBlock
+          CidrIp: !Ref Subnet01CidrBlock
+        - IpProtocol: -1
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: !Ref Subnet02CidrBlock
         # TODO - For testing only will remove in final scripts
         - IpProtocol: tcp
           FromPort: 22
@@ -162,9 +277,14 @@ Resources:
           FromPort: 3389
           ToPort: 3389
           CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-sg-public-${RegionParameter}"
+          Value: !Sub "cisco-hol-${StudentName}-sg-public-${Region}"
         - Key: Org
           Value: Tetration
         - Key: Geo
@@ -172,20 +292,20 @@ Resources:
         - Key: Cloud
           Value: AWS
         - Key: Region
-          Value: !Sub "${RegionParameter}"
+          Value: !Sub "${Region}"
         - Key: AppSDLC
           Value: Lab
   
   CiscoHOLPrivateSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      VpcId: !Ref VpcId
+      VpcId: !Ref VpcID
       GroupDescription: !Sub "Cisco HOL Private Security Group For ${StudentName}"
       SecurityGroupIngress:
         - IpProtocol: -1
           FromPort: 0
           ToPort: 65535
-          CidrIp: !Ref SubnetPublicCidrBlock
+          CidrIp: !Ref Subnet03CidrBlock
         # TODO - For testing only will remove in final scripts
         - IpProtocol: tcp
           FromPort: 22
@@ -197,7 +317,7 @@ Resources:
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-sg-private-${RegionParameter}"
+          Value: !Sub "cisco-hol-${StudentName}-sg-private-${Region}"
         - Key: Org
           Value: Tetration
         - Key: Geo
@@ -205,14 +325,14 @@ Resources:
         - Key: Cloud
           Value: AWS
         - Key: Region
-          Value: !Sub "${RegionParameter}"
+          Value: !Sub "${Region}"
         - Key: AppSDLC
           Value: Lab
 
   CiscoHOLWebSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      VpcId: !Ref VpcId
+      VpcId: !Ref VpcID
       GroupDescription: !Sub "Cisco HOL Web Security Group For ${StudentName}"
       SecurityGroupIngress:
         - IpProtocol: tcp
@@ -223,9 +343,14 @@ Resources:
           FromPort: 443
           ToPort: 443
           CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-sg-web-${RegionParameter}"
+          Value: !Sub "cisco-hol-${StudentName}-sg-web-${Region}"
         - Key: Org
           Value: Tetration
         - Key: Geo
@@ -233,21 +358,20 @@ Resources:
         - Key: Cloud
           Value: AWS
         - Key: Region
-          Value: !Sub "${RegionParameter}"
+          Value: !Sub "${Region}"
         - Key: AppSDLC
           Value: Lab
 
   # Provision EC2 Instances
-
-  #ASAv Firewall Server
+  # ASAv Firewall Server
   CiscoHOLEC2ASAv:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-004a26afe2e6a0ab4 #Needs to be changed
+      ImageId: !Ref ASAvImageID
       InstanceType: c4.large
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-asav-${RegionParameter}${SubnetPrivateAvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-ec2-asav-${Region}${Subnet01AvailabilityZone}"
         - Key: Org
           Value: Tetration
         - Key: Geo
@@ -255,7 +379,7 @@ Resources:
         - Key: Cloud
           Value: AWS
         - Key: Region
-          Value: !Sub "${RegionParameter}"
+          Value: !Sub "${Region}"
        # - Key: AppSDLC
        #   Value: Lab
        # - Key: AppGroup
@@ -283,39 +407,39 @@ Resources:
       Properties:
         Tags:
         - Key: name
-          Value: networkinterface1-ASAv
-        Description: A nice description.
+          Value: !Sub "${StudentName}-nic01-asav"
+        Description: !Sub "${StudentName} ASAv Network Interface 01"
         SourceDestCheck: 'false'
         GroupSet:
         - !Ref CiscoHOLPrivateSecurityGroup
         - !Ref CiscoHOLWebSecurityGroup
-        SubnetId: !Ref CiscoHOLSubnetPublic
+        SubnetId: !Ref CiscoHOLSubnet03
         
   ASAvNetworkInterfaces02:
       Type: AWS::EC2::NetworkInterface
       Properties:
         Tags:
         - Key: name
-          Value: networkinterface2-ASAv
-        Description: A nice description.
+          Value: !Sub "${StudentName}-nic02-asav"
+        Description: !Sub "${StudentName} ASAv Network Interface 02"
         SourceDestCheck: 'false'
         GroupSet:
         - !Ref CiscoHOLPrivateSecurityGroup
         - !Ref CiscoHOLWebSecurityGroup
-        SubnetId: !Ref CiscoHOLSubnetPublic
+        SubnetId: !Ref CiscoHOLSubnet03
   
   ASAvNetworkInterfaces03:
       Type: AWS::EC2::NetworkInterface
       Properties:
         Tags:
         - Key: name
-          Value: networkinterface3-ASAv
-        Description: A nice description.
+          Value: !Sub "${StudentName}-nic03-asav"
+        Description: !Sub "${StudentName} ASAv Network Interface 03"
         SourceDestCheck: 'false'
         GroupSet:
         - !Ref CiscoHOLPublicSecurityGroup
         - !Ref CiscoHOLWebSecurityGroup
-        SubnetId: !Ref CiscoHOLSubnetPrivate
+        SubnetId: !Ref CiscoHOLSubnet01
 
   # Create Elastic IP Addresses
   CiscoHOLASAvEIP:
@@ -324,6 +448,8 @@ Resources:
   # Elastic IP Association  
   CiscoHOLAssociateEIPASAv:
     Type: AWS::EC2::EIPAssociation
+    DependsOn:
+      - CiscoHOLEC2ASAv
     Properties:
       AllocationId: !GetAtt CiscoHOLASAvEIP.AllocationId
       NetworkInterfaceId: !Ref ASAvNetworkInterfaces03
@@ -334,11 +460,11 @@ Resources:
       - CiscoHOLEC2ASAv
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-004a26afe2e6a0ab4
+      ImageId: !Ref LDAPImageID
       InstanceType: t2.small
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-active-directory-win-2019-${RegionParameter}${SubnetPrivateAvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-ec2-active-directory-win-2019-${Region}${Subnet01AvailabilityZone}"
         - Key: Org
           Value: Tetration
         - Key: Geo
@@ -346,7 +472,7 @@ Resources:
         - Key: Cloud
           Value: AWS
         - Key: Region
-          Value: !Sub "${RegionParameter}"
+          Value: !Sub "${Region}"
         - Key: AppSDLC
           Value: Lab
         - Key: AppGroup
@@ -366,7 +492,7 @@ Resources:
           DeviceIndex: "0"
           GroupSet:
             - !Ref CiscoHOLPublicSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnetPrivate
+          SubnetId: !Ref CiscoHOLSubnet01
   
   # MS Systems Center
   CiscoHOLEC2MSSystemCenter:
@@ -374,11 +500,11 @@ Resources:
       - CiscoHOLEC2ASAv
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-069c7f35980cae899
+      ImageId: !Ref MSSCImageID
       InstanceType: t2.micro
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-ms-system-center-${RegionParameter}${SubnetPrivateAvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-ec2-ms-system-center-${Region}${Subnet01AvailabilityZone}"
         - Key: Org
           Value: Tetration
         - Key: Geo
@@ -386,7 +512,7 @@ Resources:
         - Key: Cloud
           Value: AWS
         - Key: Region
-          Value: !Sub "${RegionParameter}"
+          Value: !Sub "${Region}"
         - Key: AppSDLC
           Value: Lab
         - Key: AppGroup
@@ -396,30 +522,30 @@ Resources:
         - Key: AppCluster
           Value: SCCM
         
-      #UserData:
-       # Fn::Base64: !Sub |
-        #  <powershell>
-         # ipconfig /flushdns
-         # </powershell>
+      UserData:
+       Fn::Base64: !Sub |
+         <powershell>
+         ipconfig /flushdns
+         </powershell>
       NetworkInterfaces:
         - AssociatePublicIpAddress: "false"
           DeviceIndex: "0"
           GroupSet:
             - !Ref CiscoHOLPublicSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnetPrivate
+          SubnetId: !Ref CiscoHOLSubnet01
 
-  # Windows App servers
+  # Windows App Server
   CiscoHOLEC2SQLServer:
     Type: AWS::EC2::Instance
     DependsOn:
       - CiscoHOLEC2ActiveDirectory
       - CiscoHOLEC2ASAv
     Properties:
-      ImageId: ami-006002ee65a3dcd21
+      ImageId: !Ref MSSQLImageID
       InstanceType: t2.small
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-sql-win-2019-${RegionParameter}${SubnetPrivateAvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-ec2-sql-win-2019-${Region}${Subnet01AvailabilityZone}"
         - Key: Org
           Value: Tetration
         - Key: Geo
@@ -427,7 +553,7 @@ Resources:
         - Key: Cloud
           Value: AWS
         - Key: Region
-          Value: !Sub "${RegionParameter}"
+          Value: !Sub "${Region}"
         - Key: AppSDLC
           Value: Lab
         - Key: AppGroup
@@ -449,19 +575,20 @@ Resources:
           DeviceIndex: "0"
           GroupSet:
             - !Ref CiscoHOLPublicSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnetPrivate
+          SubnetId: !Ref CiscoHOLSubnet01
   
+  # Windows IIS Server
   CiscoHOLEC2IIS:
     Type: AWS::EC2::Instance
     DependsOn:
       - CiscoHOLEC2SQLServer
       - CiscoHOLEC2ASAv
     Properties:
-      ImageId: ami-069c7f35980cae899
+      ImageId: !Ref IISImageID
       InstanceType: t2.small
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-iis-win-2019-${RegionParameter}${SubnetPrivateAvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-ec2-iis-win-2019-${Region}${Subnet01AvailabilityZone}"
         - Key: Org
           Value: Tetration
         - Key: Geo
@@ -469,7 +596,7 @@ Resources:
         - Key: Cloud
           Value: AWS
         - Key: Region
-          Value: !Sub "${RegionParameter}"
+          Value: !Sub "${Region}"
         - Key: AppSDLC
           Value: Lab
         - Key: AppGroup
@@ -493,19 +620,19 @@ Resources:
           GroupSet:
             - !Ref CiscoHOLPublicSecurityGroup
             - !Ref CiscoHOLWebSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnetPrivate
+          SubnetId: !Ref CiscoHOLSubnet01
 
-  # Linux App servers
+  # Linux DB Server
   CiscoHOLEC2MySQL:
     Type: AWS::EC2::Instance
     DependsOn:
       - CiscoHOLEC2ASAv
     Properties:
-      ImageId: ami-08f0e87dcc6c50d29
+      ImageId: !Ref MySQLImageID
       InstanceType: t2.micro
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-mysql-centos7-${RegionParameter}${SubnetPrivateAvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-ec2-mysql-centos7-${Region}${Subnet01AvailabilityZone}"
         - Key: Org
           Value: Tetration
         - Key: Geo
@@ -513,7 +640,7 @@ Resources:
         - Key: Cloud
           Value: AWS
         - Key: Region
-          Value: !Sub "${RegionParameter}"
+          Value: !Sub "${Region}"
         - Key: AppSDLC
           Value: Lab
         - Key: AppGroup
@@ -535,30 +662,20 @@ Resources:
           DeviceIndex: "0"
           GroupSet: 
             - !Ref CiscoHOLPublicSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnetPrivate
-
-  # Create Elastic IP Addresses
-  CiscoHOLApacheEIP:
-    Type: AWS::EC2::EIP
+          SubnetId: !Ref CiscoHOLSubnet01
   
-  # Elastic IP Association  
-  CiscoHOLAssociateEIPApache:
-    Type: AWS::EC2::EIPAssociation
-    Properties:
-      AllocationId: !GetAtt CiscoHOLApacheEIP.AllocationId
-      InstanceId: !Ref CiscoHOLEC2Apache
-  
+  # Linux App Server
   CiscoHOLEC2Apache:
     Type: AWS::EC2::Instance
     DependsOn:
       - CiscoHOLEC2MySQL
       - CiscoHOLEC2ASAv
     Properties:
-      ImageId: ami-032c129b472f40d23
+      ImageId: !Ref ApacheImageID
       InstanceType: t2.micro
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-apache-centos7-${RegionParameter}${SubnetPrivateAvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-ec2-apache-centos7-${Region}${Subnet01AvailabilityZone}"
         - Key: Org
           Value: Tetration
         - Key: Geo
@@ -566,7 +683,7 @@ Resources:
         - Key: Cloud
           Value: AWS
         - Key: Region
-          Value: !Sub "${RegionParameter}"
+          Value: !Sub "${Region}"
         - Key: AppSDLC
           Value: Lab
         - Key: AppGroup
@@ -584,8 +701,8 @@ Resources:
           rm -rf /var/www/html/admin/config.php
           cp /var/www/templates/config.php /var/www/html/config.php
           cp /var/www/templates/admin.config.php /var/www/html/admin/config.php
-          sed -i "s/{{app}}/${CiscoHOLApacheEIP}/g" /var/www/html/config.php
-          sed -i "s/{{app}}/${CiscoHOLApacheEIP}/g" /var/www/html/admin/config.php
+          sed -i "s/{{app}}/$ip_address/g" /var/www/html/config.php
+          sed -i "s/{{app}}/$ip_address/g" /var/www/html/admin/config.php
           sed -i "s/{{db}}/${CiscoHOLEC2MySQL.PrivateIp}/g" /var/www/html/config.php
           sed -i "s/{{db}}/${CiscoHOLEC2MySQL.PrivateIp}/g" /var/www/html/admin/config.php
           sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
@@ -598,19 +715,19 @@ Resources:
           GroupSet: 
             - !Ref CiscoHOLPublicSecurityGroup
             - !Ref CiscoHOLWebSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnetPrivate
+          SubnetId: !Ref CiscoHOLSubnet01
   
-  # Ansible server
+  # Ansible Server
   CiscoHOLEC2Ansible:
     Type: AWS::EC2::Instance
     DependsOn:
       - CiscoHOLEC2ASAv
     Properties:
-      ImageId: ami-04e0c559147d332d9
+      ImageId: !Ref AnsibleImageID
       InstanceType: t2.micro
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-ansible-centos7-${RegionParameter}${SubnetPrivateAvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-ec2-ansible-centos7-${Region}${Subnet01AvailabilityZone}"
         - Key: Org
           Value: Tetration
         - Key: Geo
@@ -618,7 +735,7 @@ Resources:
         - Key: Cloud
           Value: AWS
         - Key: Region
-          Value: !Sub "${RegionParameter}"
+          Value: !Sub "${Region}"
         - Key: AppSDLC
           Value: Lab
         - Key: AppGroup
@@ -631,6 +748,27 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
+          cat <<EOF > /opt/ansible-tetration-sensor/inventory/hosts
+          [linux]
+          ${CiscoHOLEC2Apache.PrivateIp}
+          ${CiscoHOLEC2MySQL.PrivateIp}
+          [linux:vars]
+          ansible_user=root
+          ansible_password=tet123\$\$!
+          ansible_sudo_pass=tet123\$\$!
+          [win]
+          ${CiscoHOLEC2IIS.PrivateIp}
+          ${CiscoHOLEC2SQLServer.PrivateIp}
+          ${CiscoHOLEC2ActiveDirectory.PrivateIp}
+          ${CiscoHOLEC2MSSystemCenter.PrivateIp}
+          [win:vars]
+          ansible_user=ciscolab@hol.local
+          ansible_password=tet123\$\$!
+          ansible_connection=winrm
+          ansible_winrm_transport=ntlm
+          ansible_winrm_server_cert_validation=ignore
+          validate_certs=false
+          EOF
           sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
           systemctl restart sshd
           echo "DNS1=${CiscoHOLEC2ActiveDirectory.PrivateIp}" | tee -a /etc/sysconfig/network-scripts/ifcfg-eth0
@@ -640,7 +778,7 @@ Resources:
           DeviceIndex: "0"
           GroupSet: 
             - !Ref CiscoHOLPublicSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnetPrivate
+          SubnetId: !Ref CiscoHOLSubnet01
     
   # Create Tetration Appliances
   CiscoHOLEC2TetData:
@@ -648,11 +786,11 @@ Resources:
     DependsOn:
       - CiscoHOLEC2ASAv
     Properties:
-      ImageId: ami-08f0e87dcc6c50d29
+      ImageId: !Ref TetrationDataIngestImageID
       InstanceType: t2.small
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-Tet-Data-centos7-${RegionParameter}${SubnetPrivateAvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-ec2-tet-data-centos7-${Region}${Subnet01AvailabilityZone}"
       NetworkInterfaces: 
         - NetworkInterfaceId: !Ref 'TetNetworkInterfaces01'
           DeviceIndex: '0'
@@ -666,36 +804,36 @@ Resources:
       Properties:
         Tags:
         - Key: name
-          Value: networkinterface1-Tet-Data
-        Description: A nice description.
+          Value: !Sub "${StudentName}-nic01-tet-data"
+        Description: !Sub "${StudentName} Tet Data Network Interface 01"
         SourceDestCheck: 'false'
         GroupSet:
         - !Ref CiscoHOLPublicSecurityGroup
-        SubnetId: !Ref CiscoHOLSubnetPrivate
+        SubnetId: !Ref CiscoHOLSubnet01
         
   TetNetworkInterfaces02:
       Type: AWS::EC2::NetworkInterface
       Properties:
         Tags:
         - Key: name
-          Value: networkinterface2-Tet-Data
-        Description: A nice description.
+          Value: !Sub "${StudentName}-nic02-tet-data"
+        Description: !Sub "${StudentName} Tet Data Network Interface 02"
         SourceDestCheck: 'false'
         GroupSet:
         - !Ref CiscoHOLPublicSecurityGroup
-        SubnetId: !Ref CiscoHOLSubnetPrivate
+        SubnetId: !Ref CiscoHOLSubnet01
   
   TetNetworkInterfaces03:
       Type: AWS::EC2::NetworkInterface
       Properties:
         Tags:
         - Key: name
-          Value: networkinterface3-Tet-Data
-        Description: A nice description.
+          Value: !Sub "${StudentName}-nic03-tet-data"
+        Description: !Sub "${StudentName} Tet Data Network Interface 03"
         SourceDestCheck: 'false'
         GroupSet:
         - !Ref CiscoHOLPublicSecurityGroup
-        SubnetId: !Ref CiscoHOLSubnetPrivate
+        SubnetId: !Ref CiscoHOLSubnet01
 
   # Create Tet Edge EC2
   CiscoHOLEC2TetEdge:
@@ -703,17 +841,17 @@ Resources:
     DependsOn:
       - CiscoHOLEC2ASAv
     Properties:
-      ImageId: ami-08f0e87dcc6c50d29
+      ImageId: !Ref TetrationEdgeImageID
       InstanceType: t2.micro
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-Tet-Edge-centos7-${RegionParameter}${SubnetPrivateAvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-ec2-tet-edge-centos7-${Region}${Subnet01AvailabilityZone}"
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "false"
           DeviceIndex: "0"
           GroupSet: 
             - !Ref CiscoHOLPublicSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnetPrivate
+          SubnetId: !Ref CiscoHOLSubnet01
   
   # Windows 10 user (AnyConnect, ASDM, Putty, CMD-Telnet, WinSCP)
   CiscoHOLEC2Win10eUser:
@@ -721,22 +859,17 @@ Resources:
     DependsOn:
       - CiscoHOLEC2ASAv
     Properties:
-      ImageId: ami-07c069355ab4cd817
-      InstanceType: t2.micro
+      ImageId: !Ref Win10UserImageID
+      InstanceType: t2.small
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-win10e-user-${RegionParameter}${SubnetPrivateAvailabilityZone}"
-      #UserData:
-       # Fn::Base64: !Sub |
-        #  <powershell>
-         # ipconfig /flushdns
-         # </powershell>
+          Value: !Sub "cisco-hol-${StudentName}-ec2-win10e-user-${Region}${Subnet02AvailabilityZone}"
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "false"
           DeviceIndex: "0"
           GroupSet: 
             - !Ref CiscoHOLPrivateSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnetPublic
+          SubnetId: !Ref CiscoHOLSubnet03
   
   # Windows 10 DBA (AnyConnect, ASDM, Putty, CMD-Telnet, WinSCP)
   CiscoHOLEC2Win10eDBA:
@@ -744,23 +877,59 @@ Resources:
     DependsOn:
       - CiscoHOLEC2ASAv
     Properties:
-      ImageId: ami-0385cc8d16e7f40da
-      InstanceType: t2.micro
+      ImageId: !Ref Win10DBAImageID
+      InstanceType: t2.small
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-win10e-dba-${RegionParameter}${SubnetPrivateAvailabilityZone}"
-      #UserData:
-       # Fn::Base64: !Sub |
-        #  <powershell>
-         # ipconfig /flushdns
-         # </powershell>
+          Value: !Sub "cisco-hol-${StudentName}-ec2-win10e-dba-${Region}${Subnet02AvailabilityZone}"
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "false"
           DeviceIndex: "0"
           GroupSet: 
             - !Ref CiscoHOLPrivateSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnetPublic
-
+          SubnetId: !Ref CiscoHOLSubnet03
+  
+  # Metasploit Attack Server
+  CiscoHOLEC2Attacker:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - CiscoHOLEC2ASAv
+    Properties:
+      ImageId: !Ref AttackerImageID
+      InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-ec2-attacker-${Region}${Subnet02AvailabilityZone}"
+        - Key: Org
+          Value: Tetration
+        - Key: Geo
+          Value: US
+        - Key: Cloud
+          Value: AWS
+        - Key: Region
+          Value: !Sub "${Region}"
+        #- Key: AppSDLC
+        #  Value: Lab
+        #- Key: AppGroup
+        #  Value: Common
+        #- Key: AppName
+        #  Value: Ansible
+        #- Key: AppCluster
+        #  Value: Ansible
+        
+      UserData:
+        Fn::Base64: !Sub |
+          !/bin/bash
+          sed -i "s/^PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
+          sed -i "s/^PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+          systemctl restart sshd
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "false"
+          DeviceIndex: "0"
+          GroupSet: 
+            - !Ref CiscoHOLPrivateSecurityGroup
+          SubnetId: !Ref CiscoHOLSubnet03
+          
   # Guacamole server
   CiscoHOLEC2Guacamole:
     Type: AWS::EC2::Instance
@@ -778,11 +947,11 @@ Resources:
       - CiscoHOLEC2Win10eDBA
       - CiscoHOLEC2ASAv
     Properties:
-      ImageId: ami-083682d65d7f1d854
+      ImageId: !Ref GuacamoleImageID
       InstanceType: t2.small
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-guacamole-centos7-${RegionParameter}${SubnetPrivateAvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-ec2-guacamole-centos7-${Region}${Subnet01AvailabilityZone}"
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
@@ -796,7 +965,7 @@ Resources:
                       <param name="hostname">${CiscoHOLEC2IIS.PrivateIp}</param>
                       <param name="port">3389</param>
                       <param name="username">ciscolab</param>
-                      <param name="password">tet123$$!</param>
+                      <param name="password">tet123\$\$!</param>
                       <param name="domain">hol.local</param>
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
@@ -806,7 +975,7 @@ Resources:
                       <param name="hostname">${CiscoHOLEC2SQLServer.PrivateIp}</param>
                       <param name="port">3389</param>
                       <param name="username">ciscolab</param>
-                      <param name="password">tet123$$!</param>
+                      <param name="password">tet123\$\$!</param>
                       <param name="domain">hol.local</param>
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
@@ -816,7 +985,7 @@ Resources:
                       <param name="hostname">${CiscoHOLEC2Apache.PrivateIp}</param>
                       <param name="port">22</param>
                       <param name="username">ciscolab</param>
-                      <param name="password">tet123$$!</param>
+                      <param name="password">tet123\$\$!</param>
                       <param name="font-name">terminus</param>
                   </connection>
                   <connection name="04) Linux CentOS7 App - OpenCart eCommerce - MySQL DB Server">
@@ -824,7 +993,7 @@ Resources:
                       <param name="hostname">${CiscoHOLEC2MySQL.PrivateIp}</param>
                       <param name="port">22</param>
                       <param name="username">ciscolab</param>
-                      <param name="password">tet123$$!</param>
+                      <param name="password">tet123\$\$!</param>
                       <param name="font-name">terminus</param>
                   </connection>
                   <connection name="05) Kubernetes Container App - SockShop eCommerce - Master/Worker node">
@@ -832,7 +1001,7 @@ Resources:
                       <param name="hostname">54.198.78.33</param>
                       <param name="port">22</param>
                       <param name="username">ciscolab</param>
-                      <param name="password">tet123$$!</param>
+                      <param name="password">tet123\$\$!</param>
                       <param name="font-name">terminus</param>
                   </connection>	
                   <connection name="06) End Users - Windows10 - General Employee">
@@ -840,7 +1009,7 @@ Resources:
                       <param name="hostname">${CiscoHOLEC2Win10eUser.PrivateIp}</param>
                       <param name="port">3389</param>
                       <param name="username">ciscolab</param>
-                      <param name="password">tet123$$!</param>
+                      <param name="password">tet123\$\$!</param>
                       <param name="domain">hol.local</param>
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
@@ -850,7 +1019,7 @@ Resources:
                       <param name="hostname">${CiscoHOLEC2Win10eDBA.PrivateIp}</param>
                       <param name="port">3389</param>
                       <param name="username">ciscolab</param>
-                      <param name="password">tet123$$!</param>
+                      <param name="password">tet123\$\$!</param>
                       <param name="domain">hol.local</param>
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
@@ -860,7 +1029,7 @@ Resources:
                       <param name="hostname">${CiscoHOLEC2Ansible.PrivateIp}</param>
                       <param name="port">22</param>
                       <param name="username">ciscolab</param>
-                      <param name="password">tet123$$!</param>
+                      <param name="password">tet123\$\$!</param>
                       <param name="font-name">terminus</param>
                       <param name="enable-sftp">true</param>
                   </connection>	
@@ -869,7 +1038,7 @@ Resources:
                       <param name="hostname">${CiscoHOLEC2ActiveDirectory.PrivateIp}</param>
                       <param name="port">3389</param>
                       <param name="username">ciscolab</param>
-                      <param name="password">tet123$$!</param>
+                      <param name="password">tet123\$\$!</param>
                       <param name="domain">hol.local</param>
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
@@ -879,17 +1048,17 @@ Resources:
                       <param name="hostname">${CiscoHOLEC2MSSystemCenter.PrivateIp}</param>
                       <param name="port">3389</param>
                       <param name="username">ciscolab</param>
-                      <param name="password">tet123$$!</param>
+                      <param name="password">tet123\$\$!</param>
                       <param name="domain">hol.local</param>
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
                   </connection>
                   <connection name="11) Attack Host - KaliLinux - Metasploit">
-                      <protocol>vnc</protocol>
-                      <param name="hostname">10.0.1.161</param>
-                      <param name="port">5901</param>
+                      <protocol>ssh</protocol>
+                      <param name="hostname">${CiscoHOLEC2Attacker.PrivateIp}</param>
+                      <param name="port">22</param>
                       <param name="username">ciscolab</param>
-                      <param name="password">tet123$$!</param>
+                      <param name="password">tet123\$\$!</param>
                       <param name="font-name">terminus</param>
                       <param name="enable-sftp">true</param>
                   </connection>	
@@ -898,7 +1067,7 @@ Resources:
                       <param name="hostname">${CiscoHOLEC2TetEdge.PrivateIp}</param>
                       <param name="port">22</param>
                       <param name="username">ciscolab</param>
-                      <param name="password">tet123$$!</param>
+                      <param name="password">tet123\$\$!</param>
                       <param name="font-name">terminus</param>
                       <param name="enable-sftp">true</param>
                   </connection>
@@ -907,7 +1076,7 @@ Resources:
                       <param name="hostname">${CiscoHOLEC2TetData.PrivateIp}</param>
                       <param name="port">22</param>
                       <param name="username">ciscolab</param>
-                      <param name="password">tet123$$!</param>
+                      <param name="password">tet123\$\$!</param>
                       <param name="font-name">terminus</param>
                       <param name="enable-sftp">true</param>
                   </connection>
@@ -920,28 +1089,35 @@ Resources:
           systemctl restart network
           systemctl restart tomcat
       NetworkInterfaces: 
-        - NetworkInterfaceId: !Ref GuacamoleNetworkInterfaces01
-          DeviceIndex: '0'
         - NetworkInterfaceId: !Ref GuacamoleNetworkInterfaces02
+          DeviceIndex: '0'
+        - NetworkInterfaceId: !Ref GuacamoleNetworkInterfaces01
           DeviceIndex: '1'
   
   GuacamoleNetworkInterfaces01:
     Type: AWS::EC2::NetworkInterface
     Properties:
+      Tags:
+      - Key: name
+        Value: !Sub "${StudentName}-nic01-guacamole"
+      Description: !Sub "${StudentName} Guacamole Network Interface 01"
       SourceDestCheck: 'false'
       GroupSet: 
       - !Ref CiscoHOLPublicSecurityGroup
       - !Ref CiscoHOLWebSecurityGroup
-      SubnetId: !Ref CiscoHOLSubnetPublic
+      SubnetId: !Ref CiscoHOLSubnet01
 
   GuacamoleNetworkInterfaces02:
     Type: AWS::EC2::NetworkInterface
-    Properties: 
+    Properties:
+      Tags:
+      - Key: name
+        Value: !Sub "${StudentName}-nic02-guacamole"
+      Description: !Sub "${StudentName} Guacamole Network Interface 02"
       SourceDestCheck: 'false'
       GroupSet: 
-      - !Ref CiscoHOLPublicSecurityGroup
-      - !Ref CiscoHOLWebSecurityGroup
-      SubnetId: !Ref CiscoHOLSubnetPrivate
+      - !Ref CiscoHOLPrivateSecurityGroup
+      SubnetId: !Ref CiscoHOLSubnet03
 
   # Create Elastic IP Addresses
   CiscoHOLGuacamoleEIP:
@@ -952,22 +1128,18 @@ Resources:
     Type: AWS::EC2::EIPAssociation
     Properties:
       AllocationId: !GetAtt CiscoHOLGuacamoleEIP.AllocationId
-      NetworkInterfaceId: !Ref GuacamoleNetworkInterfaces02
+      NetworkInterfaceId: !Ref GuacamoleNetworkInterfaces01
   
-  # Lambda Function for Hello World !
+  # Lambda Load Generator
   LambdaFunction:
     Type: AWS::Lambda::Function
     Properties:
-      Description: "Lambda function that returns Hello World ! "
+      Description: "Cisco HOL Load Generator Lambda"
       Code:
-        ZipFile: |
-          from __future__ import print_function
-          def lambda_handler(event, context):
-            print('Hello World!')
-            return 'Hello World!'
+        ZipFile: ./files/load_generator.zip
       Handler: index.lambda_handler
       Role: !Sub ${LambdaExecutionRole.Arn}
-      Runtime: python3.6
+      Runtime: nodejs12.x
 
   # Lambda Function Basic Execution Role
   LambdaExecutionRole:
@@ -985,11 +1157,10 @@ Resources:
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
     
-
   LambdaSchedule:
     Type: AWS::Events::Rule
     Properties:
-      Description: "A schedule for the Lambda Function"
+      Description: "Cisco HOL Load Generator Lambda Event"
       ScheduleExpression: rate(1 minute)
       State: ENABLED
       Targets:
@@ -1004,52 +1175,102 @@ Resources:
       Principal: events.amazonaws.com
       SourceArn: !Sub ${LambdaSchedule.Arn}
   
-  # VPC Flow Log Role
-  Role:
-    Type: 'AWS::IAM::Role'
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-        - Effect: Allow
-          Principal:
-            Service: 'vpc-flow-logs.amazonaws.com'
-          Action: 'sts:AssumeRole'
-      Policies:
-      - PolicyName: 'flowlogs-policy'
-        PolicyDocument:
-          Version: '2012-10-17'
-          Statement:
-          - Effect: Allow
-            Action:
-            - 'logs:CreateLogGroup'
-            - 'logs:CreateLogStream'
-            - 'logs:PutLogEvents'
-            - 'logs:DescribeLogGroups'
-            - 'logs:DescribeLogStreams'
-            - 'logs:CreateLogDelivery'
-            - 'logs:DeleteLogDelivery'
-            Resource: '*'
-     
-  # FlowLog
-  MyFlowLog:
-    Type: AWS::EC2::FlowLog
-    Properties:
-      LogDestinationType: s3
-      LogDestination: arn:aws:s3:::cisco-hol-vpc-flow-log
-      ResourceId: !Ref VpcId
-      ResourceType: VPC
-      TrafficType: ALL
+  # # VPC Flow Log Role
+  # Role:
+  #   Type: 'AWS::IAM::Role'
+  #   Properties:
+  #     AssumeRolePolicyDocument:
+  #       Version: '2012-10-17'
+  #       Statement:
+  #       - Effect: Allow
+  #         Principal:
+  #           Service: 'vpc-flow-logs.amazonaws.com'
+  #         Action: 'sts:AssumeRole'
+  #     Policies:
+  #     - PolicyName: 'flowlogs-policy'
+  #       PolicyDocument:
+  #         Version: '2012-10-17'
+  #         Statement:
+  #         - Effect: Allow
+  #           Action:
+  #           - 'logs:CreateLogGroup'
+  #           - 'logs:CreateLogStream'
+  #           - 'logs:PutLogEvents'
+  #           - 'logs:DescribeLogGroups'
+  #           - 'logs:DescribeLogStreams'
+  #           - 'logs:CreateLogDelivery'
+  #           - 'logs:DeleteLogDelivery'
+  #           Resource: '*'
+
+  # # FlowLog
+  # MyFlowLog:
+  #   Type: AWS::EC2::FlowLog
+  #   Properties:
+  #     LogDestinationType: s3
+  #     LogDestination: arn:aws:s3:::cisco-hol-vpc-flow-log
+  #     ResourceId: !Ref VpcID
+  #     ResourceType: VPC
+  #     TrafficType: ALL
 
 Outputs:
-  CiscoHOLPublicSubnet:
-    Description: Public Subnet Cidr Block
-    Value: !Ref SubnetPrivateCidrBlock
+  # General Outputs
+  CiscoHOLStudentName:
+    Description: Student Account Name
+    Value: !Ref StudentName
+  CiscoHOLStudentPassword:
+    Description: Student Account Password
+    Value: !Ref StudentPassword
 
+  CiscoHOLPublicSubnet01:
+    Description: Public Subnet Cidr Block
+    Value: !Ref Subnet01CidrBlock
+  CiscoHOLPublicSubnet02:
+    Description: Public Subnet Cidr Block
+    Value: !Ref Subnet02CidrBlock
   CiscoHOLPrivateSubnet:
     Description: Public Subnet Cidr Block
-    Value: !Ref SubnetPublicCidrBlock
-
-  CiscoHOLEC2ASAv:
+    Value: !Ref Subnet03CidrBlock
+  
+  # EC2 Instances Outputs
+  CiscoHOLASAv:
     Description: ASAv Firewall Server Private IP
     Value: !GetAtt CiscoHOLEC2ASAv.PrivateIp
+  CiscoHOLActiveDirectory:
+    Description: Active Directory Server Private IP
+    Value: !GetAtt CiscoHOLEC2ActiveDirectory.PrivateIp
+  CiscoHOLMSSC:
+    Description: MS System Center Server Private IP
+    Value: !GetAtt CiscoHOLEC2MSSystemCenter.PrivateIp
+  CiscoHOLMSSQL:
+    Description: MS SQL Server Private IP
+    Value: !GetAtt CiscoHOLEC2SQLServer.PrivateIp
+  CiscoHOLIIS:
+    Description: IIS Server Private IP
+    Value: !GetAtt CiscoHOLEC2IIS.PrivateIp
+  CiscoHOLMySql:
+    Description: MySQL Server Private IP
+    Value: !GetAtt CiscoHOLEC2MySQL.PrivateIp
+  CiscoHOLApache:
+    Description: Apache Server Private IP
+    Value: !GetAtt CiscoHOLEC2Apache.PrivateIp
+  CiscoHOLAnsible:
+    Description: Ansible Server Private IP
+    Value: !GetAtt CiscoHOLEC2Ansible.PrivateIp
+  CiscoHOLTetrationData:
+    Description: Tetration Data Ingest Server Private IP
+    Value: !GetAtt CiscoHOLEC2TetData.PrivateIp
+  CiscoHOLTetrationEdge:
+    Description: Tetration Edge Server Private IP
+    Value: !GetAtt CiscoHOLEC2TetEdge.PrivateIp
+  CiscoHOLWin10User:
+    Description: Windows 10 User Server Private IP
+    Value: !GetAtt CiscoHOLEC2Win10eUser.PrivateIp
+  CiscoHOLWin10DBA:
+    Description: Windows 10 DBA Server Private IP
+    Value: !GetAtt CiscoHOLEC2Win10eDBA.PrivateIp
+  CiscoHOLAttacker:
+    Description: Mire-based Attacker Server Private IP
+    Value: !GetAtt CiscoHOLEC2Attacker.PrivateIp
+  CiscoHOLGuacamole:  
+    Description: Guacamole Server Private IP
+    Value: !GetAtt CiscoHOLEC2Guacamole.PrivateIp

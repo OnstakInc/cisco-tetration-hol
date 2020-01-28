@@ -4,23 +4,27 @@ import ipaddress
 import string
 import random
 import time
+import re
+import collections
 
 PARAMETERS_FILE = './parameters.yml'
 CFT_POD_FILE = './cisco-hol-pod-cft-template.yml'
-CFT_GLOBAL_FILE = './cisco-hol-global-cft-template.yml'
+# CFT_GLOBAL_FILE = './cisco-hol-global-cft-template.yml'
 
-params = yaml.load(open(PARAMETERS_FILE))
+params = yaml.load(open(PARAMETERS_FILE), Loader=yaml.Loader)
+
 
 ACCESS_KEY = params['aws_access_key']
 SECRET_KEY = params['aws_secret_key']
 REGION = params['aws_region']
-ZONE = params['availability_zone']
-VPC_ID = params['aws_vpc_id']
-SUBNET_RANGE = params['aws_subnet_range']
+VPC_ID = params['vpc_id']
+INTERNET_GATEWAY_ID = params['internet_gateway_id']
+SUBNET_RANGE_PRIMARY = params['subnet_range_primary']
+SUBNET_RANGE_SECONDARY = params['subnet_range_secondary']
 STUDENT_COUNT = params['student_count']
 STUDENT_PREFIX = params['student_prefix']
 EMAIL_ADDRESS = params['email_address']
-GLOBAL_STACK_NAME = params['global_stack_name']
+# GLOBAL_STACK_NAME = params['global_stack_name']
 PUBLIC_ROUTE_TABLE = ''
 PRIVATE_ROUTE_TABLE = ''
 
@@ -31,6 +35,7 @@ session = boto3.Session(
     region_name=REGION
 )
 
+STACKS_LIST = []
 STUDENTS_LIST = []
 
 
@@ -58,6 +63,7 @@ except:
 print(f'INFO: Checking Existing Subnets...')
 filters = [{'Name':'vpcId', 'Values':[VPC_ID]}]
 
+ec2 = session.resource('ec2')
 subnets_count = len(list(ec2.subnets.filter(Filters=filters)))
 
 if subnets_count > 0:
@@ -72,12 +78,20 @@ print(f'INFO: Subnet Check Completed...')
 #######################################################################
 try:
     print(f'INFO: Validating Subnet Range...')
-    ips = list(ipaddress.ip_network(SUBNET_RANGE).hosts())
+    primary_ips = list(ipaddress.ip_network(SUBNET_RANGE_PRIMARY).hosts())
+    secondary_ips = list(ipaddress.ip_network(SUBNET_RANGE_SECONDARY).hosts())
 
-    print(f'INFO: {len(ips)} IP Addresses Are Available...')
+    primary_ips = list(set(list(map(lambda ip: str(re.sub(r'([0-9]+)$', '0', str(ip))), primary_ips))))
+    secondary_ips = list(set(list(map(lambda ip: str(re.sub(r'([0-9]+)$', '0', str(ip))), secondary_ips))))
 
-    if len(ips) < (STUDENT_COUNT * 2):
-        print(f'ERROR: Number Of Required IP Addresses Are {STUDENT_COUNT * 2} But Only {len(ips)} Are Available...')
+    print(f'INFO: {len(primary_ips)} Subnets Are Available...')
+
+    if len(primary_ips) < (STUDENT_COUNT * 2):
+        print(f'ERROR: Number Of Required Primary Subnets Are {STUDENT_COUNT * 2} But Only {len(primary_ips)} Are Available...')
+        exit(1)
+    
+    if len(secondary_ips) < STUDENT_COUNT:
+        print(f'ERROR: Number Of Required Secondary Subnets Are {STUDENT_COUNT} But Only {len(secondary_ips)} Are Available...')
         exit(1)
 
 except:
@@ -92,20 +106,30 @@ print(f'INFO: Subnet Range Validation Completed...')
 #######################################################################
 try:
     print(f'INFO: Creating Student Accounts Collection...')
-    ips = list(ipaddress.ip_network(SUBNET_RANGE).hosts())
+    primary_ips = list(ipaddress.ip_network(SUBNET_RANGE_PRIMARY).hosts())
+    secondary_ips = list(ipaddress.ip_network(SUBNET_RANGE_SECONDARY).hosts())
 
-    private_subnet = ips[:len(ips)//2]
-    public_subnet = ips[len(ips)//2:]
+    primary_ips = list(collections.OrderedDict.fromkeys(list(map(lambda ip: str(re.sub(r'([0-9]+)$', '0', str(ip))), primary_ips))))
+    secondary_ips = list(collections.OrderedDict.fromkeys(list(map(lambda ip: str(re.sub(r'([0-9]+)$', '0', str(ip))), secondary_ips))))
+
+    public_subnet_01 = primary_ips[:len(primary_ips)//2]
+    public_subnet_02 = primary_ips[len(primary_ips)//2:]
 
     for i in range(STUDENT_COUNT):
         STUDENTS_LIST.append({
-            'account_name': f'{STUDENT_PREFIX}_0{i}',
+            'account_name': f'{STUDENT_PREFIX}-0{i}',
             'account_password': password_generator(),
-            'public_subnet': f'{public_subnet[i]}/24',
-            'private_subnet': f'{private_subnet[i]}/24'
+            'public_subnet_01': f'{public_subnet_01[i]}/24',
+            'public_subnet_02': f'{public_subnet_02[i]}/24',
+            'private_subnet': f'{secondary_ips[i]}/24'
         })
-    
+
     print(f'INFO: {STUDENTS_LIST}')
+
+    for s in STUDENTS_LIST:
+        print(s['public_subnet_01'])
+        print(s['public_subnet_02'])
+        print(s['private_subnet'])
 
 except:
     print(f'ERROR: Invalid Subnet! Please provide a valid subnet range...')
@@ -117,73 +141,73 @@ print(f'INFO: Student Accounts Collection Created...')
 #######################################################################
 # Run Global Cloud Formation ##########################################
 #######################################################################
-try:
-    print(f'INFO: Initialize Global CloudFormation...')
+# try:
+#     print(f'INFO: Initialize Global CloudFormation...')
 
-    cloudformation = session.client('cloudformation')
-    cloudformation_template = open(CFT_GLOBAL_FILE, 'r').read()
+#     cloudformation = session.client('cloudformation')
+#     cloudformation_template = open(CFT_GLOBAL_FILE, 'r').read()
 
-    aws_parameters = [
-        {'ParameterKey': 'VpcIdParameter', 'ParameterValue': VPC_ID},
-        {'ParameterKey': 'RegionParameter', 'ParameterValue': REGION}
-    ]
+#     aws_parameters = [
+#         {'ParameterKey': 'VpcIdParameter', 'ParameterValue': VPC_ID},
+#         {'ParameterKey': 'RegionParameter', 'ParameterValue': REGION}
+#     ]
 
-    print(aws_parameters)
+#     print(aws_parameters)
 
-    result = cloudformation.create_stack(
-        StackName=GLOBAL_STACK_NAME,
-        TemplateBody=cloudformation_template,
-        Parameters=aws_parameters,
-        Capabilities=[
-            'CAPABILITY_IAM', 'CAPABILITY_NAMED_IAM',
-        ]
-    )
+#     result = cloudformation.create_stack(
+#         StackName=GLOBAL_STACK_NAME,
+#         TemplateBody=cloudformation_template,
+#         Parameters=aws_parameters,
+#         Capabilities=[
+#             'CAPABILITY_IAM', 'CAPABILITY_NAMED_IAM',
+#         ]
+#     )
 
-    print(f'INFO: Gobal Stack Creation In Progress...')
+#     print(f'INFO: Gobal Stack Creation In Progress...')
 
-except Exception as e:
-    print(e)
-    exit(1)
+# except Exception as e:
+#     print(e)
+#     exit(1)
 #######################################################################
 
 
 #######################################################################
 # Wait For Global Stack Creation ######################################
 #######################################################################
-is_completed = False
-while not is_completed:
+# is_completed = False
+# while not is_completed:
 
-    try:
+#     try:
 
-        cloudformation = session.client('cloudformation')
+#         cloudformation = session.client('cloudformation')
 
-        status = cloudformation.describe_stacks(
-            StackName=GLOBAL_STACK_NAME
-        )
+#         status = cloudformation.describe_stacks(
+#             StackName=GLOBAL_STACK_NAME
+#         )
 
-        if status['Stacks'][0]['StackStatus'] == 'CREATE_COMPLETE':
+#         if status['Stacks'][0]['StackStatus'] == 'CREATE_COMPLETE':
 
-            public_rt = next(filter(lambda x: x['OutputKey'] == 'PublicRouteTable', status['Stacks'][0]['Outputs']), None)
-            private_rt = next(filter(lambda x: x['OutputKey'] == 'PrivateRouteTable', status['Stacks'][0]['Outputs']), None)
+#             public_rt = next(filter(lambda x: x['OutputKey'] == 'PublicRouteTable', status['Stacks'][0]['Outputs']), None)
+#             private_rt = next(filter(lambda x: x['OutputKey'] == 'PrivateRouteTable', status['Stacks'][0]['Outputs']), None)
             
-            # Set Global Route Table Ids
-            PUBLIC_ROUTE_TABLE = public_rt['OutputValue']
-            PRIVATE_ROUTE_TABLE = private_rt['OutputValue']
+#             # Set Global Route Table Ids
+#             PUBLIC_ROUTE_TABLE = public_rt['OutputValue']
+#             PRIVATE_ROUTE_TABLE = private_rt['OutputValue']
 
-            is_completed = True
-            break
+#             is_completed = True
+#             break
 
-        if status['Stacks'][0]['StackStatus'] == 'ROLLBACK_IN_PROGRESS' or  status['Stacks'][0]['StackStatus'] == 'ROLLBACK_COMPLETE':
-            print(f'INFO: Stack Failed: {GLOBAL_STACK_NAME}')
-            exit(1)
+#         if status['Stacks'][0]['StackStatus'] == 'ROLLBACK_IN_PROGRESS' or  status['Stacks'][0]['StackStatus'] == 'ROLLBACK_COMPLETE':
+#             print(f'INFO: Stack Failed: {GLOBAL_STACK_NAME}')
+#             exit(1)
 
-        print(f"INFO: StackName: {GLOBAL_STACK_NAME}, Status: {status['Stacks'][0]['StackStatus']}")
+#         print(f"INFO: StackName: {GLOBAL_STACK_NAME}, Status: {status['Stacks'][0]['StackStatus']}")
 
-        time.sleep(10)
+#         time.sleep(10)
 
-    except Exception as e:
-        print(e)
-        exit(1)
+#     except Exception as e:
+#         print(e)
+#         exit(1)
 #######################################################################
 
 
@@ -200,17 +224,34 @@ for student in STUDENTS_LIST:
         aws_parameters = [
             {'ParameterKey': 'StudentName', 'ParameterValue': student['account_name']},
             {'ParameterKey': 'StudentPassword', 'ParameterValue': student['account_password']},
-            {'ParameterKey': 'VpcId', 'ParameterValue': VPC_ID},
-            {'ParameterKey': 'PublicRouteTableId', 'ParameterValue': PUBLIC_ROUTE_TABLE},
-            {'ParameterKey': 'PrivateRouteTableId', 'ParameterValue': PRIVATE_ROUTE_TABLE},
-            {'ParameterKey': 'SubnetPrivateCidrBlock', 'ParameterValue': student['private_subnet']},
-            {'ParameterKey': 'SubnetPublicCidrBlock', 'ParameterValue': student['public_subnet']},
+            {'ParameterKey': 'VpcID', 'ParameterValue': VPC_ID},
+            {'ParameterKey': 'InternetGatewayId', 'ParameterValue': INTERNET_GATEWAY_ID},
+            {'ParameterKey': 'Subnet01CidrBlock', 'ParameterValue': student['public_subnet_01']},
+            {'ParameterKey': 'Subnet02CidrBlock', 'ParameterValue': student['public_subnet_02']},
+            {'ParameterKey': 'Subnet03CidrBlock', 'ParameterValue': student['private_subnet']},
             {'ParameterKey': 'Region', 'ParameterValue': REGION},
-            {'ParameterKey': 'SubnetPrivateAvailabilityZone', 'ParameterValue': ZONE},
-            {'ParameterKey': 'SubnetPublicAvailabilityZone', 'ParameterValue': ZONE}
+            {'ParameterKey': 'Subnet01AvailabilityZone', 'ParameterValue': 'a'},
+            {'ParameterKey': 'Subnet02AvailabilityZone', 'ParameterValue': 'b'},
+            {'ParameterKey': 'Subnet03AvailabilityZone', 'ParameterValue': 'a'},
+
+            {'ParameterKey': 'ASAvImageID', 'ParameterValue': params['asav_ami']},
+            {'ParameterKey': 'LDAPImageID', 'ParameterValue': params['ldap_ami']},
+            {'ParameterKey': 'MSSCImageID', 'ParameterValue': params['mssc_ami']},
+            {'ParameterKey': 'MSSQLImageID', 'ParameterValue': params['mssql_ami']},
+            {'ParameterKey': 'IISImageID', 'ParameterValue': params['iis_ami']},
+            {'ParameterKey': 'MySQLImageID', 'ParameterValue': params['mysql_ami']},
+            {'ParameterKey': 'ApacheImageID', 'ParameterValue': params['apache_ami']},
+            {'ParameterKey': 'AnsibleImageID', 'ParameterValue': params['ansible_ami']},
+            {'ParameterKey': 'TetrationDataIngestImageID', 'ParameterValue': params['tet_data_ami']},
+            {'ParameterKey': 'TetrationEdgeImageID', 'ParameterValue': params['tet_edge_ami']},
+            {'ParameterKey': 'Win10UserImageID', 'ParameterValue': params['user_ami']},
+            {'ParameterKey': 'Win10DBAImageID', 'ParameterValue': params['dba_ami']},
+            {'ParameterKey': 'AttackerImageID', 'ParameterValue': params['attack_server_ami']},
+            {'ParameterKey': 'GuacamoleImageID', 'ParameterValue': params['guacamole_ami']},
+
         ]
 
-        print(aws_parameters)
+        print('INFO:', aws_parameters)
 
         result = cloudformation.create_stack(
             StackName=student['account_name'],
@@ -221,7 +262,52 @@ for student in STUDENTS_LIST:
             ]
         )
 
+        STACKS_LIST.append(student['account_name'])
+
     except Exception as e:
         print(e)
         exit(1)
 #######################################################################
+
+#######################################################################
+# Wait For Stack Creation #############################################
+#######################################################################
+completed_stacks = []
+while True:
+
+    try:
+
+        for stack_name in STACKS_LIST:
+
+            if stack_name in completed_stacks:
+                continue
+
+            cloudformation = session.client('cloudformation')
+
+            status = cloudformation.describe_stacks(
+                StackName=stack_name
+            )
+
+            if status['Stacks'][0]['StackStatus'] == 'CREATE_COMPLETE':
+                completed_stacks.append(stack_name)
+
+            if status['Stacks'][0]['StackStatus'] == 'ROLLBACK_IN_PROGRESS' or  status['Stacks'][0]['StackStatus'] == 'ROLLBACK_COMPLETE':
+                print(f"ERROR: Stack Failed => {stack_name}")
+                print('ERROR: Unable To Complete CloudFormation Deployment.')
+                exit(1)
+
+            print(f"INFO: StackName: {stack_name}, Status: {status['Stacks'][0]['StackStatus']}")
+
+        if len(STACKS_LIST) == len(completed_stacks):
+            print('INFO: CloudFormation Completed Successfully...')
+            break
+
+        time.sleep(10)
+
+    except Exception as e:
+        print(e)
+        exit(1)
+#######################################################################
+
+print('Exiting! All The Tasks Are Completed Successfully...')
+exit(0)
