@@ -10,7 +10,7 @@ metadata:
     EKSAppSDLC: Lab
     EKSAppGroup: Commerce
     EKSAppName: carts-db
-    EKSAppCluster: DB
+    eksappcluster: DB
   namespace: sock-shop
 spec:
   replicas: 1
