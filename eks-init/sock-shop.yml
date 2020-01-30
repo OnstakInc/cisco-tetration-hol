@@ -4,13 +4,6 @@ metadata:
   name: carts-db
   labels:
     name: carts-db
-    EKSOrg: Tetration
-    EKSGeo: US
-    EKSCloud: AWS
-    EKSAppSDLC: Lab
-    EKSAppGroup: Commerce
-    EKSAppName: carts-db
-    eksappcluster: DB
   namespace: sock-shop
 spec:
   replicas: 1
@@ -18,7 +11,14 @@ spec:
     metadata:
       labels:
         name: carts-db
-        eksappcluster: DB
+        AppCluster: DB
+        Org: Tetration
+        Geo: US
+        Cloud: AWS
+        AppSDLC: Lab
+        AppGroup: Commerce
+        AppName: Sock-Shop
+        AppCluster: DB
     spec:
       containers:
       - name: carts-db
