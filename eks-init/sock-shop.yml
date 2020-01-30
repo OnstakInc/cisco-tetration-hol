@@ -11,14 +11,14 @@ spec:
     metadata:
       labels:
         name: carts-db
-        AppCluster: DB
         Org: Tetration
         Geo: US
         Cloud: AWS
+        Region: us-east-1
         AppSDLC: Lab
         AppGroup: Commerce
         AppName: Sock-Shop
-        AppCluster: DB
+        AppCluster: carts-db
     spec:
       containers:
       - name: carts-db
@@ -66,13 +66,6 @@ metadata:
   name: carts
   labels:
     name: carts
-    Org: Tetration
-    Geo: US
-    Cloud: AWS
-    AppSDLC: Lab
-    AppGroup: Commerce
-    AppName: carts
-    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -80,6 +73,14 @@ spec:
     metadata:
       labels:
         name: carts
+        Org: Tetration
+        Geo: US
+        Cloud: AWS
+        Region: us-east-1
+        AppSDLC: Lab
+        AppGroup: Commerce
+        AppName: Sock-Shop
+        AppCluster: carts
     spec:
       containers:
       - name: carts
@@ -131,13 +132,6 @@ metadata:
   name: catalogue-db
   labels:
     name: catalogue-db
-    Org: Tetration
-    Geo: US
-    Cloud: AWS
-    AppSDLC: Lab
-    AppGroup: Commerce
-    AppName: catalogue-db
-    AppCluster: DB
   namespace: sock-shop
 spec:
   replicas: 1
@@ -145,6 +139,14 @@ spec:
     metadata:
       labels:
         name: catalogue-db
+        Org: Tetration
+        Geo: US
+        Cloud: AWS
+        Region: us-east-1
+        AppSDLC: Lab
+        AppGroup: Commerce
+        AppName: Sock-Shop
+        AppCluster: catalogue-db
     spec:
       containers:
       - name: catalogue-db
@@ -181,13 +183,6 @@ metadata:
   name: catalogue
   labels:
     name: catalogue
-    Org: Tetration
-    Geo: US
-    Cloud: AWS
-    AppSDLC: Lab
-    AppGroup: Commerce
-    AppName: catalogue
-    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -195,6 +190,14 @@ spec:
     metadata:
       labels:
         name: catalogue
+        Org: Tetration
+        Geo: US
+        Cloud: AWS
+        Region: us-east-1
+        AppSDLC: Lab
+        AppGroup: Commerce
+        AppName: Sock-Shop
+        AppCluster: catalogue
     spec:
       containers:
       - name: catalogue
@@ -234,13 +237,6 @@ metadata:
   name: front-end
   labels:
     name: front-end
-    Org: Tetration
-    Geo: US
-    Cloud: AWS
-    AppSDLC: Lab
-    AppGroup: Commerce
-    AppName: front-end
-    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -248,6 +244,14 @@ spec:
     metadata:
       labels:
         name: front-end
+        Org: Tetration
+        Geo: US
+        Cloud: AWS
+        Region: us-east-1
+        AppSDLC: Lab
+        AppGroup: Commerce
+        AppName: Sock-Shop
+        AppCluster: front-end
     spec:
       containers:
       - name: front-end
@@ -290,13 +294,6 @@ metadata:
   name: orders-db
   labels:
     name: orders-db
-    Org: Tetration
-    Geo: US
-    Cloud: AWS
-    AppSDLC: Lab
-    AppGroup: Commerce
-    AppName: orders-db
-    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -304,6 +301,14 @@ spec:
     metadata:
       labels:
         name: orders-db
+        Org: Tetration
+        Geo: US
+        Cloud: AWS
+        Region: us-east-1
+        AppSDLC: Lab
+        AppGroup: Commerce
+        AppName: Sock-Shop
+        AppCluster: orders-db
     spec:
       containers:
       - name: orders-db
@@ -352,13 +357,6 @@ metadata:
   name: orders
   labels:
     name: orders
-    Org: Tetration
-    Geo: US
-    Cloud: AWS
-    AppSDLC: Lab
-    AppGroup: Commerce
-    AppName: orders
-    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -366,6 +364,14 @@ spec:
     metadata:
       labels:
         name: orders
+        Org: Tetration
+        Geo: US
+        Cloud: AWS
+        Region: us-east-1
+        AppSDLC: Lab
+        AppGroup: Commerce
+        AppName: Sock-Shop
+        AppCluster: orders
     spec:
       containers:
       - name: orders
@@ -417,13 +423,6 @@ metadata:
   name: payment
   labels:
     name: payment
-    Org: Tetration
-    Geo: US
-    Cloud: AWS
-    AppSDLC: Lab
-    AppGroup: Commerce
-    AppName: payment
-    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -431,6 +430,14 @@ spec:
     metadata:
       labels:
         name: payment
+        Org: Tetration
+        Geo: US
+        Cloud: AWS
+        Region: us-east-1
+        AppSDLC: Lab
+        AppGroup: Commerce
+        AppName: Sock-Shop
+        AppCluster: payment
     spec:
       containers:
       - name: payment
@@ -477,6 +484,14 @@ spec:
     metadata:
       labels:
         name: queue-master
+        Org: Tetration
+        Geo: US
+        Cloud: AWS
+        Region: us-east-1
+        AppSDLC: Lab
+        AppGroup: Commerce
+        AppName: Sock-Shop
+        AppCluster: queue-master
     spec:
       containers:
       - name: queue-master
@@ -516,6 +531,14 @@ spec:
     metadata:
       labels:
         name: rabbitmq
+        Org: Tetration
+        Geo: US
+        Cloud: AWS
+        Region: us-east-1
+        AppSDLC: Lab
+        AppGroup: Commerce
+        AppName: Sock-Shop
+        AppCluster: rabbitmq
     spec:
       containers:
       - name: rabbitmq
@@ -556,13 +579,6 @@ metadata:
   name: shipping
   labels:
     name: shipping
-    Org: Tetration
-    Geo: US
-    Cloud: AWS
-    AppSDLC: Lab
-    AppGroup: Commerce
-    AppName: shipping
-    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -570,6 +586,14 @@ spec:
     metadata:
       labels:
         name: shipping
+        Org: Tetration
+        Geo: US
+        Cloud: AWS
+        Region: us-east-1
+        AppSDLC: Lab
+        AppGroup: Commerce
+        AppName: Sock-Shop
+        AppCluster: shipping
     spec:
       containers:
       - name: shipping
@@ -621,13 +645,6 @@ metadata:
   name: user-db
   labels:
     name: user-db
-    Org: Tetration
-    Geo: US
-    Cloud: AWS
-    AppSDLC: Lab
-    AppGroup: Commerce
-    AppName: user-db
-    AppCluster: DB
   namespace: sock-shop
 spec:
   replicas: 1
@@ -635,6 +652,14 @@ spec:
     metadata:
       labels:
         name: user-db
+        Org: Tetration
+        Geo: US
+        Cloud: AWS
+        Region: us-east-1
+        AppSDLC: Lab
+        AppGroup: Commerce
+        AppName: Sock-Shop
+        AppCluster: user-db
     spec:
       containers:
       - name: user-db
@@ -682,13 +707,6 @@ metadata:
   name: user
   labels:
     name: user
-    Org: Tetration
-    Geo: US
-    Cloud: AWS
-    AppSDLC: Lab
-    AppGroup: Commerce
-    AppName: user
-    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -696,6 +714,14 @@ spec:
     metadata:
       labels:
         name: user
+        Org: Tetration
+        Geo: US
+        Cloud: AWS
+        Region: us-east-1
+        AppSDLC: Lab
+        AppGroup: Commerce
+        AppName: Sock-Shop
+        AppCluster: user
     spec:
       containers:
       - name: user
