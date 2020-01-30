@@ -4,6 +4,13 @@ metadata:
   name: carts-db
   labels:
     name: carts-db
+    Org: Tetration
+    Geo: US
+    Cloud: AWS
+    AppSDLC: Lab
+    AppGroup: Commerce
+    AppName: carts-db
+    AppCluster: DB
   namespace: sock-shop
 spec:
   replicas: 1
@@ -58,6 +65,13 @@ metadata:
   name: carts
   labels:
     name: carts
+    Org: Tetration
+    Geo: US
+    Cloud: AWS
+    AppSDLC: Lab
+    AppGroup: Commerce
+    AppName: carts
+    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -116,6 +130,13 @@ metadata:
   name: catalogue-db
   labels:
     name: catalogue-db
+    Org: Tetration
+    Geo: US
+    Cloud: AWS
+    AppSDLC: Lab
+    AppGroup: Commerce
+    AppName: catalogue-db
+    AppCluster: DB
   namespace: sock-shop
 spec:
   replicas: 1
@@ -159,6 +180,13 @@ metadata:
   name: catalogue
   labels:
     name: catalogue
+    Org: Tetration
+    Geo: US
+    Cloud: AWS
+    AppSDLC: Lab
+    AppGroup: Commerce
+    AppName: catalogue
+    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -203,6 +231,15 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: front-end
+  labels:
+    name: front-end
+    Org: Tetration
+    Geo: US
+    Cloud: AWS
+    AppSDLC: Lab
+    AppGroup: Commerce
+    AppName: front-end
+    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -252,6 +289,13 @@ metadata:
   name: orders-db
   labels:
     name: orders-db
+    Org: Tetration
+    Geo: US
+    Cloud: AWS
+    AppSDLC: Lab
+    AppGroup: Commerce
+    AppName: orders-db
+    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -291,6 +335,7 @@ metadata:
   name: orders-db
   labels:
     name: orders-db
+    
   namespace: sock-shop
 spec:
   ports:
@@ -306,6 +351,13 @@ metadata:
   name: orders
   labels:
     name: orders
+    Org: Tetration
+    Geo: US
+    Cloud: AWS
+    AppSDLC: Lab
+    AppGroup: Commerce
+    AppName: orders
+    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -364,6 +416,13 @@ metadata:
   name: payment
   labels:
     name: payment
+    Org: Tetration
+    Geo: US
+    Cloud: AWS
+    AppSDLC: Lab
+    AppGroup: Commerce
+    AppName: payment
+    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -496,6 +555,13 @@ metadata:
   name: shipping
   labels:
     name: shipping
+    Org: Tetration
+    Geo: US
+    Cloud: AWS
+    AppSDLC: Lab
+    AppGroup: Commerce
+    AppName: shipping
+    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
@@ -554,6 +620,13 @@ metadata:
   name: user-db
   labels:
     name: user-db
+    Org: Tetration
+    Geo: US
+    Cloud: AWS
+    AppSDLC: Lab
+    AppGroup: Commerce
+    AppName: user-db
+    AppCluster: DB
   namespace: sock-shop
 spec:
   replicas: 1
@@ -608,6 +681,13 @@ metadata:
   name: user
   labels:
     name: user
+    Org: Tetration
+    Geo: US
+    Cloud: AWS
+    AppSDLC: Lab
+    AppGroup: Commerce
+    AppName: user
+    AppCluster: App
   namespace: sock-shop
 spec:
   replicas: 1
