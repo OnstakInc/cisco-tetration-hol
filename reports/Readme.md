@@ -1,1 +1,0 @@
-All the AWS CloudFormation reports will be generated in this directory

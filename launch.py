@@ -7,6 +7,7 @@ import time
 import re
 import collections
 import csv
+import os
 from datetime import datetime
 
 PARAMETERS_FILE = './parameters.yml'
@@ -16,8 +17,15 @@ CFT_POD_FILE = './cisco-hol-pod-cft-template.yml'
 params = yaml.load(open(PARAMETERS_FILE), Loader=yaml.Loader)
 
 
-ACCESS_KEY = params['aws_access_key']
-SECRET_KEY = params['aws_secret_key']
+ACCESS_KEY = os.environ['AWS_ACCESS_KEY_ID']
+SECRET_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+
+if ACCESS_KEY == None or ACCESS_KEY == '':
+    ACCESS_KEY = params['aws_access_key']
+
+if SECRET_KEY == None or SECRET_KEY == '':
+    SECRET_KEY = params['aws_secret_key']
+
 REGION = params['aws_region']
 VPC_ID = params['vpc_id']
 INTERNET_GATEWAY_ID = params['internet_gateway_id']
@@ -61,16 +69,16 @@ except:
 #######################################################################
 # Check Existing Subnets ##############################################
 #######################################################################
-# print(f'INFO: Checking Existing Subnets...')
-# filters = [{'Name':'vpcId', 'Values':[VPC_ID]}]
+print(f'INFO: Checking Existing Subnets...')
+filters = [{'Name':'vpcId', 'Values':[VPC_ID]}]
 
-# ec2 = session.resource('ec2')
-# subnets_count = len(list(ec2.subnets.filter(Filters=filters)))
+ec2 = session.resource('ec2')
+subnets_count = len(list(ec2.subnets.filter(Filters=filters)))
 
-# if subnets_count > 0:
-#     print(f'ERROR: {subnets_count} Subnets Found In Current VPC...')
-#     exit(1)
-# print(f'INFO: Subnet Check Completed...')
+if subnets_count > 0:
+    print(f'ERROR: {subnets_count} Subnets Found In Current VPC...')
+    exit(1)
+print(f'INFO: Subnet Check Completed...')
 #######################################################################
 
 
@@ -257,14 +265,14 @@ for student in STUDENTS_LIST:
 
         print('INFO:', aws_parameters)
 
-        # result = cloudformation.create_stack(
-        #     StackName=student['account_name'],
-        #     TemplateBody=cloudformation_template,
-        #     Parameters=aws_parameters,
-        #     Capabilities=[
-        #         'CAPABILITY_IAM', 'CAPABILITY_NAMED_IAM',
-        #     ]
-        # )
+        result = cloudformation.create_stack(
+            StackName=student['account_name'],
+            TemplateBody=cloudformation_template,
+            Parameters=aws_parameters,
+            Capabilities=[
+                'CAPABILITY_IAM', 'CAPABILITY_NAMED_IAM',
+            ]
+        )
 
         STACKS_LIST.append(student['account_name'])
 
@@ -378,6 +386,9 @@ try:
     ]
 
     filename = 'reports/' + datetime.today().strftime('%H-%M-%S %Y-%m-%d') + '-report.csv'
+
+    if not os.path.exists('reports'):
+        os.makedirs('reports')
 
     with open(filename, 'w', newline='') as file:
         writer = csv.writer(file)
