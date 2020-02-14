@@ -6,6 +6,8 @@ import random
 import time
 import re
 import collections
+import csv
+from datetime import datetime
 
 PARAMETERS_FILE = './parameters.yml'
 CFT_POD_FILE = './cisco-hol-pod-cft-template.yml'
@@ -23,15 +25,14 @@ SUBNET_RANGE_PRIMARY = params['subnet_range_primary']
 SUBNET_RANGE_SECONDARY = params['subnet_range_secondary']
 STUDENT_COUNT = params['student_count']
 STUDENT_PREFIX = params['student_prefix']
-EMAIL_ADDRESS = params['email_address']
+# EMAIL_ADDRESS = params['email_address']
 # GLOBAL_STACK_NAME = params['global_stack_name']
-PUBLIC_ROUTE_TABLE = ''
-PRIVATE_ROUTE_TABLE = ''
+# PUBLIC_ROUTE_TABLE = ''
+# PRIVATE_ROUTE_TABLE = ''
 
-# TODO - Uncomment In Final Release
 session = boto3.Session(
-    # aws_access_key_id=ACCESS_KEY,
-    # aws_secret_access_key=SECRET_KEY,
+    aws_access_key_id=ACCESS_KEY,
+    aws_secret_access_key=SECRET_KEY,
     region_name=REGION
 )
 
@@ -60,16 +61,16 @@ except:
 #######################################################################
 # Check Existing Subnets ##############################################
 #######################################################################
-print(f'INFO: Checking Existing Subnets...')
-filters = [{'Name':'vpcId', 'Values':[VPC_ID]}]
+# print(f'INFO: Checking Existing Subnets...')
+# filters = [{'Name':'vpcId', 'Values':[VPC_ID]}]
 
-ec2 = session.resource('ec2')
-subnets_count = len(list(ec2.subnets.filter(Filters=filters)))
+# ec2 = session.resource('ec2')
+# subnets_count = len(list(ec2.subnets.filter(Filters=filters)))
 
-if subnets_count > 0:
-    print(f'ERROR: {subnets_count} Subnets Found In Current VPC...')
-    exit(1)
-print(f'INFO: Subnet Check Completed...')
+# if subnets_count > 0:
+#     print(f'ERROR: {subnets_count} Subnets Found In Current VPC...')
+#     exit(1)
+# print(f'INFO: Subnet Check Completed...')
 #######################################################################
 
 
@@ -119,9 +120,9 @@ try:
         STUDENTS_LIST.append({
             'account_name': f'{STUDENT_PREFIX}-0{i}',
             'account_password': password_generator(),
-            'public_subnet_01': f'{public_subnet_01[i]}/24',
-            'public_subnet_02': f'{public_subnet_02[i]}/24',
-            'private_subnet': f'{secondary_ips[i]}/24'
+            'public_subnet_01': f'{public_subnet_01[i]}',
+            'public_subnet_02': f'{public_subnet_02[i]}',
+            'private_subnet': f'{secondary_ips[i]}'
         })
 
     print(f'INFO: {STUDENTS_LIST}')
@@ -217,13 +218,21 @@ for student in STUDENTS_LIST:
         cloudformation_template = open(CFT_POD_FILE, 'r').read()
 
         aws_parameters = [
+            {'ParameterKey': 'AccessKey', 'ParameterValue': ACCESS_KEY},
+            {'ParameterKey': 'SecretKey', 'ParameterValue': SECRET_KEY},
+
+            {'ParameterKey': 'StudentIndex', 'ParameterValue': str(STUDENTS_LIST.index(student))},
             {'ParameterKey': 'StudentName', 'ParameterValue': student['account_name']},
             {'ParameterKey': 'StudentPassword', 'ParameterValue': student['account_password']},
             {'ParameterKey': 'VpcID', 'ParameterValue': VPC_ID},
             {'ParameterKey': 'InternetGatewayId', 'ParameterValue': INTERNET_GATEWAY_ID},
-            {'ParameterKey': 'Subnet01CidrBlock', 'ParameterValue': student['public_subnet_01']},
-            {'ParameterKey': 'Subnet02CidrBlock', 'ParameterValue': student['public_subnet_02']},
-            {'ParameterKey': 'Subnet03CidrBlock', 'ParameterValue': student['private_subnet']},
+            {'ParameterKey': 'Subnet01CidrBlock', 'ParameterValue': f"{student['public_subnet_01']}/24"},
+            {'ParameterKey': 'Subnet02CidrBlock', 'ParameterValue': f"{student['public_subnet_02']}/24"},
+            {'ParameterKey': 'Subnet03CidrBlock', 'ParameterValue': f"{student['private_subnet']}/24"},
+
+            {'ParameterKey': 'ASAvInsideSubnet', 'ParameterValue': student['public_subnet_01']},
+            {'ParameterKey': 'ASAvOutsideSubnet', 'ParameterValue': student['private_subnet']},
+
             {'ParameterKey': 'Region', 'ParameterValue': REGION},
             {'ParameterKey': 'Subnet01AvailabilityZone', 'ParameterValue': 'a'},
             {'ParameterKey': 'Subnet02AvailabilityZone', 'ParameterValue': 'b'},
@@ -248,14 +257,14 @@ for student in STUDENTS_LIST:
 
         print('INFO:', aws_parameters)
 
-        result = cloudformation.create_stack(
-            StackName=student['account_name'],
-            TemplateBody=cloudformation_template,
-            Parameters=aws_parameters,
-            Capabilities=[
-                'CAPABILITY_IAM', 'CAPABILITY_NAMED_IAM',
-            ]
-        )
+        # result = cloudformation.create_stack(
+        #     StackName=student['account_name'],
+        #     TemplateBody=cloudformation_template,
+        #     Parameters=aws_parameters,
+        #     Capabilities=[
+        #         'CAPABILITY_IAM', 'CAPABILITY_NAMED_IAM',
+        #     ]
+        # )
 
         STACKS_LIST.append(student['account_name'])
 
@@ -303,6 +312,84 @@ while True:
         print(e)
         exit(1)
 #######################################################################
+
+
+#######################################################################
+# Generate CSV Reports ################################################
+#######################################################################
+
+try:
+
+    records = []
+
+    for stack_name in STACKS_LIST:
+
+        print(f"INFO: StackName: {stack_name}, Status: Generating CSV Report...")
+
+        cloudformation = session.client('cloudformation')
+
+        stack = cloudformation.describe_stacks(
+            StackName=stack_name
+        )
+
+        output = {}
+
+        for o in stack['Stacks'][0]['Outputs']:
+            output[o['OutputKey']] = o['OutputValue']
+
+        records.append([
+            output['CiscoHOLStudentName'],
+            output['CiscoHOLStudentPassword'],
+            f"https://{output['CiscoHOLGuacamolePublic']}",
+            output['CiscoHOLApachePrivate'],
+            output['CiscoHOLApachePublic'],
+            output['CiscoHOLIISPrivate'],
+            output['CiscoHOLIISPublic'],
+            output['CiscoHOLMySql'],
+            output['CiscoHOLMSSQL'],
+            output['EKSClusterEndpoint'],
+            output['CiscoHOLAnsible'],
+            output['CiscoHOLTetrationEdge'],
+            output['CiscoHOLTetrationData'],
+            output['CiscoHOLASAv'],
+            output['CiscoHOLAttacker'],
+            output['CiscoHOLWin10User'],
+            output['CiscoHOLWin10DBA'],
+        ])
+
+    header = [
+        'Account', 
+        'Password', 
+        'Web Console URL',
+        'Apache OpenCart',
+        'Apache OpenCart Public',
+        'IIS nopCommerce',
+        'IIS nopCommerce Public',
+        'MySQL',
+        'MSSQL',
+        'EKS',
+        'Ansible',
+        'Tetration Edge',
+        'Tetration Data',
+        'ASAv',
+        'Metasploit',
+        'Employee',
+        'SysAdmin'
+    ]
+
+    filename = 'reports/' + datetime.today().strftime('%H-%M-%S %Y-%m-%d') + '-report.csv'
+
+    with open(filename, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(header)
+        writer.writerows(records)
+
+except Exception as e:
+    print(e)
+    exit(1)
+
+#######################################################################
+
 
 print('Exiting! All The Tasks Are Completed Successfully...')
 exit(0)
