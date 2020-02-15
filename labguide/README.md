@@ -23,7 +23,7 @@
 [Module19: Enforcement - Common Policies](https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/)  
 [Module20: Enforcement - NopCommerce](https://onstakinc.github.io/cisco-tetration-hol/labguide/module20/)  
 [Module21: Enforcement - OpenCart](https://onstakinc.github.io/cisco-tetration-hol/labguide/module21/)  
-[Module22: Container Policies and Enforcement](https://onstakinc.github.io/cisco-tetration-hol/labguide/module22/)
+[Module22: Container Policies and Enforcement](https://onstakinc.github.io/cisco-tetration-hol/labguide/module22/)  
 [Module23: Forensics](https://onstakinc.github.io/cisco-tetration-hol/labguide/module23/)  
 [Module24: Tetration Edge - ISE](https://onstakinc.github.io/cisco-tetration-hol/labguide/module24/)  
 [Module25: User-Based Enforcement](https://onstakinc.github.io/cisco-tetration-hol/labguide/module25/)  
