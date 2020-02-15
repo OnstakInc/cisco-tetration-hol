@@ -1,5 +1,6 @@
 import os, glob
 from pathlib import Path
+from shutil import copy2
 
 module = Path(os.getcwd()).parent.name
 url_dict = {}
@@ -8,11 +9,12 @@ files = [file for file in glob.glob('*.png')]
 files.sort(key=os.path.getmtime)
 
 for i,file in enumerate(files):
-    new_fn = str(i) + '.png'
+    new_fn = f'{module}_' + str(i).zfill(3) + '.png'
     os.rename(file,new_fn)
     url_dict[i] = f'https://onstakinc.github.io/cisco-tetration-hol/labguide/{module}/images/{new_fn}'
 
 os.chdir('..')
+copy2('README.md', 'README.bak.md') 
 
 with open('README.md','w') as f:
     f.write('# Cisco Tetration - Hands-On Lab\n')

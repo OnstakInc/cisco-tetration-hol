@@ -1,6 +1,7 @@
 # Cisco Tetration - Hands-On Lab
   
 ## Table of Contents
+[Module00: Diagrams](https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/)  
 [Module01: Introduction](https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/)  
 [Module02: Collection Rules](https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/)  
 [Module03: Sensor Installation](https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/)  
