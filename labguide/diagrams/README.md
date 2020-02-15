@@ -2,5 +2,4 @@
   
 ## Diagrams
   
-Here is a live, interactive diagram. It can be useful to reference when working with this hands-on lab guide. 
-[Interactive Diagram](https://www.lucidchart.com/documents/view/425e1b97-194e-413a-b793-0df939a87501)
+[Here is a live, interactive diagram] (https://www.lucidchart.com/documents/view/425e1b97-194e-413a-b793-0df939a87501). It can be useful to reference when working with this hands-on lab guide. 
