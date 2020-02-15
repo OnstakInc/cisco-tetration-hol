@@ -26,6 +26,7 @@ with open('README.md','w') as f:
         f.write(f'![Alt Text]({url_dict[key]})  \n')
         f.write('  \n')
 
-
+    f.write('  \n')
+    f.write('![Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/]'
 
 
