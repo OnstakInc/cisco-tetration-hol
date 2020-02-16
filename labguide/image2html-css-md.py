@@ -28,7 +28,7 @@ with open('README.md','w') as f:
     f.write('  \n')
 
     for key in sorted(url_dict.keys()):
-        f.write(f'<img src="{url_dict[key]}" style="width:100%;height:100%;">  \n')
+        f.write(f'<a href="{url_dict[key]}"><img src="{url_dict[key]}" style="width:100%;height:100%;"></a>  \n')
         f.write('  \n')
 
     f.write('  \n')
