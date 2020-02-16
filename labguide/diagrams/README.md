@@ -61,16 +61,22 @@ This first image is the base diagram which references the environment that _each
 
 This is the flow that for a learner (that's you) accessing the lab environment. You will have been provided a unique URL and login for your TaaS instance, and will access it directly given that information (step 1 in this diagram). Step 2 in this diagram shows you accesing the lab guide documentation, which we will assume you have managed somehow since you are reading this on that documentation site, which is hosted with GitHub Pages. Step 3 on the diagram shows you accessing the three applications that you have unique to your lab environment. 
 
-In your lab are one of each of the following apps:
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_003.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_003.png" style="width:100%;height:100%;"></a>  
+  
+As you can see from the diagram above, your lab contains one of each of the following apps:
 
    1. Windows app - "nopCommerce" - consisting of: 
       *  Win19 IIS App server
       *  Win19 MS SQL DB server
-   2. Linux app - "OpenCart"
+   2. Linux app - "OpenCart" - consisting of: 
       *  CentOS 7 Apache App server
       *  CentOS 7 MySQL DB server
-   3. Microservices Container app on Kubernetes - "Sock Shop"
+   3. Microservices Container app on Kubernetes - "Sock Shop" - consisting of: 
       *  Front End service
+      *  Payment service
+      *  Shipping service
+      *  Queuemaster service
+      *  RabbitMQ service
       *  Orders service
          *  Orders App
          *  Orders DB
@@ -83,14 +89,6 @@ In your lab are one of each of the following apps:
       *  Carts service
          *  Carts App
          *  Carts DB
-      *  Payment service
-      *  Shipping service
-      *  Queuemaster service
-      *  RabbitMQ service
-
-
-<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_003.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_003.png" style="width:100%;height:100%;"></a>  
-  
 
 
 <div class="diagram" id="diagram-004"><a href="#diagram-004" style="font-weight:bold">Diagram 004</a></div>  
