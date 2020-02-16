@@ -4,21 +4,20 @@
   
 
 #### Module Steps  
-<a href="#step-000">###### Step 000</a>  
-<a href="#step-001">###### Step 001</a>  
-<a href="#step-002">###### Step 002</a>  
-<a href="#step-003">###### Step 003</a>  
-<a href="#step-004">###### Step 004</a>  
-<a href="#step-005">###### Step 005</a>  
-<a href="#step-006">###### Step 006</a>  
-<a href="#step-007">###### Step 007</a>  
-<a href="#step-008">###### Step 008</a>  
-<a href="#step-009">###### Step 009</a>  
-<a href="#step-010">###### Step 010</a>  
-<a href="#step-011">###### Step 011</a>  
-<a href="#step-012">###### Step 012</a>  
-<a href="#step-013">###### Step 013</a>  
-
+###### <a href="#step-000">Step 000</a>  
+###### <a href="#step-001">Step 001</a>  
+###### <a href="#step-002">Step 002</a>  
+###### <a href="#step-003">Step 003</a>  
+###### <a href="#step-004">Step 004</a>  
+###### <a href="#step-005">Step 005</a>  
+###### <a href="#step-006">Step 006</a>  
+###### <a href="#step-007">Step 007</a>  
+###### <a href="#step-008">Step 008</a>  
+###### <a href="#step-009">Step 009</a>  
+###### <a href="#step-010">Step 010</a>  
+###### <a href="#step-011">Step 011</a>  
+###### <a href="#step-012">Step 012</a>  
+###### <a href="#step-013">Step 013</a>  
 
 
 Throughout this lab guide you will find diagrams that can be helpful in visualizing the flow of information for a given topic. These diagrams will generally be included in the context of the task where they might add value. However, you may also wish to occasionally come back to this page to view all of the diagrams in one go. 

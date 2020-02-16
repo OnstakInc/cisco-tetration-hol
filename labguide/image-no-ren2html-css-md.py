@@ -33,7 +33,7 @@ with open('README.md','w') as f:
     f.write('  \n')
 
     for key in sorted(url_dict.keys()):
-        toc_steps_dict[i] = f.write(f'<a href="#step-{stepnum_dict[key]}">###### Step {stepnum_dict[key]}</a>')
+        toc_steps_dict[i] = f.write(f'###### <a href="#step-{stepnum_dict[key]}">Step {stepnum_dict[key]}</a>')
         f.write('  \n')
 
     f.write('\n\n')
