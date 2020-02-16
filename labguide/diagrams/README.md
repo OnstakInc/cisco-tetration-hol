@@ -2,7 +2,6 @@
   
 ## Diagrams
 
-
 Throughout this lab guide you will find diagrams that can be helpful in visualizing the flow of information for a given topic. These diagrams will generally be included in the context of the task where they might add value. However, you may also wish to occasionally come back to this page to view all of the diagrams in one go. 
 
 You may prefer to utilize [this interactive LucidChart diagram](https://www.lucidchart.com/documents/view/425e1b97-194e-413a-b793-0df939a87501){:target="_blank"} while working on various modules in this lab. Should you choose to use the interactive diagram, follow the instructions on right of the diagram to toggle on/off various "flows", as seen in this image:
