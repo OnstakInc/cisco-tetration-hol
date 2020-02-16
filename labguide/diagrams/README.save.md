@@ -20,6 +20,7 @@
 <a href="#diagram-013" style="font-weight:bold">Diagram 013</a>  
 
 
+
 ### Introduction to Lab Diagrams 
 
 Throughout this lab guide you will find diagrams that can be helpful in visualizing the flow of information for a given topic. These diagrams will generally be included in the context of the task where they might add value. However, you may also wish to occasionally come back to this page to view all of the diagrams in one go. 
@@ -46,41 +47,78 @@ As mentioned, here are are a collection of the diagram with each flow enabled, f
 
 This first image is the base diagram which references the environment that _each_ learner will have access to. Note that every item you see here is completely unique and independant for each and every learner. This includes Windows VMs, Linux VMs, Active Directory, Ansible, ASAv, Tetration appliances, Lambda, Kubernetes - all of it. Each learner will also have their own unique instance of TaaS (Tetration-as-a-Service), as well. 
 
-<div class="diagram" id="diagram-002"><a href="#diagram-002" style="font-weight:bold">Diagram 002</a></div><a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_002.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_002.png" style="width:100%;height:100%;"></a>  
+
+<div class="diagram" id="diagram-002"><a href="#diagram-002" style="font-weight:bold">Diagram 002</a></div>  
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_002.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_002.png" style="width:100%;height:100%;"></a>  
   
 
-<div class="diagram" id="diagram-003"><a href="#diagram-003" style="font-weight:bold">Diagram 003</a></div><a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_003.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_003.png" style="width:100%;height:100%;"></a>  
+
+<div class="diagram" id="diagram-003"><a href="#diagram-003" style="font-weight:bold">Diagram 003</a></div>  
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_003.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_003.png" style="width:100%;height:100%;"></a>  
   
 
-<div class="diagram" id="diagram-004"><a href="#diagram-004" style="font-weight:bold">Diagram 004</a></div><a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_004.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_004.png" style="width:100%;height:100%;"></a>  
+
+<div class="diagram" id="diagram-004"><a href="#diagram-004" style="font-weight:bold">Diagram 004</a></div>  
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_004.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_004.png" style="width:100%;height:100%;"></a>  
   
 
-<div class="diagram" id="diagram-005"><a href="#diagram-005" style="font-weight:bold">Diagram 005</a></div><a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_005.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_005.png" style="width:100%;height:100%;"></a>  
+
+<div class="diagram" id="diagram-005"><a href="#diagram-005" style="font-weight:bold">Diagram 005</a></div>  
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_005.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_005.png" style="width:100%;height:100%;"></a>  
   
 
-<div class="diagram" id="diagram-006"><a href="#diagram-006" style="font-weight:bold">Diagram 006</a></div><a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_006.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_006.png" style="width:100%;height:100%;"></a>  
+
+<div class="diagram" id="diagram-006"><a href="#diagram-006" style="font-weight:bold">Diagram 006</a></div>  
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_006.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_006.png" style="width:100%;height:100%;"></a>  
   
 
-<div class="diagram" id="diagram-007"><a href="#diagram-007" style="font-weight:bold">Diagram 007</a></div><a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_007.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_007.png" style="width:100%;height:100%;"></a>  
+
+<div class="diagram" id="diagram-007"><a href="#diagram-007" style="font-weight:bold">Diagram 007</a></div>  
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_007.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_007.png" style="width:100%;height:100%;"></a>  
   
 
-<div class="diagram" id="diagram-008"><a href="#diagram-008" style="font-weight:bold">Diagram 008</a></div><a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_008.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_008.png" style="width:100%;height:100%;"></a>  
+
+<div class="diagram" id="diagram-008"><a href="#diagram-008" style="font-weight:bold">Diagram 008</a></div>  
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_008.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_008.png" style="width:100%;height:100%;"></a>  
   
 
-<div class="diagram" id="diagram-009"><a href="#diagram-009" style="font-weight:bold">Diagram 009</a></div><a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_009.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_009.png" style="width:100%;height:100%;"></a>  
+
+<div class="diagram" id="diagram-009"><a href="#diagram-009" style="font-weight:bold">Diagram 009</a></div>  
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_009.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_009.png" style="width:100%;height:100%;"></a>  
   
 
-<div class="diagram" id="diagram-010"><a href="#diagram-010" style="font-weight:bold">Diagram 010</a></div><a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_010.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_010.png" style="width:100%;height:100%;"></a>  
+
+<div class="diagram" id="diagram-010"><a href="#diagram-010" style="font-weight:bold">Diagram 010</a></div>  
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_010.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_010.png" style="width:100%;height:100%;"></a>  
   
 
-<div class="diagram" id="diagram-011"><a href="#diagram-011" style="font-weight:bold">Diagram 011</a></div><a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_011.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_011.png" style="width:100%;height:100%;"></a>  
+
+<div class="diagram" id="diagram-011"><a href="#diagram-011" style="font-weight:bold">Diagram 011</a></div>  
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_011.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_011.png" style="width:100%;height:100%;"></a>  
   
 
-<div class="diagram" id="diagram-012"><a href="#diagram-012" style="font-weight:bold">Diagram 012</a></div><a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_012.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_012.png" style="width:100%;height:100%;"></a>  
+
+<div class="diagram" id="diagram-012"><a href="#diagram-012" style="font-weight:bold">Diagram 012</a></div>  
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_012.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_012.png" style="width:100%;height:100%;"></a>  
   
 
-<div class="diagram" id="diagram-013"><a href="#diagram-013" style="font-weight:bold">Diagram 013</a></div><a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_013.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_013.png" style="width:100%;height:100%;"></a>  
+
+<div class="diagram" id="diagram-013"><a href="#diagram-013" style="font-weight:bold">Diagram 013</a></div>  
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_013.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_013.png" style="width:100%;height:100%;"></a>  
   
+
 
   
 [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/)
