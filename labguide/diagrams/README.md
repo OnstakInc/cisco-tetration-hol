@@ -17,9 +17,10 @@ As mentioned, here are are a collection of the diagram with each flow enabled, f
 
 This first image is the base diagram which references the environment that _each_ learner will have access to. Note that every item you see here is completely unique and independant for each and every learner. This includes Windows VMs, Linux VMs, Active Directory, Ansible, ASAv, Tetration appliances, Lambda, Kubernetes - all of it. Each learner will also have their own unique instance of TaaS (Tetration-as-a-Service), as well. 
   
-<img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_002.png" style="width:100%;height:100%;">  
+<img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_002.png" style="width:150%;height:150%;">  
   
-<img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_003.png" style="width:100%;height:100%;">  
+This 
+<img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_003.png" style="width:150%;height:150%;">  
   
 <img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_004.png" style="width:100%;height:100%;">  
   
