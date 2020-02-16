@@ -4,8 +4,8 @@
 
 In this module we will configure Collection Rules.  Collection Rules govern what endpoints will be considered for inclusion in inventory.  Typically this should be any internal IP address space of an organization.  It may also make sense to configure public IP address space that is used by an organization,  such as DMZ or public cloud address space.  
 
-Perform the following tasks to configure Collection Rules.  Click here to view a video of the tasks being performed:
-<p><a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01_collection_rules.mp4" title="Collection Rules Title">Collection Rules Video</a></p>  
+Perform the following tasks to configure Collection Rules. <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01_collection_rules.mp4" title="Collection Rules Title">Click here</a> to view a video of the tasks being performed.
+
 
 1. Click on the gear icon in the upper right hand corner and select Collection Rules.   
 
