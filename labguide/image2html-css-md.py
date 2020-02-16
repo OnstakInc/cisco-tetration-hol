@@ -11,17 +11,18 @@ files = [file for file in glob.glob('*.png')]
 files.sort(key=os.path.getmtime)
 
 for i,file in enumerate(files):
-    new_fn = f'{module}_' + str(i).zfill(3) + '.png'
+    pic_nbr = i + 1
+    new_fn = f'{module}_' + str(pic_nbr).zfill(3) + '.png'
     os.rename(file,new_fn)
-    url_dict[i] = f'https://onstakinc.github.io/cisco-tetration-hol/labguide/{module}/images/{new_fn}'
-    stepnum = str(i).zfill(3)
-    stepnum_dict[i] = f'{stepnum}'
+    url_dict[pic_nbr] = f'https://onstakinc.github.io/cisco-tetration-hol/labguide/{module}/images/{new_fn}'
+    stepnum = str(pic_nbr).zfill(3)
+    stepnum_dict[pic_nbr] = f'{stepnum}'
 
 os.chdir('..')
 
 if os.path.exists('README.md'):
     print("Backing up README.md")
-    copy2('README.md', 'README.bak.md') 
+    copy2('README.md', 'README.bak.md')
 else:
     pass
 
