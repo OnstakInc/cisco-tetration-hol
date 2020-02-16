@@ -8,7 +8,7 @@ You may prefer to utilize [this interactive diagram](https://www.lucidchart.com/
 
 ![Alt Text](https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_000.png | width=100)  
 
-To toggle flows on/off, follow the instructions for depending on whether you are using a Windows machine or a Mac. For Windows, press and hold Shift + Ctrl, then click. For Mac, press and hold Shift + ⌘, then click. When you press these key combinations, you should see the clickable links in the panel turn a sort of greenish color, as such:
+To toggle flows on/off, follow the instructions for depending on whether you are using a Windows machine or a Mac. For Windows, press and hold `Shift + Ctrl`, then click. For Mac, press and hold `Shift + ⌘`, then click. When you press these key combinations, you should see the clickable links in the panel turn a sort of greenish color, as such:
   
 ![Alt Text](https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_001.png)  
   
