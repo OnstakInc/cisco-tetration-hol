@@ -29,7 +29,7 @@ with open('README.md','w') as f:
     f.write('  \n')
     f.write(f'## {module.capitalize()}\n')
     f.write('  \n\n')
-    f.write('### Module Steps')
+    f.write('### TOC for Module Steps on This Page')
     f.write('  \n')
 
     for key in sorted(url_dict.keys()):
