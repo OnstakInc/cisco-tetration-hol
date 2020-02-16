@@ -29,18 +29,18 @@ with open('README.md','w') as f:
     f.write('  \n')
     f.write(f'## {module.capitalize()}\n')
     f.write('  \n\n')
-    f.write('#### Module Steps')
+    f.write('### Module Steps')
     f.write('  \n')
 
     for key in sorted(url_dict.keys()):
-        toc_steps_dict[i] = f.write(f'###### <a href="#step-{stepnum_dict[key]}">Step {stepnum_dict[key]}</a>')
+        toc_steps_dict[i] = f.write(f'<a href="#step-{stepnum_dict[key]}"><b>Step {stepnum_dict[key]}</b></a>')
         f.write('  \n')
 
     f.write('\n\n')
 
     for key in sorted(url_dict.keys()):
         f.write(f'<div class="step" id="step-{stepnum_dict[key]}">')
-        f.write(f'<a href="#step-{stepnum_dict[key]}">Step {stepnum_dict[key]}</a>')
+        f.write(f'###### <a href="#step-{stepnum_dict[key]}">Step {stepnum_dict[key]}</a>')
         f.write(f'</div>')
         f.write(f'<a href="{url_dict[key]}"><img src="{url_dict[key]}" style="width:100%;height:100%;"></a>  \n')
         f.write('  \n\n')
