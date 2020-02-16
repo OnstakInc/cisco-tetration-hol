@@ -64,12 +64,30 @@ This is the flow that for a learner (that's you) accessing the lab environment. 
 In your lab are one of each of the following apps:
 
    1. Windows app - "nopCommerce" - consisting of: 
-      *  Win19 IIS WebApp server
+      *  Win19 IIS App server
       *  Win19 MS SQL DB server
    2. Linux app - "OpenCart"
-      *  CentOS 7 Apache WebApp server
+      *  CentOS 7 Apache App server
       *  CentOS 7 MySQL DB server
-   4. Microservices Container app on Kubernetes - "Sock Shop"
+   3. Microservices Container app on Kubernetes - "Sock Shop"
+      *  Front End service
+      *  Orders service
+         *  Orders App
+         *  Orders DB
+      *  User service
+         *  User App
+         *  User DB
+      *  Catalog service
+         *  Catalog App
+         *  Catalog DB
+      *  Carts service
+         *  Carts App
+         *  Carts DB
+      *  Payment service
+      *  Shipping service
+      *  Queuemaster service
+      *  RabbitMQ service
+
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_003.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_003.png" style="width:100%;height:100%;"></a>  
   
