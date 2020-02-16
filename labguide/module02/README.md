@@ -8,16 +8,16 @@ When configuring Collection rules, we must first delete the IPv6 and IPv4 rules 
 Perform the following tasks to configure Collection Rules. <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01_collection_rules.mp4" title="Collection Rules Title">Click here</a> to view a video of the tasks being performed.  
 
 ### Steps for this Module  
-<a href="#step-001" style="font-weight:bold">Step 001</a>  
-<a href="#step-002" style="font-weight:bold">Step 002</a>  
-<a href="#step-003" style="font-weight:bold">Step 003</a>  
-<a href="#step-004" style="font-weight:bold">Step 004</a>  
-<a href="#step-005" style="font-weight:bold">Step 005</a>  
-<a href="#step-006" style="font-weight:bold">Step 006</a>  
-<a href="#step-007" style="font-weight:bold">Step 007</a>  
-<a href="#step-008" style="font-weight:bold">Step 008</a>  
-<a href="#step-009" style="font-weight:bold">Step 009</a>  
-<a href="#step-010" style="font-weight:bold">Step 010</a>  
+<a href="#step-001" style="font-weight:bold">Step 001 - Navigate to Collection Rules</a>  
+<a href="#step-002" style="font-weight:bold">Step 002 - Edit the Collection Rules</a>  
+<a href="#step-003" style="font-weight:bold">Step 003 - Delete the default IPv6 rule</a>  
+<a href="#step-004" style="font-weight:bold">Step 004 - Delete the default IPv4 rule</a>  
+<a href="#step-005" style="font-weight:bold">Step 005 - Enter a new exclude rule for IPv6</a>  
+<a href="#step-006" style="font-weight:bold">Step 006 - Enter a new exclude rule for IPv4</a>  
+<a href="#step-007" style="font-weight:bold">Step 007 - Enter a rule for 10.0.0.0/8</a>  
+<a href="#step-008" style="font-weight:bold">Step 008 - Enter a rule for 172.16.0.0/12</a>  
+<a href="#step-009" style="font-weight:bold">Step 009 - Enter a rule for 192.168.0.0/16</a>  
+<a href="#step-010" style="font-weight:bold">Step 010 - View the final ruleset</a>  
 
 
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a>
