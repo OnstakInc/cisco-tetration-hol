@@ -1,10 +1,11 @@
 # Cisco Tetration - Hands-On Lab
   
-## Module03
+## Module03: Agent Installation
   
 
 ### Steps for this Module  
 
+<a href="" style="font-weight:bold" title="Collection Rules Title">Click here to view a video of the tasks being performed.</a>
 
   
 
