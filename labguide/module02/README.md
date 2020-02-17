@@ -103,4 +103,4 @@ Below is what the ruleset should look like when finished.
 
 
 
-[Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/)
+| [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/) | [Continue to the Introduction](https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/) |

@@ -219,4 +219,4 @@ This diagram depicts the AWS Security Groups that help to keep this intentionall
 
 
 
-| [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | Go to Top of the Page | [Continue to the Introduction](https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/) |
+| [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/) | [Continue to the Introduction](https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/) |

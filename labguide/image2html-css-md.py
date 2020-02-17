@@ -53,6 +53,4 @@ with open('README.md','w') as f:
     module_num_int = int(module_num[1])
     next_module_num = module_num_int + 1
     next_module = 'module' + str(next_module_num).zfill(2)
-    f.write(f'[Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/{next_module}/)')
-    f.write('  \n\n')
-    f.write('[Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/)')
+    f.write(f'| [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/{module}/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/{next_module}/) |')
