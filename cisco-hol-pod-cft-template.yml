@@ -844,7 +844,7 @@ Resources:
       Roles:
       - !Ref EKSClusterInstanceRole
     
-  # Attache IAM Role EKS Worker
+  # # Attache IAM Role EKS Worker
   EKSWorkerInstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
@@ -949,15 +949,20 @@ Resources:
           security-level 100
           ip address dhcp setroute 
           no shutdown
-          username admin password tet123\$\$! privilege 15
-          username ciscolab password tet123\$\$! privilege 15
-          enable password tet123\$\$!
+          username admin password tet123$$! privilege 15
+          username ciscolab password tet123$$! privilege 15
+          enable password tet123$$!
           access-list ssh standard permit any4
           ssh 0.0.0.0 0.0.0.0 outside
           ssh 0.0.0.0 0.0.0.0 inside
           ssh 0.0.0.0 0.0.0.0 management
+          hostname cisco-hol-asav
+          domain-name hol.local
+          crypto key generate rsa modulus 2048 noconfirm
           ssh version 2
           ssh scopy enable
+          aaa authentication ssh console LOCAL
+          user-identity default-domain LOCAL
       NetworkInterfaces: 
         - NetworkInterfaceId: !Ref 'ASAvNetworkInterfaces01'
           DeviceIndex: '0'

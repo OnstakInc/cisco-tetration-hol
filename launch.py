@@ -130,7 +130,8 @@ try:
             'account_password': password_generator(),
             'public_subnet_01': f'{public_subnet_01[i]}',
             'public_subnet_02': f'{public_subnet_02[i]}',
-            'private_subnet': f'{secondary_ips[i]}'
+            'private_subnet': f'{secondary_ips[i]}',
+            'eks_dns': ''
         })
 
     print(f'INFO: {STUDENTS_LIST}')
@@ -321,6 +322,39 @@ while True:
         exit(1)
 #######################################################################
 
+#######################################################################
+# Assemble EKS ELB DNS Records ########################################
+#######################################################################
+
+# try:
+
+#     print('INFO: Initializing EKS DNS Assembly...')
+
+#     time.sleep(15)
+
+#     for student in STUDENTS_LIST:
+
+#         client = boto3.client('elb')
+
+#         eks_elbs = client.describe_load_balancers()['LoadBalancerDescriptions']
+
+#         elb_tags = client.describe_tags(
+#             LoadBalancerNames=list(map(lambda e: e['LoadBalancerName'], eks_elbs))
+#         )
+
+#         for elb in elb_tags['TagDescriptions']:
+#             for tag in elb['Tags']:
+#                 if tag['Key'] == 'Account' and tag['Value'] == student['account_name']:
+#                     student['eks_dns'] = list(filter(lambda e: e['LoadBalancerName'] == elb['LoadBalancerName'], eks_elbs))[0]['DNSName']
+#                     break
+    
+#     print('INFO: EKS DNS Assembly Completed...')
+
+# except Exception as e:
+#     print(e)
+#     exit(1)
+
+#######################################################################
 
 #######################################################################
 # Generate CSV Reports ################################################
@@ -375,7 +409,7 @@ try:
         'IIS nopCommerce Public',
         'MySQL',
         'MSSQL',
-        'EKS',
+        'EKS Clsuter',
         'Ansible',
         'Tetration Edge',
         'Tetration Data',
