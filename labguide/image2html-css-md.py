@@ -42,7 +42,7 @@ with open('README.md','w') as f:
 
     for key in sorted(url_dict.keys()):
         f.write(f'<div class="step" id="step-{stepnum_dict[key]}">')
-        f.write(f'<b><a name="#step-{stepnum_dict[key]}">Step {stepnum_dict[key]}</a></b>')
+        f.write(f'<a href="#step-{stepnum_dict[key]}" style="font-weight:bold">Step {stepnum_dict[key]}</a>')
         f.write(f'</div>')
         f.write('  \n\n')
         f.write(f'<a href="{url_dict[key]}"><img src="{url_dict[key]}" style="width:100%;height:100%;"></a>  \n')
