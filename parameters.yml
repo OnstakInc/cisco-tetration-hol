@@ -10,16 +10,15 @@ vpc_id: vpc-07e7ba44fadc5c271
 internet_gateway_id: igw-0f5e60daa68580ca8
 subnet_range_primary: 172.40.0.0/16
 subnet_range_secondary: 198.18.0.0/16
-email_address: raheel.anwar@onstak.com
 
-asav_ami: ami-03f3e6b7b153eed80
-ldap_ami: ami-0da00f363f93add92
+asav_ami: ami-018637632d5e62976
+ldap_ami: ami-0576c6538fb5b40c4
 mssc_ami: ami-0da00f363f93add92
-mssql_ami: ami-0da00f363f93add92
-iis_ami: ami-0da00f363f93add92
+mssql_ami: ami-090ab21d87411b44e
+iis_ami: ami-0c4e857f7ec9de0dc
 mysql_ami: ami-0c170ef4a4f9b1789
 apache_ami: ami-0bb3d60453bbc693a
-ansible_ami: ami-03f3e6b7b153eed80
+ansible_ami: ami-00755f1788655b924
 tet_data_ami: ami-0c2276fc51ad25018
 tet_edge_ami: ami-0cb78ddba97ce6591
 user_ami: ami-0da00f363f93add92

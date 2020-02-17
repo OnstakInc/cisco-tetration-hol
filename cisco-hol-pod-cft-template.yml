@@ -68,6 +68,17 @@ Metadata:
         default: "Region of VPC"
 
 Parameters:
+  AccessKey:
+    NoEcho: True
+    Type: String
+    Description: Please enter AWS Access Key
+  SecretKey:
+    NoEcho: True
+    Type: String
+    Description: Please enter AWS Secret Key
+  StudentIndex:
+    Type: String
+    Description: Please enter student index number
   StudentName:
     Type: String
     Description: Please enter student name
@@ -90,6 +101,12 @@ Parameters:
   Subnet03CidrBlock:
     Type: String
     Description: Please enter the Cidr Block for 3rd Subnet
+  ASAvInsideSubnet:
+    Type: String
+    Description: Please enter the ASAv Inside Subnet Address
+  ASAvOutsideSubnet:
+    Type: String
+    Description: Please enter the ASAv Outside Subnet Address
   Region:
     Type: String
     Description: Please enter the Region in which VPC is present
@@ -370,9 +387,534 @@ Resources:
           Value: 'owned'
 
   # Provision EC2 Instances
+  # LDAP Server
+  CiscoHOLEC2ActiveDirectory:
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref LDAPImageID
+      InstanceType: t2.small
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-ec2-active-directory-win-2019-${Region}${Subnet01AvailabilityZone}"
+        - Key: Org
+          Value: Tetration
+        - Key: Geo
+          Value: US
+        - Key: Cloud
+          Value: AWS
+        - Key: Region
+          Value: !Sub "${Region}"
+        - Key: AppSDLC
+          Value: Lab
+        - Key: AppGroup
+          Value: Common
+        - Key: AppName
+          Value: Active Directory
+        - Key: AppCluster
+          Value: GC-DC-DNS
+      UserData:
+        Fn::Base64: !Sub |
+          <powershell>
+          ipconfig /flushdns
+          Clear-DnsClientCache
+          </powershell>
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet:
+            - !Ref CiscoHOLPublicSecurityGroup
+          SubnetId: !Ref CiscoHOLSubnet01
+  
+  # MS Systems Center
+  CiscoHOLEC2MSSystemCenter:
+    DependsOn:
+      - CiscoHOLEC2ActiveDirectory
+    Type: AWS::EC2::Instance
+    Properties:
+      ImageId: !Ref MSSCImageID
+      InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-ec2-ms-system-center-${Region}${Subnet01AvailabilityZone}"
+        - Key: Org
+          Value: Tetration
+        - Key: Geo
+          Value: US
+        - Key: Cloud
+          Value: AWS
+        - Key: Region
+          Value: !Sub "${Region}"
+        - Key: AppSDLC
+          Value: Lab
+        - Key: AppGroup
+          Value: Common
+        - Key: AppName
+          Value: SCCM
+        - Key: AppCluster
+          Value: SCCM
+      UserData:
+       Fn::Base64: !Sub |
+        <powershell>
+        $adapter = Get-NetAdapter -Name 'Ethernet*'
+        Set-DNSClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ("${CiscoHOLEC2ActiveDirectory.PrivateIp}")
+        ipconfig /flushdns
+        Clear-DnsClientCache
+        </powershell>
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet:
+            - !Ref CiscoHOLPublicSecurityGroup
+          SubnetId: !Ref CiscoHOLSubnet01
+
+  # Windows App Server
+  CiscoHOLEC2SQLServer:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - CiscoHOLEC2ActiveDirectory
+    Properties:
+      ImageId: !Ref MSSQLImageID
+      InstanceType: t2.large
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-ec2-sql-win-2019-${Region}${Subnet01AvailabilityZone}"
+        - Key: Org
+          Value: Tetration
+        - Key: Geo
+          Value: US
+        - Key: Cloud
+          Value: AWS
+        - Key: Region
+          Value: !Sub "${Region}"
+        - Key: AppSDLC
+          Value: Lab
+        - Key: AppGroup
+          Value: Commerce
+        - Key: AppName
+          Value: nopCommerce 
+        - Key: AppCluster
+          Value: DB
+      UserData:
+        Fn::Base64: !Sub |
+          <powershell>
+          $adapter = Get-NetAdapter -Name 'Ethernet*'
+          Set-DNSClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ("${CiscoHOLEC2ActiveDirectory.PrivateIp}")
+          ipconfig /flushdns
+          Clear-DnsClientCache
+          </powershell>
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet:
+            - !Ref CiscoHOLPublicSecurityGroup
+          SubnetId: !Ref CiscoHOLSubnet01
+  
+  # Windows IIS Server
+  CiscoHOLEC2IIS:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - CiscoHOLEC2SQLServer
+    Properties:
+      ImageId: !Ref IISImageID
+      InstanceType: t2.large
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-ec2-iis-win-2019-${Region}${Subnet01AvailabilityZone}"
+        - Key: Org
+          Value: Tetration
+        - Key: Geo
+          Value: US
+        - Key: Cloud
+          Value: AWS
+        - Key: Region
+          Value: !Sub "${Region}"
+        - Key: AppSDLC
+          Value: Lab
+        - Key: AppGroup
+          Value: Commerce
+        - Key: AppName
+          Value: nopCommerce
+        - Key: AppCluster
+          Value: App
+      UserData:
+        Fn::Base64: !Sub |
+          <powershell>
+          $adapter = Get-NetAdapter -Name 'Ethernet*'
+          Set-DNSClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ("${CiscoHOLEC2ActiveDirectory.PrivateIp}")
+          ipconfig /flushdns
+          Clear-DnsClientCache
+          IISReset /Restart
+          </powershell>
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet:
+            - !Ref CiscoHOLPublicSecurityGroup
+            - !Ref CiscoHOLWebSecurityGroup
+          SubnetId: !Ref CiscoHOLSubnet01
+
+  # # Create Elastic IP Addresses
+  # CiscoHOLIISEIP:
+  #   Type: AWS::EC2::EIP
+  #   Properties:
+  #     InstanceId: !Ref CiscoHOLEC2IIS
+
+  # Linux DB Server
+  CiscoHOLEC2MySQL:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - CiscoHOLEC2ActiveDirectory
+    Properties:
+      ImageId: !Ref MySQLImageID
+      InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-ec2-mysql-centos7-${Region}${Subnet01AvailabilityZone}"
+        - Key: Org
+          Value: Tetration
+        - Key: Geo
+          Value: US
+        - Key: Cloud
+          Value: AWS
+        - Key: Region
+          Value: !Sub "${Region}"
+        - Key: AppSDLC
+          Value: Lab
+        - Key: AppGroup
+          Value: Commerce
+        - Key: AppName
+          Value: OpenCart
+        - Key: AppCluster
+          Value: DB
+        
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+          systemctl restart sshd
+          echo "DNS1=${CiscoHOLEC2ActiveDirectory.PrivateIp}" | tee -a /etc/sysconfig/network-scripts/ifcfg-eth0
+          systemctl restart network
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "false"
+          DeviceIndex: "0"
+          GroupSet: 
+            - !Ref CiscoHOLPublicSecurityGroup
+          SubnetId: !Ref CiscoHOLSubnet01
+  
+  # # Create Elastic IP Addresse
+  # CiscoHOLApacheEIP:
+  #   Type: AWS::EC2::EIP
+
+  # Linux App Server
+  CiscoHOLEC2Apache:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - CiscoHOLEC2ActiveDirectory
+    Properties:
+      ImageId: !Ref ApacheImageID
+      InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-ec2-apache-centos7-${Region}${Subnet01AvailabilityZone}"
+        - Key: Org
+          Value: Tetration
+        - Key: Geo
+          Value: US
+        - Key: Cloud
+          Value: AWS
+        - Key: Region
+          Value: !Sub "${Region}"
+        - Key: AppSDLC
+          Value: Lab
+        - Key: AppGroup
+          Value: Commerce
+        - Key: AppName
+          Value: OpenCart
+        - Key: AppCluster
+          Value: App
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          ip_address=$(echo $(hostname -I) | sed -e 's/^[ \t]*//')
+          rm -rf /var/www/html/config.php
+          rm -rf /var/www/html/admin/config.php
+          cp /var/www/templates/config.php /var/www/html/config.php
+          cp /var/www/templates/admin.config.php /var/www/html/admin/config.php
+          sed -i "s/{{app}}/$ip_address/g" /var/www/html/config.php
+          sed -i "s/{{app}}/$ip_address/g" /var/www/html/admin/config.php
+          sed -i "s/{{db}}/${CiscoHOLEC2MySQL.PrivateIp}/g" /var/www/html/config.php
+          sed -i "s/{{db}}/${CiscoHOLEC2MySQL.PrivateIp}/g" /var/www/html/admin/config.php
+          sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+          systemctl restart sshd
+          echo "DNS1=${CiscoHOLEC2ActiveDirectory.PrivateIp}" | tee -a /etc/sysconfig/network-scripts/ifcfg-eth0
+          systemctl restart network
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - !Ref CiscoHOLPublicSecurityGroup
+            - !Ref CiscoHOLWebSecurityGroup
+          SubnetId: !Ref CiscoHOLSubnet01
+
+  # # Elastic IP Association  
+  # CiscoHOLAssociateEIPApache:
+  #   Type: AWS::EC2::EIPAssociation
+  #   Properties:
+  #     AllocationId: !GetAtt CiscoHOLApacheEIP.AllocationId
+  #     InstanceId: !Ref CiscoHOLEC2Apache
+
+  # Create Tetration Appliances
+  CiscoHOLEC2TetData:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - CiscoHOLEC2ActiveDirectory
+    Properties:
+      ImageId: !Ref TetrationDataIngestImageID
+      InstanceType: t2.small
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-ec2-tet-data-centos7-${Region}${Subnet01AvailabilityZone}"
+      NetworkInterfaces: 
+        - NetworkInterfaceId: !Ref 'TetNetworkInterfaces01'
+          DeviceIndex: '0'
+        - NetworkInterfaceId: !Ref 'TetNetworkInterfaces02'
+          DeviceIndex: '1'
+        - NetworkInterfaceId: !Ref 'TetNetworkInterfaces03'
+          DeviceIndex: '2'
+  
+  TetNetworkInterfaces01:
+      Type: AWS::EC2::NetworkInterface
+      Properties:
+        Tags:
+        - Key: name
+          Value: !Sub "${StudentName}-nic01-tet-data"
+        Description: !Sub "${StudentName} Tet Data Network Interface 01"
+        SourceDestCheck: 'false'
+        GroupSet:
+        - !Ref CiscoHOLPublicSecurityGroup
+        SubnetId: !Ref CiscoHOLSubnet01
+        
+  TetNetworkInterfaces02:
+      Type: AWS::EC2::NetworkInterface
+      Properties:
+        Tags:
+        - Key: name
+          Value: !Sub "${StudentName}-nic02-tet-data"
+        Description: !Sub "${StudentName} Tet Data Network Interface 02"
+        SourceDestCheck: 'false'
+        GroupSet:
+        - !Ref CiscoHOLPublicSecurityGroup
+        SubnetId: !Ref CiscoHOLSubnet01
+  
+  TetNetworkInterfaces03:
+      Type: AWS::EC2::NetworkInterface
+      Properties:
+        Tags:
+        - Key: name
+          Value: !Sub "${StudentName}-nic03-tet-data"
+        Description: !Sub "${StudentName} Tet Data Network Interface 03"
+        SourceDestCheck: 'false'
+        GroupSet:
+        - !Ref CiscoHOLPublicSecurityGroup
+        SubnetId: !Ref CiscoHOLSubnet01
+
+  # Create Tet Edge EC2
+  CiscoHOLEC2TetEdge:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - CiscoHOLEC2ActiveDirectory
+    Properties:
+      ImageId: !Ref TetrationEdgeImageID
+      InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-ec2-tet-edge-centos7-${Region}${Subnet01AvailabilityZone}"
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - !Ref CiscoHOLPublicSecurityGroup
+          SubnetId: !Ref CiscoHOLSubnet01
+  
+  # Windows 10 user (AnyConnect, ASDM, Putty, CMD-Telnet, WinSCP)
+  CiscoHOLEC2Win10eUser:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - CiscoHOLEC2ActiveDirectory
+    Properties:
+      ImageId: !Ref Win10UserImageID
+      InstanceType: t2.small
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-ec2-win10e-user-${Region}${Subnet02AvailabilityZone}"
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - !Ref CiscoHOLPrivateSecurityGroup
+          SubnetId: !Ref CiscoHOLSubnet03
+  
+  # Windows 10 DBA (AnyConnect, ASDM, Putty, CMD-Telnet, WinSCP)
+  CiscoHOLEC2Win10eDBA:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - CiscoHOLEC2ActiveDirectory
+    Properties:
+      ImageId: !Ref Win10DBAImageID
+      InstanceType: t2.small
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-ec2-win10e-dba-${Region}${Subnet02AvailabilityZone}"
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - !Ref CiscoHOLPrivateSecurityGroup
+          SubnetId: !Ref CiscoHOLSubnet03
+  
+  # Metasploit Attack Server
+  CiscoHOLEC2Attacker:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - CiscoHOLEC2ActiveDirectory
+    Properties:
+      ImageId: !Ref AttackerImageID
+      InstanceType: t2.micro
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-ec2-attacker-${Region}${Subnet02AvailabilityZone}"
+      UserData:
+        Fn::Base64: !Sub |
+          !/bin/bash
+          sed -i "s/^PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
+          sed -i "s/^PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+          systemctl restart sshd
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          GroupSet: 
+            - !Ref CiscoHOLPrivateSecurityGroup
+          SubnetId: !Ref CiscoHOLSubnet03
+          
+  # Create IAM Role For EKS Cluster
+  EKSClusterInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - eks.amazonaws.com
+          Action:
+            - sts:AssumeRole
+      Path: "/"
+      RoleName: !Join [ "-", [ !Ref 'AWS::StackName', "EKS-Cluster-Role" ] ]
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
+        - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
+        - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
+  
+  # Create IAM Role For EKS Worker Node
+  EKSWorkerInstanceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: /
+      RoleName: !Join [ "-", [ !Ref 'AWS::StackName', "EKS-Worker-Role" ] ]
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
+        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+
+  # Attache IAM Role EKS Cluster
+  EKSClusterInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+      - !Ref EKSClusterInstanceRole
+    
+  # # Attache IAM Role EKS Worker
+  EKSWorkerInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: /
+      Roles:
+      - !Ref EKSWorkerInstanceRole
+  
+  # Create EKS Cluster
+  EKSCluster:
+    Type: "AWS::EKS::Cluster"
+    Properties:
+      Name: !Sub "${StudentName}-eks-cluster-${Region}"
+      ResourcesVpcConfig:
+        SecurityGroupIds:
+          - !Ref CiscoHOLWebSecurityGroup
+          - !Ref CiscoHOLPublicSecurityGroup
+        SubnetIds:
+          - !Ref CiscoHOLSubnet01
+          - !Ref CiscoHOLSubnet02
+      RoleArn: !GetAtt EKSClusterInstanceRole.Arn
+  
+  # Node Launch Configuration
+  EKSWorkerNodeLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      AssociatePublicIpAddress: 'True'
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            VolumeSize: 20
+            VolumeType: gp2
+            DeleteOnTermination: true
+      IamInstanceProfile: !Ref EKSWorkerInstanceProfile
+      ImageId: !Ref EKSWorkerImageID
+      InstanceType: t3.medium
+      # KeyName: !Ref KeyName
+      SecurityGroups:
+        - !Ref CiscoHOLPublicSecurityGroup
+      UserData: !Base64
+        "Fn::Sub": |
+          #!/bin/bash
+          set -o xtrace
+          /etc/eks/bootstrap.sh --apiserver-endpoint '${EKSCluster.Endpoint}' --b64-cluster-ca '${EKSCluster.CertificateAuthorityData}' '${EKSCluster}'
+          /opt/aws/bin/cfn-signal --exit-code $? --stack  ${AWS::StackName} --resource NodeGroup --region ${AWS::Region}     
+  
+  # Node Provision
+  EKSWorkerNodeGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      DesiredCapacity: 1
+      LaunchConfigurationName: !Ref EKSWorkerNodeLaunchConfig
+      MinSize: 1
+      MaxSize: 2
+      VPCZoneIdentifier:
+        - !Ref CiscoHOLSubnet01
+      Tags:
+      - Key: Name
+        PropagateAtLaunch: "true"
+        Value: !Sub "${StudentName}-eks-worker-${Region}"
+      - Key: !Sub kubernetes.io/cluster/${StudentName}-eks-cluster-${Region}
+        Value: owned
+        PropagateAtLaunch: "true"
+
   # ASAv Firewall Server
   CiscoHOLEC2ASAv:
     Type: AWS::EC2::Instance
+    DependsOn:
+      - CiscoHOLEC2ActiveDirectory
+      - CiscoHOLEC2IIS
+      - CiscoHOLEC2Apache
     Properties:
       ImageId: !Ref ASAvImageID
       InstanceType: c4.large
@@ -395,12 +937,32 @@ Resources:
        #   Value: Active Directory
        # - Key: AppCluster
        #   Value: GC-DC-DNS
-        
-      #UserData:
-      #  Fn::Base64: !Sub |
-      #    <powershell>
-      #    ipconfig /flushdns
-      #    </powershell>
+      UserData: !Base64
+        "Fn::Sub": |
+          interface GigabitEthernet0/0
+          nameif outside
+          security-level 0
+          ip address dhcp 
+          no shutdown
+          interface GigabitEthernet0/1
+          nameif inside
+          security-level 100
+          ip address dhcp setroute 
+          no shutdown
+          username admin password tet123$$! privilege 15
+          username ciscolab password tet123$$! privilege 15
+          enable password tet123$$!
+          access-list ssh standard permit any4
+          ssh 0.0.0.0 0.0.0.0 outside
+          ssh 0.0.0.0 0.0.0.0 inside
+          ssh 0.0.0.0 0.0.0.0 management
+          hostname cisco-hol-asav
+          domain-name hol.local
+          crypto key generate rsa modulus 2048 noconfirm
+          ssh version 2
+          ssh scopy enable
+          aaa authentication ssh console LOCAL
+          user-identity default-domain LOCAL
       NetworkInterfaces: 
         - NetworkInterfaceId: !Ref 'ASAvNetworkInterfaces01'
           DeviceIndex: '0'
@@ -460,270 +1022,7 @@ Resources:
     Properties:
       AllocationId: !GetAtt CiscoHOLASAvEIP.AllocationId
       NetworkInterfaceId: !Ref ASAvNetworkInterfaces03
-  
-  # LDAP Server
-  CiscoHOLEC2ActiveDirectory:
-    DependsOn:
-      - CiscoHOLEC2ASAv
-    Type: AWS::EC2::Instance
-    Properties:
-      ImageId: !Ref LDAPImageID
-      InstanceType: t2.small
-      Tags:
-        - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-active-directory-win-2019-${Region}${Subnet01AvailabilityZone}"
-        - Key: Org
-          Value: Tetration
-        - Key: Geo
-          Value: US
-        - Key: Cloud
-          Value: AWS
-        - Key: Region
-          Value: !Sub "${Region}"
-        - Key: AppSDLC
-          Value: Lab
-        - Key: AppGroup
-          Value: Common
-        - Key: AppName
-          Value: Active Directory
-        - Key: AppCluster
-          Value: GC-DC-DNS
-        
-      UserData:
-        Fn::Base64: !Sub |
-          <powershell>
-          ipconfig /flushdns
-          </powershell>
-      NetworkInterfaces:
-        - AssociatePublicIpAddress: "false"
-          DeviceIndex: "0"
-          GroupSet:
-            - !Ref CiscoHOLPublicSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnet01
-  
-  # MS Systems Center
-  CiscoHOLEC2MSSystemCenter:
-    DependsOn:
-      - CiscoHOLEC2ASAv
-    Type: AWS::EC2::Instance
-    Properties:
-      ImageId: !Ref MSSCImageID
-      InstanceType: t2.micro
-      Tags:
-        - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-ms-system-center-${Region}${Subnet01AvailabilityZone}"
-        - Key: Org
-          Value: Tetration
-        - Key: Geo
-          Value: US
-        - Key: Cloud
-          Value: AWS
-        - Key: Region
-          Value: !Sub "${Region}"
-        - Key: AppSDLC
-          Value: Lab
-        - Key: AppGroup
-          Value: Common
-        - Key: AppName
-          Value: SCCM
-        - Key: AppCluster
-          Value: SCCM
-        
-      UserData:
-       Fn::Base64: !Sub |
-         <powershell>
-         ipconfig /flushdns
-         </powershell>
-      NetworkInterfaces:
-        - AssociatePublicIpAddress: "false"
-          DeviceIndex: "0"
-          GroupSet:
-            - !Ref CiscoHOLPublicSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnet01
 
-  # Windows App Server
-  CiscoHOLEC2SQLServer:
-    Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ActiveDirectory
-      - CiscoHOLEC2ASAv
-    Properties:
-      ImageId: !Ref MSSQLImageID
-      InstanceType: t2.small
-      Tags:
-        - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-sql-win-2019-${Region}${Subnet01AvailabilityZone}"
-        - Key: Org
-          Value: Tetration
-        - Key: Geo
-          Value: US
-        - Key: Cloud
-          Value: AWS
-        - Key: Region
-          Value: !Sub "${Region}"
-        - Key: AppSDLC
-          Value: Lab
-        - Key: AppGroup
-          Value: Commerce
-        - Key: AppName
-          Value: nopCommerce 
-        - Key: AppCluster
-          Value: DB
-        
-      UserData:
-        Fn::Base64: !Sub |
-          <powershell>
-          $adapter = Get-NetAdapter -Name 'Ethernet*'
-          Set-DNSClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ("${CiscoHOLEC2ActiveDirectory.PrivateIp}")
-          ipconfig /flushdns
-          </powershell>
-      NetworkInterfaces:
-        - AssociatePublicIpAddress: "false"
-          DeviceIndex: "0"
-          GroupSet:
-            - !Ref CiscoHOLPublicSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnet01
-  
-  # Windows IIS Server
-  CiscoHOLEC2IIS:
-    Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2SQLServer
-      - CiscoHOLEC2ASAv
-    Properties:
-      ImageId: !Ref IISImageID
-      InstanceType: t2.small
-      Tags:
-        - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-iis-win-2019-${Region}${Subnet01AvailabilityZone}"
-        - Key: Org
-          Value: Tetration
-        - Key: Geo
-          Value: US
-        - Key: Cloud
-          Value: AWS
-        - Key: Region
-          Value: !Sub "${Region}"
-        - Key: AppSDLC
-          Value: Lab
-        - Key: AppGroup
-          Value: Commerce
-        - Key: AppName
-          Value: nopCommerce
-        - Key: AppCluster
-          Value: App
-        
-      UserData:
-        Fn::Base64: !Sub |
-          <powershell>
-          $adapter = Get-NetAdapter -Name 'Ethernet*'
-          Set-DNSClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ("${CiscoHOLEC2ActiveDirectory.PrivateIp}")
-          ipconfig /flushdns
-          IISReset /Restart
-          </powershell>
-      NetworkInterfaces:
-        - AssociatePublicIpAddress: "false"
-          DeviceIndex: "0"
-          GroupSet:
-            - !Ref CiscoHOLPublicSecurityGroup
-            - !Ref CiscoHOLWebSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnet01
-
-  # Linux DB Server
-  CiscoHOLEC2MySQL:
-    Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ASAv
-    Properties:
-      ImageId: !Ref MySQLImageID
-      InstanceType: t2.micro
-      Tags:
-        - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-mysql-centos7-${Region}${Subnet01AvailabilityZone}"
-        - Key: Org
-          Value: Tetration
-        - Key: Geo
-          Value: US
-        - Key: Cloud
-          Value: AWS
-        - Key: Region
-          Value: !Sub "${Region}"
-        - Key: AppSDLC
-          Value: Lab
-        - Key: AppGroup
-          Value: Commerce
-        - Key: AppName
-          Value: OpenCart
-        - Key: AppCluster
-          Value: DB
-        
-      UserData:
-        Fn::Base64: !Sub |
-          #!/bin/bash
-          sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
-          systemctl restart sshd
-          echo "DNS1=${CiscoHOLEC2ActiveDirectory.PrivateIp}" | tee -a /etc/sysconfig/network-scripts/ifcfg-eth0
-          systemctl restart network
-      NetworkInterfaces: 
-        - AssociatePublicIpAddress: "false"
-          DeviceIndex: "0"
-          GroupSet: 
-            - !Ref CiscoHOLPublicSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnet01
-  
-  # Linux App Server
-  CiscoHOLEC2Apache:
-    Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2MySQL
-      - CiscoHOLEC2ASAv
-    Properties:
-      ImageId: !Ref ApacheImageID
-      InstanceType: t2.micro
-      Tags:
-        - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-apache-centos7-${Region}${Subnet01AvailabilityZone}"
-        - Key: Org
-          Value: Tetration
-        - Key: Geo
-          Value: US
-        - Key: Cloud
-          Value: AWS
-        - Key: Region
-          Value: !Sub "${Region}"
-        - Key: AppSDLC
-          Value: Lab
-        - Key: AppGroup
-          Value: Commerce
-        - Key: AppName
-          Value: OpenCart
-        - Key: AppCluster
-          Value: App
-        
-      UserData:
-        Fn::Base64: !Sub |
-          #!/bin/bash
-          ip_address=$(echo $(hostname -I) | sed -e 's/^[ \t]*//')
-          rm -rf /var/www/html/config.php
-          rm -rf /var/www/html/admin/config.php
-          cp /var/www/templates/config.php /var/www/html/config.php
-          cp /var/www/templates/admin.config.php /var/www/html/admin/config.php
-          sed -i "s/{{app}}/$ip_address/g" /var/www/html/config.php
-          sed -i "s/{{app}}/$ip_address/g" /var/www/html/admin/config.php
-          sed -i "s/{{db}}/${CiscoHOLEC2MySQL.PrivateIp}/g" /var/www/html/config.php
-          sed -i "s/{{db}}/${CiscoHOLEC2MySQL.PrivateIp}/g" /var/www/html/admin/config.php
-          sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
-          systemctl restart sshd
-          echo "DNS1=${CiscoHOLEC2ActiveDirectory.PrivateIp}" | tee -a /etc/sysconfig/network-scripts/ifcfg-eth0
-          systemctl restart network
-      NetworkInterfaces: 
-        - AssociatePublicIpAddress: "false"
-          DeviceIndex: "0"
-          GroupSet: 
-            - !Ref CiscoHOLPublicSecurityGroup
-            - !Ref CiscoHOLWebSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnet01
-  
   # Ansible Server
   CiscoHOLEC2Ansible:
     Type: AWS::EC2::Instance
@@ -780,146 +1079,15 @@ Resources:
           systemctl restart sshd
           echo "DNS1=${CiscoHOLEC2ActiveDirectory.PrivateIp}" | tee -a /etc/sysconfig/network-scripts/ifcfg-eth0
           systemctl restart network
+          sleep 15
+          /bin/bash /var/eks-init/bootstrap.sh "${AccessKey}" "${SecretKey}" "${Region}" "${EKSCluster}" "${EKSCluster.Endpoint}" "${EKSCluster.CertificateAuthorityData}" "${EKSWorkerInstanceRole.Arn}"
       NetworkInterfaces: 
-        - AssociatePublicIpAddress: "false"
+        - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
           GroupSet: 
             - !Ref CiscoHOLPublicSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet01
     
-  # Create Tetration Appliances
-  CiscoHOLEC2TetData:
-    Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ASAv
-    Properties:
-      ImageId: !Ref TetrationDataIngestImageID
-      InstanceType: t2.small
-      Tags:
-        - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-tet-data-centos7-${Region}${Subnet01AvailabilityZone}"
-      NetworkInterfaces: 
-        - NetworkInterfaceId: !Ref 'TetNetworkInterfaces01'
-          DeviceIndex: '0'
-        - NetworkInterfaceId: !Ref 'TetNetworkInterfaces02'
-          DeviceIndex: '1'
-        - NetworkInterfaceId: !Ref 'TetNetworkInterfaces03'
-          DeviceIndex: '2'
-  
-  TetNetworkInterfaces01:
-      Type: AWS::EC2::NetworkInterface
-      Properties:
-        Tags:
-        - Key: name
-          Value: !Sub "${StudentName}-nic01-tet-data"
-        Description: !Sub "${StudentName} Tet Data Network Interface 01"
-        SourceDestCheck: 'false'
-        GroupSet:
-        - !Ref CiscoHOLPublicSecurityGroup
-        SubnetId: !Ref CiscoHOLSubnet01
-        
-  TetNetworkInterfaces02:
-      Type: AWS::EC2::NetworkInterface
-      Properties:
-        Tags:
-        - Key: name
-          Value: !Sub "${StudentName}-nic02-tet-data"
-        Description: !Sub "${StudentName} Tet Data Network Interface 02"
-        SourceDestCheck: 'false'
-        GroupSet:
-        - !Ref CiscoHOLPublicSecurityGroup
-        SubnetId: !Ref CiscoHOLSubnet01
-  
-  TetNetworkInterfaces03:
-      Type: AWS::EC2::NetworkInterface
-      Properties:
-        Tags:
-        - Key: name
-          Value: !Sub "${StudentName}-nic03-tet-data"
-        Description: !Sub "${StudentName} Tet Data Network Interface 03"
-        SourceDestCheck: 'false'
-        GroupSet:
-        - !Ref CiscoHOLPublicSecurityGroup
-        SubnetId: !Ref CiscoHOLSubnet01
-
-  # Create Tet Edge EC2
-  CiscoHOLEC2TetEdge:
-    Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ASAv
-    Properties:
-      ImageId: !Ref TetrationEdgeImageID
-      InstanceType: t2.micro
-      Tags:
-        - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-tet-edge-centos7-${Region}${Subnet01AvailabilityZone}"
-      NetworkInterfaces: 
-        - AssociatePublicIpAddress: "false"
-          DeviceIndex: "0"
-          GroupSet: 
-            - !Ref CiscoHOLPublicSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnet01
-  
-  # Windows 10 user (AnyConnect, ASDM, Putty, CMD-Telnet, WinSCP)
-  CiscoHOLEC2Win10eUser:
-    Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ASAv
-    Properties:
-      ImageId: !Ref Win10UserImageID
-      InstanceType: t2.small
-      Tags:
-        - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-win10e-user-${Region}${Subnet02AvailabilityZone}"
-      NetworkInterfaces: 
-        - AssociatePublicIpAddress: "false"
-          DeviceIndex: "0"
-          GroupSet: 
-            - !Ref CiscoHOLPrivateSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnet03
-  
-  # Windows 10 DBA (AnyConnect, ASDM, Putty, CMD-Telnet, WinSCP)
-  CiscoHOLEC2Win10eDBA:
-    Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ASAv
-    Properties:
-      ImageId: !Ref Win10DBAImageID
-      InstanceType: t2.small
-      Tags:
-        - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-win10e-dba-${Region}${Subnet02AvailabilityZone}"
-      NetworkInterfaces: 
-        - AssociatePublicIpAddress: "false"
-          DeviceIndex: "0"
-          GroupSet: 
-            - !Ref CiscoHOLPrivateSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnet03
-  
-  # Metasploit Attack Server
-  CiscoHOLEC2Attacker:
-    Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ASAv
-    Properties:
-      ImageId: !Ref AttackerImageID
-      InstanceType: t2.micro
-      Tags:
-        - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-attacker-${Region}${Subnet02AvailabilityZone}"
-      UserData:
-        Fn::Base64: !Sub |
-          !/bin/bash
-          sed -i "s/^PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
-          sed -i "s/^PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
-          systemctl restart sshd
-      NetworkInterfaces: 
-        - AssociatePublicIpAddress: "false"
-          DeviceIndex: "0"
-          GroupSet: 
-            - !Ref CiscoHOLPrivateSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnet03
-          
   # Guacamole server
   CiscoHOLEC2Guacamole:
     Type: AWS::EC2::Instance
@@ -986,15 +1154,7 @@ Resources:
                       <param name="password">tet123\$\$!</param>
                       <param name="font-name">terminus</param>
                   </connection>
-                  <connection name="05) Kubernetes Container App - SockShop eCommerce - Master/Worker node">
-                      <protocol>ssh</protocol>
-                      <param name="hostname">54.198.78.33</param>
-                      <param name="port">22</param>
-                      <param name="username">ciscolab</param>
-                      <param name="password">tet123\$\$!</param>
-                      <param name="font-name">terminus</param>
-                  </connection>	
-                  <connection name="06) End Users - Windows10 - General Employee">
+                  <connection name="05) End Users - Windows10 - Employee">
                       <protocol>rdp</protocol>
                       <param name="hostname">${CiscoHOLEC2Win10eUser.PrivateIp}</param>
                       <param name="port">3389</param>
@@ -1004,7 +1164,7 @@ Resources:
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
                   </connection>	
-                  <connection name="07) End Users - Windows10 - Database Admin">
+                  <connection name="06) End Users - Windows10 - SysAdmin">
                       <protocol>rdp</protocol>
                       <param name="hostname">${CiscoHOLEC2Win10eDBA.PrivateIp}</param>
                       <param name="port">3389</param>
@@ -1014,7 +1174,7 @@ Resources:
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
                   </connection>	
-                  <connection name="08) Common Services - Ansible">
+                  <connection name="07) Common Services - Ansible">
                       <protocol>ssh</protocol>
                       <param name="hostname">${CiscoHOLEC2Ansible.PrivateIp}</param>
                       <param name="port">22</param>
@@ -1023,7 +1183,7 @@ Resources:
                       <param name="font-name">terminus</param>
                       <param name="enable-sftp">true</param>
                   </connection>	
-                  <connection name="09) Common Services - Microsoft Active Directory 2019">
+                  <connection name="08) Common Services - Microsoft Active Directory 2019">
                       <protocol>rdp</protocol>
                       <param name="hostname">${CiscoHOLEC2ActiveDirectory.PrivateIp}</param>
                       <param name="port">3389</param>
@@ -1033,17 +1193,16 @@ Resources:
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
                   </connection>
-                  <connection name="10) Common Services - Microsoft Systems Center Configuration Manager">
-                      <protocol>rdp</protocol>
-                      <param name="hostname">${CiscoHOLEC2MSSystemCenter.PrivateIp}</param>
-                      <param name="port">3389</param>
+                  <connection name="09) Firewall and VPN - ASAv">
+                      <protocol>ssh</protocol>
+                      <param name="hostname">${CiscoHOLEC2ASAv.PrivateIp}</param>
+                      <param name="port">22</param>
                       <param name="username">ciscolab</param>
                       <param name="password">tet123\$\$!</param>
-                      <param name="domain">hol.local</param>
-                      <param name="security">any</param>
-                      <param name="ignore-cert">true</param>
+                      <param name="enable-sftp">true</param>
+                      <param name="font-name">terminus</param>
                   </connection>
-                  <connection name="11) Attack Host - KaliLinux - Metasploit">
+                  <connection name="10) Attack Host - KaliLinux - Metasploit">
                       <protocol>ssh</protocol>
                       <param name="hostname">${CiscoHOLEC2Attacker.PrivateIp}</param>
                       <param name="port">22</param>
@@ -1052,7 +1211,7 @@ Resources:
                       <param name="font-name">terminus</param>
                       <param name="enable-sftp">true</param>
                   </connection>	
-                  <connection name="12) Tetration Edge Appliance">
+                  <connection name="11) Tetration Edge Appliance">
                       <protocol>ssh</protocol>
                       <param name="hostname">${CiscoHOLEC2TetEdge.PrivateIp}</param>
                       <param name="port">22</param>
@@ -1061,7 +1220,7 @@ Resources:
                       <param name="font-name">terminus</param>
                       <param name="enable-sftp">true</param>
                   </connection>
-                  <connection name="13) Tetration Data Ingest Appliance">
+                  <connection name="12) Tetration Data Ingest Appliance">
                       <protocol>ssh</protocol>
                       <param name="hostname">${CiscoHOLEC2TetData.PrivateIp}</param>
                       <param name="port">22</param>
@@ -1112,6 +1271,10 @@ Resources:
   # Create Elastic IP Addresses
   CiscoHOLGuacamoleEIP:
     Type: AWS::EC2::EIP
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-eip-guacamole-${Region}${Subnet01AvailabilityZone}"
   
   # Elastic IP Association  
   CiscoHOLAssociateEIPGuacamole:
@@ -1119,17 +1282,6 @@ Resources:
     Properties:
       AllocationId: !GetAtt CiscoHOLGuacamoleEIP.AllocationId
       NetworkInterfaceId: !Ref GuacamoleNetworkInterfaces01
-  
-  # Lambda Load Generator
-  LambdaFunction:
-    Type: AWS::Lambda::Function
-    Properties:
-      Description: "Cisco HOL Load Generator Lambda"
-      Code:
-        ZipFile: ./files/load_generator.zip
-      Handler: index.lambda_handler
-      Role: !Sub ${LambdaExecutionRole.Arn}
-      Runtime: nodejs12.x
 
   # Lambda Function Basic Execution Role
   LambdaExecutionRole:
@@ -1146,136 +1298,110 @@ Resources:
               - sts:AssumeRole
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
-    
-  LambdaSchedule:
+
+  # Lambda Load Generator For IIS
+  LambdaFunctionIIS:
+    Type: AWS::Lambda::Function
+    Properties:
+      Description: "Cisco HOL Load Generator Lambda For IIS"
+      Code:
+        ZipFile: |
+          const http = require('http');
+          const https = require('https');
+          process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+          exports.handler = function(event, context) {
+              http.get(process.env.APP_URL, (resp) => {
+                  let data = '';
+                  resp.on('data', (chunk) => {
+                      data += chunk;
+                  });
+                  resp.on('end', () => {
+                      console.log('Result:', data);
+                      return {
+                          result: data
+                      };
+                  });
+
+              }).on('error', (err) => {
+                  console.log('Error:', err.message);
+              });
+          };
+      Handler: index.lambda_handler
+      Role: !Sub ${LambdaExecutionRole.Arn}
+      Environment:
+        Variables:
+          APP_URL: !GetAtt CiscoHOLEC2IIS.PublicIp
+      Runtime: nodejs12.x
+
+  LambdaScheduleIIS:
     Type: AWS::Events::Rule
     Properties:
       Description: "Cisco HOL Load Generator Lambda Event"
       ScheduleExpression: rate(1 minute)
       State: ENABLED
       Targets:
-        - Arn: !Sub ${LambdaFunction.Arn}
-          Id: LambdaSchedule
+        - Arn: !Sub ${LambdaFunctionIIS.Arn}
+          Id: LambdaScheduleIIS
 
-  LambdaSchedulePermission:
+  LambdaSchedulePermissionIIS:
     Type: AWS::Lambda::Permission
     Properties:
       Action: lambda:InvokeFunction
-      FunctionName: !Sub ${LambdaFunction.Arn}
+      FunctionName: !Sub ${LambdaFunctionIIS.Arn}
       Principal: events.amazonaws.com
-      SourceArn: !Sub ${LambdaSchedule.Arn}
+      SourceArn: !Sub ${LambdaScheduleIIS.Arn}
   
-  # Create IAM Role For EKS Cluster
-  EKSClusterInstanceRole:
-    Type: AWS::IAM::Role
+  # Lambda Load Generator For Apache
+  LambdaFunctionApache:
+    Type: AWS::Lambda::Function
     Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-        - Effect: Allow
-          Principal:
-            Service:
-              - eks.amazonaws.com
-          Action:
-            - sts:AssumeRole
-      Path: "/"
-      RoleName: !Join [ "-", [ !Ref 'AWS::StackName', "EKS-Cluster-Role" ] ]
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
-        - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
-        - arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess
-  
-  # Create IAM Role For EKS Worker Node
-  EKSWorkerInstanceRole:
-    Type: AWS::IAM::Role
-    Properties:
-      AssumeRolePolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service:
-                - ec2.amazonaws.com
-            Action:
-              - sts:AssumeRole
-      Path: /
-      RoleName: !Join [ "-", [ !Ref 'AWS::StackName', "EKS-Worker-Role" ] ]
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
-        - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
-        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+      Description: "Cisco HOL Load Generator Lambda For Apache"
+      Code:
+        ZipFile: |
+          const http = require('http');
+          const https = require('https');
+          process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
+          exports.handler = function(event, context) {
+              http.get(process.env.APP_URL, (resp) => {
+                  let data = '';
+                  resp.on('data', (chunk) => {
+                      data += chunk;
+                  });
+                  resp.on('end', () => {
+                      console.log('Result:', data);
+                      return {
+                          result: data
+                      };
+                  });
 
-  # Attache IAM Role EKS Cluster
-  EKSClusterInstanceProfile:
-    Type: AWS::IAM::InstanceProfile
+              }).on('error', (err) => {
+                  console.log('Error:', err.message);
+              });
+          };
+      Handler: index.lambda_handler
+      Role: !Sub ${LambdaExecutionRole.Arn}
+      Environment:
+        Variables:
+          APP_URL: !GetAtt CiscoHOLEC2Apache.PublicIp
+      Runtime: nodejs12.x
+
+  LambdaScheduleApache:
+    Type: AWS::Events::Rule
     Properties:
-      Path: "/"
-      Roles:
-      - !Ref EKSClusterInstanceRole
-    
-  # Attache IAM Role EKS Worker
-  EKSWorkerInstanceProfile:
-    Type: AWS::IAM::InstanceProfile
+      Description: "Cisco HOL Load Generator Lambda Event"
+      ScheduleExpression: rate(1 minute)
+      State: ENABLED
+      Targets:
+        - Arn: !Sub ${LambdaFunctionApache.Arn}
+          Id: LambdaScheduleApache
+
+  LambdaSchedulePermissionApache:
+    Type: AWS::Lambda::Permission
     Properties:
-      Path: /
-      Roles:
-      - !Ref EKSWorkerInstanceRole
-  
-  # Create EKS Cluster
-  EKSCluster:
-    Type: "AWS::EKS::Cluster"
-    Properties:
-      Name: !Sub "${StudentName}-eks-cluster-${Region}"
-      ResourcesVpcConfig:
-        SecurityGroupIds:
-          - !Ref CiscoHOLWebSecurityGroup
-          - !Ref CiscoHOLPublicSecurityGroup
-        SubnetIds:
-          - !Ref CiscoHOLSubnet01
-          - !Ref CiscoHOLSubnet02
-      RoleArn: !GetAtt EKSClusterInstanceRole.Arn
-  
-  # Node Launch Configuration
-  EKSWorkerNodeLaunchConfig:
-    Type: AWS::AutoScaling::LaunchConfiguration
-    Properties:
-      AssociatePublicIpAddress: 'True'
-      BlockDeviceMappings:
-        - DeviceName: /dev/xvda
-          Ebs:
-            VolumeSize: 20
-            VolumeType: gp2
-            DeleteOnTermination: true
-      IamInstanceProfile: !Ref EKSWorkerInstanceProfile
-      ImageId: !Ref EKSWorkerImageID
-      InstanceType: t2.medium
-      # KeyName: !Ref KeyName
-      SecurityGroups:
-        - !Ref CiscoHOLPublicSecurityGroup
-      UserData: !Base64
-        "Fn::Sub": |
-          #!/bin/bash
-          set -o xtrace
-          /etc/eks/bootstrap.sh --apiserver-endpoint '${EKSCluster.Endpoint}' --b64-cluster-ca '${EKSCluster.CertificateAuthorityData}' '${EKSCluster}'
-          /opt/aws/bin/cfn-signal --exit-code $? --stack  ${AWS::StackName} --resource NodeGroup --region ${AWS::Region}     
-  
-  # Node Provision
-  EKSWorkerNodeGroup:
-    Type: AWS::AutoScaling::AutoScalingGroup
-    Properties:
-      DesiredCapacity: 1
-      LaunchConfigurationName: !Ref EKSWorkerNodeLaunchConfig
-      MinSize: 1
-      MaxSize: 2
-      VPCZoneIdentifier:
-        - !Ref CiscoHOLSubnet01
-      Tags:
-      - Key: Name
-        PropagateAtLaunch: "true"
-        Value: !Sub "${StudentName}-eks-worker-${Region}"
-      - Key: !Sub kubernetes.io/cluster/${StudentName}-eks-cluster-${Region}
-        Value: owned
-        PropagateAtLaunch: "true"
+      Action: lambda:InvokeFunction
+      FunctionName: !Sub ${LambdaFunctionApache.Arn}
+      Principal: events.amazonaws.com
+      SourceArn: !Sub ${LambdaScheduleApache.Arn}
 
   # # VPC Flow Log Role
   # Role:
@@ -1360,15 +1486,21 @@ Outputs:
   CiscoHOLMSSQL:
     Description: MS SQL Server Private IP
     Value: !GetAtt CiscoHOLEC2SQLServer.PrivateIp
-  CiscoHOLIIS:
+  CiscoHOLIISPrivate:
     Description: IIS Server Private IP
     Value: !GetAtt CiscoHOLEC2IIS.PrivateIp
+  CiscoHOLIISPublic:
+    Description: IIS Server Public IP
+    Value: !GetAtt CiscoHOLEC2IIS.PublicIp
   CiscoHOLMySql:
     Description: MySQL Server Private IP
     Value: !GetAtt CiscoHOLEC2MySQL.PrivateIp
-  CiscoHOLApache:
+  CiscoHOLApachePrivate:
     Description: Apache Server Private IP
     Value: !GetAtt CiscoHOLEC2Apache.PrivateIp
+  CiscoHOLApachePublic:
+    Description: Apache Server Public IP
+    Value: !GetAtt CiscoHOLEC2Apache.PublicIp
   CiscoHOLAnsible:
     Description: Ansible Server Private IP
     Value: !GetAtt CiscoHOLEC2Ansible.PrivateIp
@@ -1387,6 +1519,9 @@ Outputs:
   CiscoHOLAttacker:
     Description: Mire-based Attacker Server Private IP
     Value: !GetAtt CiscoHOLEC2Attacker.PrivateIp
-  CiscoHOLGuacamole:  
+  CiscoHOLGuacamolePrivate:  
     Description: Guacamole Server Private IP
     Value: !GetAtt CiscoHOLEC2Guacamole.PrivateIp
+  CiscoHOLGuacamolePublic:
+    Description: Guacamole Server Public IP
+    Value: !Ref CiscoHOLGuacamoleEIP

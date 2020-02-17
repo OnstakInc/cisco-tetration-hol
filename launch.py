@@ -6,6 +6,9 @@ import random
 import time
 import re
 import collections
+import csv
+import os
+from datetime import datetime
 
 PARAMETERS_FILE = './parameters.yml'
 CFT_POD_FILE = './cisco-hol-pod-cft-template.yml'
@@ -14,8 +17,15 @@ CFT_POD_FILE = './cisco-hol-pod-cft-template.yml'
 params = yaml.load(open(PARAMETERS_FILE), Loader=yaml.Loader)
 
 
-ACCESS_KEY = params['aws_access_key']
-SECRET_KEY = params['aws_secret_key']
+ACCESS_KEY = os.environ['AWS_ACCESS_KEY_ID']
+SECRET_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+
+if ACCESS_KEY == None or ACCESS_KEY == '':
+    ACCESS_KEY = params['aws_access_key']
+
+if SECRET_KEY == None or SECRET_KEY == '':
+    SECRET_KEY = params['aws_secret_key']
+
 REGION = params['aws_region']
 VPC_ID = params['vpc_id']
 INTERNET_GATEWAY_ID = params['internet_gateway_id']
@@ -23,15 +33,14 @@ SUBNET_RANGE_PRIMARY = params['subnet_range_primary']
 SUBNET_RANGE_SECONDARY = params['subnet_range_secondary']
 STUDENT_COUNT = params['student_count']
 STUDENT_PREFIX = params['student_prefix']
-EMAIL_ADDRESS = params['email_address']
+# EMAIL_ADDRESS = params['email_address']
 # GLOBAL_STACK_NAME = params['global_stack_name']
-PUBLIC_ROUTE_TABLE = ''
-PRIVATE_ROUTE_TABLE = ''
+# PUBLIC_ROUTE_TABLE = ''
+# PRIVATE_ROUTE_TABLE = ''
 
-# TODO - Uncomment In Final Release
 session = boto3.Session(
-    # aws_access_key_id=ACCESS_KEY,
-    # aws_secret_access_key=SECRET_KEY,
+    aws_access_key_id=ACCESS_KEY,
+    aws_secret_access_key=SECRET_KEY,
     region_name=REGION
 )
 
@@ -119,9 +128,10 @@ try:
         STUDENTS_LIST.append({
             'account_name': f'{STUDENT_PREFIX}-0{i}',
             'account_password': password_generator(),
-            'public_subnet_01': f'{public_subnet_01[i]}/24',
-            'public_subnet_02': f'{public_subnet_02[i]}/24',
-            'private_subnet': f'{secondary_ips[i]}/24'
+            'public_subnet_01': f'{public_subnet_01[i]}',
+            'public_subnet_02': f'{public_subnet_02[i]}',
+            'private_subnet': f'{secondary_ips[i]}',
+            'eks_dns': ''
         })
 
     print(f'INFO: {STUDENTS_LIST}')
@@ -217,13 +227,21 @@ for student in STUDENTS_LIST:
         cloudformation_template = open(CFT_POD_FILE, 'r').read()
 
         aws_parameters = [
+            {'ParameterKey': 'AccessKey', 'ParameterValue': ACCESS_KEY},
+            {'ParameterKey': 'SecretKey', 'ParameterValue': SECRET_KEY},
+
+            {'ParameterKey': 'StudentIndex', 'ParameterValue': str(STUDENTS_LIST.index(student))},
             {'ParameterKey': 'StudentName', 'ParameterValue': student['account_name']},
             {'ParameterKey': 'StudentPassword', 'ParameterValue': student['account_password']},
             {'ParameterKey': 'VpcID', 'ParameterValue': VPC_ID},
             {'ParameterKey': 'InternetGatewayId', 'ParameterValue': INTERNET_GATEWAY_ID},
-            {'ParameterKey': 'Subnet01CidrBlock', 'ParameterValue': student['public_subnet_01']},
-            {'ParameterKey': 'Subnet02CidrBlock', 'ParameterValue': student['public_subnet_02']},
-            {'ParameterKey': 'Subnet03CidrBlock', 'ParameterValue': student['private_subnet']},
+            {'ParameterKey': 'Subnet01CidrBlock', 'ParameterValue': f"{student['public_subnet_01']}/24"},
+            {'ParameterKey': 'Subnet02CidrBlock', 'ParameterValue': f"{student['public_subnet_02']}/24"},
+            {'ParameterKey': 'Subnet03CidrBlock', 'ParameterValue': f"{student['private_subnet']}/24"},
+
+            {'ParameterKey': 'ASAvInsideSubnet', 'ParameterValue': student['public_subnet_01']},
+            {'ParameterKey': 'ASAvOutsideSubnet', 'ParameterValue': student['private_subnet']},
+
             {'ParameterKey': 'Region', 'ParameterValue': REGION},
             {'ParameterKey': 'Subnet01AvailabilityZone', 'ParameterValue': 'a'},
             {'ParameterKey': 'Subnet02AvailabilityZone', 'ParameterValue': 'b'},
@@ -303,6 +321,120 @@ while True:
         print(e)
         exit(1)
 #######################################################################
+
+#######################################################################
+# Assemble EKS ELB DNS Records ########################################
+#######################################################################
+
+# try:
+
+#     print('INFO: Initializing EKS DNS Assembly...')
+
+#     time.sleep(15)
+
+#     for student in STUDENTS_LIST:
+
+#         client = boto3.client('elb')
+
+#         eks_elbs = client.describe_load_balancers()['LoadBalancerDescriptions']
+
+#         elb_tags = client.describe_tags(
+#             LoadBalancerNames=list(map(lambda e: e['LoadBalancerName'], eks_elbs))
+#         )
+
+#         for elb in elb_tags['TagDescriptions']:
+#             for tag in elb['Tags']:
+#                 if tag['Key'] == 'Account' and tag['Value'] == student['account_name']:
+#                     student['eks_dns'] = list(filter(lambda e: e['LoadBalancerName'] == elb['LoadBalancerName'], eks_elbs))[0]['DNSName']
+#                     break
+    
+#     print('INFO: EKS DNS Assembly Completed...')
+
+# except Exception as e:
+#     print(e)
+#     exit(1)
+
+#######################################################################
+
+#######################################################################
+# Generate CSV Reports ################################################
+#######################################################################
+
+try:
+
+    records = []
+
+    for stack_name in STACKS_LIST:
+
+        print(f"INFO: StackName: {stack_name}, Status: Generating CSV Report...")
+
+        cloudformation = session.client('cloudformation')
+
+        stack = cloudformation.describe_stacks(
+            StackName=stack_name
+        )
+
+        output = {}
+
+        for o in stack['Stacks'][0]['Outputs']:
+            output[o['OutputKey']] = o['OutputValue']
+
+        records.append([
+            output['CiscoHOLStudentName'],
+            output['CiscoHOLStudentPassword'],
+            f"https://{output['CiscoHOLGuacamolePublic']}",
+            output['CiscoHOLApachePrivate'],
+            output['CiscoHOLApachePublic'],
+            output['CiscoHOLIISPrivate'],
+            output['CiscoHOLIISPublic'],
+            output['CiscoHOLMySql'],
+            output['CiscoHOLMSSQL'],
+            output['EKSClusterEndpoint'],
+            output['CiscoHOLAnsible'],
+            output['CiscoHOLTetrationEdge'],
+            output['CiscoHOLTetrationData'],
+            output['CiscoHOLASAv'],
+            output['CiscoHOLAttacker'],
+            output['CiscoHOLWin10User'],
+            output['CiscoHOLWin10DBA'],
+        ])
+
+    header = [
+        'Account', 
+        'Password', 
+        'Web Console URL',
+        'Apache OpenCart',
+        'Apache OpenCart Public',
+        'IIS nopCommerce',
+        'IIS nopCommerce Public',
+        'MySQL',
+        'MSSQL',
+        'EKS Clsuter',
+        'Ansible',
+        'Tetration Edge',
+        'Tetration Data',
+        'ASAv',
+        'Metasploit',
+        'Employee',
+        'SysAdmin'
+    ]
+
+    filename = 'reports/' + datetime.today().strftime('%H-%M-%S %Y-%m-%d') + '-report.csv'
+
+    if not os.path.exists('reports'):
+        os.makedirs('reports')
+
+    with open(filename, 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow(header)
+        writer.writerows(records)
+
+except Exception as e:
+    print(e)
+    exit(1)
+
+#######################################################################
+
 
 print('Exiting! All The Tasks Are Completed Successfully...')
 exit(0)
