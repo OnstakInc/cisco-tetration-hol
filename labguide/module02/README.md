@@ -21,6 +21,7 @@ Perform the following tasks to configure Collection Rules.
 <a href="#step-009" style="font-weight:bold">Step 009 - Enter a rule for 192.168.0.0/16</a>  
 <a href="#step-010" style="font-weight:bold">Step 010 - View the final ruleset</a>  
 
+</hr>
 
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>
 
