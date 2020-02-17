@@ -27,28 +27,28 @@ Perform the following tasks to configure Collection Rules. <a href="https://cisc
 
 
 
-<div class="step" id="step-002"><a href="#step-002" style="font-weight:bold">Step 002</a>
+<div class="step" id="step-002"><b><a name="#step-002">Step 002</a></b>
 - Click on Edit.  </div>
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_002.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_002.png" style="width:100%;height:100%;"></a>  
 
 
 
-<div class="step" id="step-003"><a href="#step-003" style="font-weight:bold">Step 003</a> - Click Delete to remove the default ::/0: IPv6 rule.</div>  
+<div class="step" id="step-003"><b><a name="#step-003">Step 003</a></b> - Click Delete to remove the default ::/0: IPv6 rule.</div>  
 
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_003.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_003.png" style="width:100%;height:100%;"></a>  
 
 
 
-<div class="step" id="step-004"><a href="#step-004" style="font-weight:bold">Step 004</a>  
+<div class="step" id="step-004"><b><a name="#step-004">Step 004</a></b>  
 - Click Delete to remove the default 0.0.0.0/0 IPv4 rule.</div>
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_004.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_004.png" style="width:100%;height:100%;"></a>  
 
 
 
-<div class="step" id="step-005"><a href="#step-005" style="font-weight:bold">Step 005</a> - Enter ::/0: in the Subnet field,  select "Exclude traffic" and then Add Rule.</div>  
+<div class="step" id="step-005"><b><a name="#step-005">Step 005</a></b> - Enter ::/0: in the Subnet field,  select "Exclude traffic" and then Add Rule.</div>  
 
 
 
@@ -56,35 +56,35 @@ Perform the following tasks to configure Collection Rules. <a href="https://cisc
 
 
 
-<div class="step" id="step-006"><a href="#step-006" style="font-weight:bold">Step 006</a> - Enter 0.0.0.0/0 in the Subnet field, Select "Exclude traffic" and then Add Rule.</div>  
+<div class="step" id="step-006"><b><a name="#step-006">Step 006</a></b> - Enter 0.0.0.0/0 in the Subnet field, Select "Exclude traffic" and then Add Rule.</div>  
 
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_006.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_006.png" style="width:100%;height:100%;"></a>  
 
 
 
-<div class="step" id="step-007"><a href="#step-007" style="font-weight:bold">Step 007</a> - Enter 10.0.0.0/8 in the Subnet field,  Select "include traffic" and then Add Rule.</div>  
+<div class="step" id="step-007"><b><a name="#step-007">Step 007</a></b> - Enter 10.0.0.0/8 in the Subnet field,  Select "include traffic" and then Add Rule.</div>  
 
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_007.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_007.png" style="width:100%;height:100%;"></a>  
 
 
 
-<div class="step" id="step-008"><a href="#step-008" style="font-weight:bold">Step 008</a> - Enter 172.16.0.0/12 in the Subnet field,  Select "include traffic" and then Add Rule.</div>  
+<div class="step" id="step-008"><b><a name="#step-008">Step 008</a></b> - Enter 172.16.0.0/12 in the Subnet field,  Select "include traffic" and then Add Rule.</div>  
 
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_008.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_008.png" style="width:100%;height:100%;"></a>  
 
 
 
-<div class="step" id="step-009"><a href="#step-009" style="font-weight:bold">Step 009</a> - Enter 192.168.0.0/16 in the Subnet field,  Select "include traffic" and then Add Rule.</div>  
+<div class="step" id="step-009"><b><a name="#step-009">Step 009</a></b> - Enter 192.168.0.0/16 in the Subnet field,  Select "include traffic" and then Add Rule.</div>  
 
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_009.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_009.png" style="width:100%;height:100%;"></a>  
 
 
 
-<div class="step" id="step-010"><a href="#step-010" style="font-weight:bold">Step 010</a> - Below is what the ruleset should look like when finished.</div>  
+<div class="step" id="step-010"><b><a name="#step-010">Step 010</a></b> - Below is what the ruleset should look like when finished.</div>  
 
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_010.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_010.png" style="width:100%;height:100%;"></a>  
