@@ -17,8 +17,9 @@ CFT_POD_FILE = './cisco-hol-pod-cft-template.yml'
 params = yaml.load(open(PARAMETERS_FILE), Loader=yaml.Loader)
 
 
-ACCESS_KEY = os.environ['AWS_ACCESS_KEY_ID']
-SECRET_KEY = os.environ['AWS_SECRET_ACCESS_KEY']
+ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY_ID')
+SECRET_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+
 
 if ACCESS_KEY == None or ACCESS_KEY == '':
     ACCESS_KEY = params['aws_access_key']

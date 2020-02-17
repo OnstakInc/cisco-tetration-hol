@@ -288,15 +288,6 @@ Resources:
           FromPort: 0
           ToPort: 65535
           CidrIp: !Ref Subnet02CidrBlock
-        # TODO - For testing only will remove in final scripts
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 3389
-          ToPort: 3389
-          CidrIp: 0.0.0.0/0
       SecurityGroupEgress:
         - IpProtocol: -1
           FromPort: 0
@@ -328,15 +319,6 @@ Resources:
           FromPort: 0
           ToPort: 65535
           CidrIp: !Ref Subnet03CidrBlock
-        # TODO - For testing only will remove in final scripts
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: 0.0.0.0/0
-        - IpProtocol: tcp
-          FromPort: 3389
-          ToPort: 3389
-          CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
           Value: !Sub "cisco-hol-${StudentName}-sg-private-${Region}"
@@ -1326,7 +1308,7 @@ Resources:
                   console.log('Error:', err.message);
               });
           };
-      Handler: index.lambda_handler
+      Handler: index.handler
       Role: !Sub ${LambdaExecutionRole.Arn}
       Environment:
         Variables:
@@ -1378,7 +1360,7 @@ Resources:
                   console.log('Error:', err.message);
               });
           };
-      Handler: index.lambda_handler
+      Handler: index.handler
       Role: !Sub ${LambdaExecutionRole.Arn}
       Environment:
         Variables:
