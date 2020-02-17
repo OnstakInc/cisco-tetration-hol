@@ -22,7 +22,7 @@ ansible_ami: ami-00755f1788655b924
 tet_data_ami: ami-0c2276fc51ad25018
 tet_edge_ami: ami-0cb78ddba97ce6591
 user_ami: ami-0da00f363f93add92
-dba_ami: ami-08192725122d93c22
+dba_ami: ami-0251560c1974053ba
 attack_server_ami: ami-09b253f6574754048
 guacamole_ami: ami-04e70edcc169673d7
 eks_worker_ami: ami-00c0ebc8b70d7e97c
