@@ -1,4 +1,4 @@
-import os, glob
+import os, glob, re
 from pathlib import Path
 from shutil import copy2
 
@@ -48,5 +48,11 @@ with open('README.md','w') as f:
         f.write(f'<a href="{url_dict[key]}"><img src="{url_dict[key]}" style="width:100%;height:100%;"></a>  \n')
         f.write('  \n\n\n')
 
-    f.write('  \n')
+    f.write('  \n\n')
+    module_num = re.split('[a-zA-Z]+' , module)
+    module_num_int = int(module_num[1])
+    next_module_num = module_num_int + 1
+    next_module = 'module' + str(next_module_num).zfill(2)
+    f.write(f'[Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/{next_module}/)')
+    f.write('  \n\n')
     f.write('[Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/)')
