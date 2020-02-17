@@ -1,6 +1,6 @@
 # Cisco Tetration - Hands-On Lab
   
-## Module24
+## Module24: Edge Appliance - ISE
   
 
 ### Steps for this Module  

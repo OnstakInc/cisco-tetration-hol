@@ -1,6 +1,6 @@
 # Cisco Tetration - Hands-On Lab
   
-## Module27
+## Module27: Security Visibility & Monitoring
   
 
 ### Steps for this Module  

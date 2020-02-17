@@ -1,6 +1,6 @@
 # Cisco Tetration - Hands-On Lab
   
-## Module07
+## Module07: External Orchestrators
   
 
 ### Steps for this Module  

@@ -1,6 +1,6 @@
 # Cisco Tetration - Hands-On Lab
   
-## Module25
+## Module25: User-Based Enforcement
   
 
 ### Steps for this Module  

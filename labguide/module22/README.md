@@ -1,6 +1,6 @@
 # Cisco Tetration - Hands-On Lab
   
-## Module22
+## Module22: Container Policies and Enforcement
   
 
 ### Steps for this Module  

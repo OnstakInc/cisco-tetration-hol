@@ -1,6 +1,6 @@
 # Cisco Tetration - Hands-On Lab
   
-## Module23
+## Module23: Forensics
   
 
 ### Steps for this Module  

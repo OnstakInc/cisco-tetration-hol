@@ -7,7 +7,7 @@ When configuring Collection rules, we must first delete the IPv6 and IPv4 rules 
 
 Perform the following tasks to configure Collection Rules.  
 
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01_collection_rules.mp4" style="font-weight:bold" title="Collection Rules Title">Click here to view a video of the tasks being performed.</a>
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01_collection_rules.mp4" style="font-weight:bold" title="Collection Rules Title">Click here to view a video of the tasks being performed to configure Collection Rules.</a>
 
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Navigate to Collection Rules</a>  
