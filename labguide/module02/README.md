@@ -20,7 +20,8 @@ Perform the following tasks to configure Collection Rules. <a href="https://cisc
 <a href="#step-010" style="font-weight:bold">Step 010 - View the final ruleset</a>  
 
 
-<b><a id="#step-001">Step 001</a></b> - Click on the gear icon in the upper right hand corner and select Collection Rules.
+<b><a id="#step-001">Step 001</a></b>
+- Click on the gear icon in the upper right hand corner and select Collection Rules.</div>
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_001.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_001.png" style="width:100%;height:100%;"></a>  
 
