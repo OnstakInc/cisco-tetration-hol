@@ -421,7 +421,6 @@ Resources:
           DeviceIndex: "0"
           GroupSet:
             - !Ref CiscoHOLPublicSecurityGroup
-            - !Ref CiscoHOLWebSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet01
   
   # MS Systems Center
@@ -508,7 +507,6 @@ Resources:
           DeviceIndex: "0"
           GroupSet:
             - !Ref CiscoHOLPublicSecurityGroup
-            - !Ref CiscoHOLWebSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet01
   
   # Windows IIS Server
@@ -605,11 +603,10 @@ Resources:
           echo "${ASAvOutsideSubnet}/24 via ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0" >> /etc/sysconfig/network-scripts/route-eth0
           systemctl restart network
       NetworkInterfaces: 
-        - AssociatePublicIpAddress: "false"
+        - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
           GroupSet: 
             - !Ref CiscoHOLPublicSecurityGroup
-            - !Ref CiscoHOLWebSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet01
   
   # # Create Elastic IP Addresse
