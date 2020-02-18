@@ -11,22 +11,24 @@ In this module,  we'll configure Static Annotations for the endpoints in the lab
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/04_verify_static_annotations.mp4" style="font-weight:bold" title="Collection Rules Title">Click here to view the second of two videos highlighting the verification of those Annotations.</a>
 
 ### Steps for this Module  
-<a href="#step-001" style="font-weight:bold">Step 001</a>  
-<a href="#step-002" style="font-weight:bold">Step 002</a>  
-<a href="#step-003" style="font-weight:bold">Step 003</a>  
-<a href="#step-004" style="font-weight:bold">Step 004</a>  
-<a href="#step-005" style="font-weight:bold">Step 005</a>  
-<a href="#step-006" style="font-weight:bold">Step 006</a>  
-<a href="#step-007" style="font-weight:bold">Step 007</a>  
-<a href="#step-008" style="font-weight:bold">Step 008</a>  
-<a href="#step-009" style="font-weight:bold">Step 009</a>  
-<a href="#step-010" style="font-weight:bold">Step 010</a>  
-<a href="#step-011" style="font-weight:bold">Step 011</a>  
-<a href="#step-012" style="font-weight:bold">Step 012</a>  
-<a href="#step-013" style="font-weight:bold">Step 013</a>  
+<a href="#step-001" style="font-weight:bold">Step 001 - Open annotations file</a>  
+<a href="#step-002" style="font-weight:bold">Step 002 - Modify annotations file with lab IP addresses</a>  
+<a href="#step-003" style="font-weight:bold">Step 003 - Save the annotations file to the desktop</a>  
+<a href="#step-004" style="font-weight:bold">Step 004 - Navigate to Inventory Uploads</a>  
+<a href="#step-005" style="font-weight:bold">Step 005 - Select the annotations file from the desktop</a>  
+<a href="#step-006" style="font-weight:bold">Step 006 - Specify the upload operation</a>  
+<a href="#step-007" style="font-weight:bold">Step 007 - Examine the new annotations</a>  
+<a href="#step-008" style="font-weight:bold">Step 008 - Navigate to Inventory Search</a>  
+<a href="#step-009" style="font-weight:bold">Step 009 - View the annotations that can be filtered upon</a>  
+<a href="#step-010" style="font-weight:bold">Step 010 - Search for inventory using annotations</a>  
+<a href="#step-011" style="font-weight:bold">Step 011 - Navigate to Workload Profile</a>  
+<a href="#step-012" style="font-weight:bold">Step 012 - View the annotations assigned to the workload</a>  
+<a href="#step-013" style="font-weight:bold">Step 013 - Annotations on the workload</a>  
 
 
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  
+
+Open the provided annotations.csv file in a text editor.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_001.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_001.png" style="width:100%;height:100%;"></a>  
 
@@ -34,11 +36,15 @@ In this module,  we'll configure Static Annotations for the endpoints in the lab
 
 <div class="step" id="step-002"><a href="#step-002" style="font-weight:bold">Step 002</a></div>  
 
+Change the 1.1.1.x addresses in the annotations file to the provided IP addresses for the lab.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_002.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_002.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-003"><a href="#step-003" style="font-weight:bold">Step 003</a></div>  
+
+Save the annotations file to the desktop on the lab workstation.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_003.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_003.png" style="width:100%;height:100%;"></a>  
 
@@ -46,11 +52,15 @@ In this module,  we'll configure Static Annotations for the endpoints in the lab
 
 <div class="step" id="step-004"><a href="#step-004" style="font-weight:bold">Step 004</a></div>  
 
+On the Tetration dashboard,  click on Visibility and Inventory Upload.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_004.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_004.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-005"><a href="#step-005" style="font-weight:bold">Step 005</a></div>  
+
+Click the Select File button and select the .csv file previously saved to the desktop.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_005.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_005.png" style="width:100%;height:100%;"></a>  
 
@@ -58,17 +68,23 @@ In this module,  we'll configure Static Annotations for the endpoints in the lab
 
 <div class="step" id="step-006"><a href="#step-006" style="font-weight:bold">Step 006</a></div>  
 
+Click the dropdown arrow and select Add for the operation.  
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_006.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_006.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-007"><a href="#step-007" style="font-weight:bold">Step 007</a></div>  
 
+Notice the new annotation columns that have been imported into the cluster from the .csv file.  These map to the column headers in the .csv file.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_007.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_007.png" style="width:100%;height:100%;"></a>  
 
 
 
-<div class="step" id="step-008"><a href="#step-008" style="font-weight:bold">Step 008</a></div>  
+<div class="step" id="step-008"><a href="#step-008" style="font-weight:bold">Step 008</a></div>
+
+Click on Visibility and Inventory Search.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_008.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_008.png" style="width:100%;height:100%;"></a>  
 
@@ -76,34 +92,37 @@ In this module,  we'll configure Static Annotations for the endpoints in the lab
 
 <div class="step" id="step-009"><a href="#step-009" style="font-weight:bold">Step 009</a></div>  
 
+Here we can query for workloads using the annotations that we created.  Click on the question mark next to Filters to display the annotation columns. Tetration contains a number of default fields that can be filtered on,  however user annotations as well as annotations from external orchestrators are prepended with a * to differentiate from the system defaults.
+
+> Note: It may take a few minutes for the newly uploaded annotations to show up in the Filters help screen.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_009.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_009.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-010"><a href="#step-010" style="font-weight:bold">Step 010</a></div>  
 
+Enter the query: ```* AppName contains OpenCart``` and click Search. The Linux machine in your lab environment should be shown.   
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_010.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_010.png" style="width:100%;height:100%;"></a>  
-
-
 
 <div class="step" id="step-011"><a href="#step-011" style="font-weight:bold">Step 011</a></div>  
 
+Click on the IP address of the Linux machine to go to the Workload Profile screen.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_011.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_011.png" style="width:100%;height:100%;"></a>  
-
-
 
 <div class="step" id="step-012"><a href="#step-012" style="font-weight:bold">Step 012</a></div>  
 
+Click on the link under User Annotations to display the list of annotations.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_012.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_012.png" style="width:100%;height:100%;"></a>  
-
-
 
 <div class="step" id="step-013"><a href="#step-013" style="font-weight:bold">Step 013</a></div>  
 
+Here you should see the annotations and their values that were entered into the .csv file for this workload.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_013.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/images/module05_013.png" style="width:100%;height:100%;"></a>  
-
-
-
 
 
 | [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/module06/) |
