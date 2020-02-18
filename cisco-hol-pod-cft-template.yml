@@ -1164,7 +1164,7 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash
           rm -rf /opt/*
-          git clone https://github.com/OnstakInc/ansible-tetration-sensor.git
+          sh -c 'cd /opt && git clone https://github.com/OnstakInc/ansible-tetration-sensor.git'
           cat <<EOF > /opt/ansible-tetration-sensor/inventory/hosts
           [linux]
           ${CiscoHOLEC2Apache.PrivateIp}
