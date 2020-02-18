@@ -37,8 +37,8 @@ Metadata:
           - AnsibleImageID
           - TetrationDataIngestImageID
           - TetrationEdgeImageID
-          - Win10UserImageID
-          - Win10DBAImageID
+          - Win10EmployeeImageID
+          - Win10SysAdminImageID
           - AttackerImageID
           - GuacamoleImageID 
     ParameterLabels:
@@ -119,6 +119,21 @@ Parameters:
   Subnet03AvailabilityZone:
     Type: String
     Description: Please enter the AZ for 3rd Subnet
+  AttackerPrivateIp:
+    Type: String
+    Description: Please enter Private IP For Attacker
+  Win10EmployeePrivateIp:
+    Type: String
+    Description: Please enter Private IP For Employee
+  Win10SysAdminPrivateIp:
+    Type: String
+    Description: Please enter Private IP For SysAdmin
+  IISOutsidePrivateIp:
+    Type: String
+    Description: Please enter Private IP For Outside IIS Interface
+  ApacheOutsidePrivateIp:
+    Type: String
+    Description: Please enter Private IP For Outside Apache Interface
   ASAvImageID:
     Type: String
     Description: Please enter Image Id for ASAv
@@ -149,12 +164,12 @@ Parameters:
   TetrationEdgeImageID:
     Type: String
     Description: Please enter Image Id for Tetration Edge
-  Win10UserImageID:
+  Win10EmployeeImageID:
     Type: String
-    Description: Please enter Image Id for Win10 User
-  Win10DBAImageID:
+    Description: Please enter Image Id for Win10 Employee
+  Win10SysAdminImageID:
     Type: String
-    Description: Please enter Image Id for Win10 DBA
+    Description: Please enter Image Id for Win10 SysAdmin
   AttackerImageID:
     Type: String
     Description: Please enter Image Id for Mire-based Attacker
@@ -164,7 +179,6 @@ Parameters:
   EKSWorkerImageID:
     Type: String
     Description: Please enter Image Id for EKS Worker Node
-
 Resources:
 
   # Create Public Route Table
@@ -397,6 +411,8 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           <powershell>
+          route add 192.168.${StudentIndex}.0 mask 255.255.255.0 ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} -p
+          route add ${ASAvOutsideSubnet} mask 255.255.255.0 ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} -p
           ipconfig /flushdns
           Clear-DnsClientCache
           </powershell>
@@ -481,6 +497,8 @@ Resources:
           <powershell>
           $adapter = Get-NetAdapter -Name 'Ethernet*'
           Set-DNSClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ("${CiscoHOLEC2ActiveDirectory.PrivateIp}")
+          route add 192.168.${StudentIndex}.0 mask 255.255.255.0 ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} -p
+          route add ${ASAvOutsideSubnet} mask 255.255.255.0 ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} -p
           ipconfig /flushdns
           Clear-DnsClientCache
           </powershell>
@@ -523,8 +541,11 @@ Resources:
           <powershell>
           $adapter = Get-NetAdapter -Name 'Ethernet*'
           Set-DNSClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ("${CiscoHOLEC2ActiveDirectory.PrivateIp}")
+          route add 192.168.${StudentIndex}.0 mask 255.255.255.0 ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} -p
+          route add ${ASAvOutsideSubnet} mask 255.255.255.0 ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} -p
           ipconfig /flushdns
           Clear-DnsClientCache
+          Start-Sleep -Seconds 60
           IISReset /Restart
           </powershell>
       NetworkInterfaces:
@@ -576,6 +597,11 @@ Resources:
           systemctl restart sshd
           echo "DNS1=${CiscoHOLEC2ActiveDirectory.PrivateIp}" | tee -a /etc/sysconfig/network-scripts/ifcfg-eth0
           systemctl restart network
+          route add -net 192.168.${StudentIndex}.0 netmask 255.255.255.0 gw ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0
+          route add -net ${ASAvOutsideSubnet} netmask 255.255.255.0 gw ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0
+          echo "192.168.${StudentIndex}.0/24 via ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0" > /etc/sysconfig/network-scripts/route-eth0
+          echo "${ASAvOutsideSubnet}/24 via ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0" >> /etc/sysconfig/network-scripts/route-eth0
+          systemctl restart network
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "false"
           DeviceIndex: "0"
@@ -622,14 +648,23 @@ Resources:
           rm -rf /var/www/html/admin/config.php
           cp /var/www/templates/config.php /var/www/html/config.php
           cp /var/www/templates/admin.config.php /var/www/html/admin/config.php
-          sed -i "s/{{app}}/$ip_address/g" /var/www/html/config.php
-          sed -i "s/{{app}}/$ip_address/g" /var/www/html/admin/config.php
+          sed -i "s/^.*HTTP_SERVER.*$/define('HTTP_SERVER', 'http:\/\/'.\$_SERVER['HTTP_HOST'].'\/');/g" /var/www/html/config.php
+          sed -i "s/^.*HTTPS_SERVER.*$/define('HTTPS_SERVER', 'https:\/\/'.\$_SERVER['HTTP_HOST'].'\/');/g" /var/www/html/config.php
+          sed -i "s/^.*HTTP_SERVER.*$/define('HTTP_SERVER', 'http:\/\/'.\$_SERVER['HTTP_HOST'].'\/admin\/');/g" /var/www/html/admin/config.php
+          sed -i "s/^.*HTTP_CATALOG.*$/define('HTTP_CATALOG', 'http:\/\/'.\$_SERVER['HTTP_HOST'].'\/');/g" /var/www/html/admin/config.php
+          sed -i "s/^.*HTTPS_SERVER.*$/define('HTTPS_SERVER', 'https:\/\/'.\$_SERVER['HTTP_HOST'].'\/admin\/');/g" /var/www/html/admin/config.php
+          sed -i "s/^.*HTTPS_CATALOG.*$/define('HTTPS_CATALOG', 'https:\/\/'.\$_SERVER['HTTP_HOST'].'\/');/g" /var/www/html/admin/config.php
           sed -i "s/{{db}}/${CiscoHOLEC2MySQL.PrivateIp}/g" /var/www/html/config.php
           sed -i "s/{{db}}/${CiscoHOLEC2MySQL.PrivateIp}/g" /var/www/html/admin/config.php
           sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+          chown apache:apache -R /var/www/html
           systemctl restart sshd
-          echo "DNS1=${CiscoHOLEC2ActiveDirectory.PrivateIp}" | tee -a /etc/sysconfig/network-scripts/ifcfg-eth0
           systemctl restart network
+          echo "DNS1=${CiscoHOLEC2ActiveDirectory.PrivateIp}" | tee -a /etc/sysconfig/network-scripts/ifcfg-eth0
+          route add -net 192.168.${StudentIndex}.0 netmask 255.255.255.0 gw ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0
+          route add -net ${ASAvOutsideSubnet} netmask 255.255.255.0 gw ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0
+          echo "192.168.${StudentIndex}.0/24 via ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0" > /etc/sysconfig/network-scripts/route-eth0
+          echo "${ASAvOutsideSubnet}/24 via ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0" >> /etc/sysconfig/network-scripts/route-eth0
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
@@ -719,36 +754,38 @@ Resources:
           SubnetId: !Ref CiscoHOLSubnet01
   
   # Windows 10 user (AnyConnect, ASDM, Putty, CMD-Telnet, WinSCP)
-  CiscoHOLEC2Win10eUser:
+  CiscoHOLEC2Win10Employee:
     Type: AWS::EC2::Instance
     DependsOn:
       - CiscoHOLEC2ActiveDirectory
     Properties:
-      ImageId: !Ref Win10UserImageID
+      ImageId: !Ref Win10EmployeeImageID
       InstanceType: t2.small
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-win10e-user-${Region}${Subnet02AvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-ec2-win10-employee-${Region}${Subnet02AvailabilityZone}"
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
+          PrivateIpAddress: !Ref Win10EmployeePrivateIp
           DeviceIndex: "0"
           GroupSet: 
             - !Ref CiscoHOLPrivateSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet03
   
-  # Windows 10 DBA (AnyConnect, ASDM, Putty, CMD-Telnet, WinSCP)
-  CiscoHOLEC2Win10eDBA:
+  # Windows 10 SysAdmin (AnyConnect, ASDM, Putty, CMD-Telnet, WinSCP)
+  CiscoHOLEC2Win10SysAdmin:
     Type: AWS::EC2::Instance
     DependsOn:
       - CiscoHOLEC2ActiveDirectory
     Properties:
-      ImageId: !Ref Win10DBAImageID
+      ImageId: !Ref Win10SysAdminImageID
       InstanceType: t2.small
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-win10e-dba-${Region}${Subnet02AvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-ec2-win10-sysadmin-${Region}${Subnet02AvailabilityZone}"
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
+          PrivateIpAddress: !Ref Win10SysAdminPrivateIp
           DeviceIndex: "0"
           GroupSet: 
             - !Ref CiscoHOLPrivateSecurityGroup
@@ -773,6 +810,7 @@ Resources:
           systemctl restart sshd
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
+          PrivateIpAddress: !Ref AttackerPrivateIp
           DeviceIndex: "0"
           GroupSet: 
             - !Ref CiscoHOLPrivateSecurityGroup
@@ -911,16 +949,18 @@ Resources:
           Value: AWS
         - Key: Region
           Value: !Sub "${Region}"
-       # - Key: AppSDLC
-       #   Value: Lab
-       # - Key: AppGroup
-       #   Value: Common
-       # - Key: AppName
-       #   Value: Active Directory
-       # - Key: AppCluster
-       #   Value: GC-DC-DNS
-      UserData: !Base64
-        "Fn::Sub": |
+      UserData: 
+        Fn::Base64: !Sub |
+          hostname cisco-hol-asav
+          domain-name hol.local
+          crypto key generate rsa modulus 2048 noconfirm
+          enable password tet123$$!
+          names
+          name 129.6.15.28 time-a.nist.gov
+          name 129.6.15.29 time-b.nist.gov
+          name 129.6.15.30 time-c.nist.gov
+          no mac-address auto
+          ip local pool LAB-POOL 192.168.${StudentIndex}.1-192.168.${StudentIndex}.254 mask 255.255.255.0
           interface GigabitEthernet0/0
           nameif outside
           security-level 0
@@ -931,20 +971,107 @@ Resources:
           security-level 100
           ip address dhcp setroute 
           no shutdown
-          username admin password tet123$$! privilege 15
+          interface Management0/0
+          management-only
+          shutdown
+          nameif management
+          security-level 100
+          no ip address
+          ssh version 2
+          ssh scopy enable
           username ciscolab password tet123$$! privilege 15
-          enable password tet123$$!
-          access-list ssh standard permit any4
+          username admin password tet123$$! privilege 15
+          ftp mode passive
+          clock timezone PST -8
+          dns domain-lookup inside
+          dns domain-lookup management
+          dns server-group DefaultDNS
+          name-server ${CiscoHOLEC2ActiveDirectory.PrivateIp}
+          domain-name hol.local
+          object network OBJ-LAB-SUBNET
+          subnet 192.168.${StudentIndex}.0 255.255.255.0
+          object network nopCommerce-IIS
+          host ${CiscoHOLEC2IIS.PrivateIp}
+          object network OpenCart-App
+          host ${CiscoHOLEC2Apache.PrivateIp}
+          object-group network RemoteAccessVPN
+          network-object 192.168.${StudentIndex}.0 255.255.255.0
+          access-list ssh standard permit any4 
+          access-list standard standard permit any4 
+          access-list outside-in extended permit icmp any any 
+          access-list outside-in extended permit tcp any object nopCommerce-IIS eq www 
+          access-list outside-in extended permit tcp any object nopCommerce-IIS eq https 
+          access-list outside-in extended permit tcp any object OpenCart-App eq www 
+          access-list outside-in extended permit tcp any object OpenCart-App eq https 
+          access-list outside-in extended permit tcp any object OpenCart-App eq 8080 
+          access-list outside-in extended permit tcp any object nopCommerce-IIS eq 8080 
+          access-list LAB-LIST standard permit ${ASAvInsideSubnet} 255.255.255.0 
+          nat (inside,outside) source static any any destination static RemoteAccessVPN RemoteAccessVPN
+          object network nopCommerce-IIS
+          nat (inside,outside) static ${IISOutsidePrivateIp}
+          object network OpenCart-App
+          nat (inside,outside) static ${ApacheOutsidePrivateIp}
+          access-group outside-in in interface outside
+          aaa authentication ssh console LOCAL
+          user-identity default-domain LOCAL
+          aaa authentication login-history
+          http server enable
+          http 0.0.0.0 0.0.0.0 management
+          http 0.0.0.0 0.0.0.0 inside
+          crypto ipsec security-association pmtu-aging infinite
+          crypto key generate rsa label sslvpnkeypair modulus 1024
+          crypto ca trustpoint self_trustpoint
+          enrollment self
+          fqdn ${ASAvOutsideSubnet}
+          subject-name CN=${ASAvOutsideSubnet}
+          serial-number
+          keypair sslvpnkeypair
+          crl configure
+          ssl trust-point self_trustpoint outside
+          crypto ca trustpool policy
+          auto-import
           ssh 0.0.0.0 0.0.0.0 outside
           ssh 0.0.0.0 0.0.0.0 inside
           ssh 0.0.0.0 0.0.0.0 management
-          hostname cisco-hol-asav
-          domain-name hol.local
-          crypto key generate rsa modulus 2048 noconfirm
-          ssh version 2
-          ssh scopy enable
-          aaa authentication ssh console LOCAL
-          user-identity default-domain LOCAL
+          ntp server time-c.nist.gov
+          ntp server time-b.nist.gov
+          ntp server time-a.nist.gov
+          webvpn
+          enable outside
+          enable inside
+          hsts
+          enable
+          max-age 31536000
+          include-sub-domains
+          no preload
+          anyconnect enable
+          tunnel-group-list enable
+          cache
+          disable
+          error-recovery disable
+          group-policy DfltGrpPolicy attributes
+          vpn-tunnel-protocol ikev1 ikev2 l2tp-ipsec ssl-client ssl-clientless
+          group-policy LAB-PROFILE internal
+          group-policy LAB-PROFILE attributes
+          dns-server value ${CiscoHOLEC2ActiveDirectory.PrivateIp}
+          vpn-tunnel-protocol ssl-client 
+          split-tunnel-policy tunnelspecified
+          split-tunnel-network-list value LAB-LIST
+          webvpn
+          anyconnect modules value dart
+          dynamic-access-policy-record DfltAccessPolicy
+          username employee password tet123$$! privilege 15
+          username employee attributes
+          service-type remote-access
+          username sysadmin password tet123$$! privilege 15
+          username sysadmin attributes
+          service-type remote-access
+          tunnel-group LAB-PROFILE type remote-access
+          tunnel-group LAB-PROFILE general-attributes
+          address-pool LAB-POOL
+          default-group-policy LAB-PROFILE
+          tunnel-group LAB-PROFILE webvpn-attributes
+          group-alias LAB-PROFILE enable
       NetworkInterfaces: 
         - NetworkInterfaceId: !Ref 'ASAvNetworkInterfaces01'
           DeviceIndex: '0'
@@ -1036,6 +1163,8 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
+          rm -rf /opt/*
+          git clone https://github.com/OnstakInc/ansible-tetration-sensor.git
           cat <<EOF > /opt/ansible-tetration-sensor/inventory/hosts
           [linux]
           ${CiscoHOLEC2Apache.PrivateIp}
@@ -1048,7 +1177,6 @@ Resources:
           ${CiscoHOLEC2IIS.PrivateIp}
           ${CiscoHOLEC2SQLServer.PrivateIp}
           ${CiscoHOLEC2ActiveDirectory.PrivateIp}
-          ${CiscoHOLEC2MSSystemCenter.PrivateIp}
           [win:vars]
           ansible_user=ciscolab@hol.local
           ansible_password=tet123\$\$!
@@ -1083,8 +1211,8 @@ Resources:
       - CiscoHOLEC2Ansible
       - CiscoHOLEC2TetData
       - CiscoHOLEC2TetEdge
-      - CiscoHOLEC2Win10eUser
-      - CiscoHOLEC2Win10eDBA
+      - CiscoHOLEC2Win10Employee
+      - CiscoHOLEC2Win10SysAdmin
       - CiscoHOLEC2ASAv
     Properties:
       ImageId: !Ref GuacamoleImageID
@@ -1138,7 +1266,7 @@ Resources:
                   </connection>
                   <connection name="05) End Users - Windows10 - Employee">
                       <protocol>rdp</protocol>
-                      <param name="hostname">${CiscoHOLEC2Win10eUser.PrivateIp}</param>
+                      <param name="hostname">${CiscoHOLEC2Win10Employee.PrivateIp}</param>
                       <param name="port">3389</param>
                       <param name="username">ciscolab</param>
                       <param name="password">tet123\$\$!</param>
@@ -1148,7 +1276,7 @@ Resources:
                   </connection>	
                   <connection name="06) End Users - Windows10 - SysAdmin">
                       <protocol>rdp</protocol>
-                      <param name="hostname">${CiscoHOLEC2Win10eDBA.PrivateIp}</param>
+                      <param name="hostname">${CiscoHOLEC2Win10SysAdmin.PrivateIp}</param>
                       <param name="port">3389</param>
                       <param name="username">ciscolab</param>
                       <param name="password">tet123\$\$!</param>
@@ -1175,16 +1303,7 @@ Resources:
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
                   </connection>
-                  <connection name="09) Firewall and VPN - ASAv">
-                      <protocol>ssh</protocol>
-                      <param name="hostname">${CiscoHOLEC2ASAv.PrivateIp}</param>
-                      <param name="port">22</param>
-                      <param name="username">ciscolab</param>
-                      <param name="password">tet123\$\$!</param>
-                      <param name="enable-sftp">true</param>
-                      <param name="font-name">terminus</param>
-                  </connection>
-                  <connection name="10) Attack Host - KaliLinux - Metasploit">
+                  <connection name="09) Attack Host - KaliLinux - Metasploit">
                       <protocol>ssh</protocol>
                       <param name="hostname">${CiscoHOLEC2Attacker.PrivateIp}</param>
                       <param name="port">22</param>
@@ -1193,7 +1312,7 @@ Resources:
                       <param name="font-name">terminus</param>
                       <param name="enable-sftp">true</param>
                   </connection>	
-                  <connection name="11) Tetration Edge Appliance">
+                  <connection name="10) Tetration Edge Appliance">
                       <protocol>ssh</protocol>
                       <param name="hostname">${CiscoHOLEC2TetEdge.PrivateIp}</param>
                       <param name="port">22</param>
@@ -1202,7 +1321,7 @@ Resources:
                       <param name="font-name">terminus</param>
                       <param name="enable-sftp">true</param>
                   </connection>
-                  <connection name="12) Tetration Data Ingest Appliance">
+                  <connection name="11) Tetration Data Ingest Appliance">
                       <protocol>ssh</protocol>
                       <param name="hostname">${CiscoHOLEC2TetData.PrivateIp}</param>
                       <param name="port">22</param>
@@ -1292,7 +1411,7 @@ Resources:
           const https = require('https');
           process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
           exports.handler = function(event, context) {
-              http.get(process.env.APP_URL, (resp) => {
+              https.get(`https://${process.env.APP_URL}`, (resp) => {
                   let data = '';
                   resp.on('data', (chunk) => {
                       data += chunk;
@@ -1344,7 +1463,7 @@ Resources:
           const https = require('https');
           process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
           exports.handler = function(event, context) {
-              http.get(process.env.APP_URL, (resp) => {
+              https.get(`https://${process.env.APP_URL}/`, (resp) => {
                   let data = '';
                   resp.on('data', (chunk) => {
                       data += chunk;
@@ -1474,6 +1593,9 @@ Outputs:
   CiscoHOLIISPublic:
     Description: IIS Server Public IP
     Value: !GetAtt CiscoHOLEC2IIS.PublicIp
+  CiscoHOLIISOutsidePrivate:
+    Description: IIS Server Outside Private IP
+    Value: !Ref IISOutsidePrivateIp
   CiscoHOLMySql:
     Description: MySQL Server Private IP
     Value: !GetAtt CiscoHOLEC2MySQL.PrivateIp
@@ -1483,6 +1605,9 @@ Outputs:
   CiscoHOLApachePublic:
     Description: Apache Server Public IP
     Value: !GetAtt CiscoHOLEC2Apache.PublicIp
+  CiscoHOLApacheOutsidePrivate:
+    Description: Apache Server Outside Private IP
+    Value: !Ref ApacheOutsidePrivateIp
   CiscoHOLAnsible:
     Description: Ansible Server Private IP
     Value: !GetAtt CiscoHOLEC2Ansible.PrivateIp
@@ -1492,12 +1617,12 @@ Outputs:
   CiscoHOLTetrationEdge:
     Description: Tetration Edge Server Private IP
     Value: !GetAtt CiscoHOLEC2TetEdge.PrivateIp
-  CiscoHOLWin10User:
-    Description: Windows 10 User Server Private IP
-    Value: !GetAtt CiscoHOLEC2Win10eUser.PrivateIp
-  CiscoHOLWin10DBA:
-    Description: Windows 10 DBA Server Private IP
-    Value: !GetAtt CiscoHOLEC2Win10eDBA.PrivateIp
+  CiscoHOLWin10Employee:
+    Description: Windows 10 Employee Server Private IP
+    Value: !GetAtt CiscoHOLEC2Win10Employee.PrivateIp
+  CiscoHOLWin10SysAdmin:
+    Description: Windows 10 SysAdmin Server Private IP
+    Value: !GetAtt CiscoHOLEC2Win10SysAdmin.PrivateIp
   CiscoHOLAttacker:
     Description: Mire-based Attacker Server Private IP
     Value: !GetAtt CiscoHOLEC2Attacker.PrivateIp

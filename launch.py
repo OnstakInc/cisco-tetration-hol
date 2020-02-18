@@ -12,7 +12,6 @@ from datetime import datetime
 
 PARAMETERS_FILE = './parameters.yml'
 CFT_POD_FILE = './cisco-hol-pod-cft-template.yml'
-# CFT_GLOBAL_FILE = './cisco-hol-global-cft-template.yml'
 
 params = yaml.load(open(PARAMETERS_FILE), Loader=yaml.Loader)
 
@@ -34,10 +33,8 @@ SUBNET_RANGE_PRIMARY = params['subnet_range_primary']
 SUBNET_RANGE_SECONDARY = params['subnet_range_secondary']
 STUDENT_COUNT = params['student_count']
 STUDENT_PREFIX = params['student_prefix']
-# EMAIL_ADDRESS = params['email_address']
-# GLOBAL_STACK_NAME = params['global_stack_name']
-# PUBLIC_ROUTE_TABLE = ''
-# PRIVATE_ROUTE_TABLE = ''
+
+S3_BUCKET = params['s3_bucket']
 
 session = boto3.Session(
     aws_access_key_id=ACCESS_KEY,
@@ -145,77 +142,13 @@ print(f'INFO: Student Accounts Collection Created...')
 
 
 #######################################################################
-# Run Global Cloud Formation ##########################################
+# Upload CFT TO S3 Bucket #############################################
 #######################################################################
-# try:
-#     print(f'INFO: Initialize Global CloudFormation...')
-
-#     cloudformation = session.client('cloudformation')
-#     cloudformation_template = open(CFT_GLOBAL_FILE, 'r').read()
-
-#     aws_parameters = [
-#         {'ParameterKey': 'VpcIdParameter', 'ParameterValue': VPC_ID},
-#         {'ParameterKey': 'RegionParameter', 'ParameterValue': REGION}
-#     ]
-
-#     print(aws_parameters)
-
-#     result = cloudformation.create_stack(
-#         StackName=GLOBAL_STACK_NAME,
-#         TemplateBody=cloudformation_template,
-#         Parameters=aws_parameters,
-#         Capabilities=[
-#             'CAPABILITY_IAM', 'CAPABILITY_NAMED_IAM',
-#         ]
-#     )
-
-#     print(f'INFO: Gobal Stack Creation In Progress...')
-
-# except Exception as e:
-#     print(e)
-#     exit(1)
+print('INFO: Uploading Template To S3...')
+s3 = boto3.resource('s3')
+s3.meta.client.upload_file('cisco-hol-pod-cft-template.yml', S3_BUCKET, 'cisco-hol-pod-cft-template.yml')
+print('INFO: CFT Template Uploaded To S3...')
 #######################################################################
-
-
-#######################################################################
-# Wait For Global Stack Creation ######################################
-#######################################################################
-# is_completed = False
-# while not is_completed:
-
-#     try:
-
-#         cloudformation = session.client('cloudformation')
-
-#         status = cloudformation.describe_stacks(
-#             StackName=GLOBAL_STACK_NAME
-#         )
-
-#         if status['Stacks'][0]['StackStatus'] == 'CREATE_COMPLETE':
-
-#             public_rt = next(filter(lambda x: x['OutputKey'] == 'PublicRouteTable', status['Stacks'][0]['Outputs']), None)
-#             private_rt = next(filter(lambda x: x['OutputKey'] == 'PrivateRouteTable', status['Stacks'][0]['Outputs']), None)
-            
-#             # Set Global Route Table Ids
-#             PUBLIC_ROUTE_TABLE = public_rt['OutputValue']
-#             PRIVATE_ROUTE_TABLE = private_rt['OutputValue']
-
-#             is_completed = True
-#             break
-
-#         if status['Stacks'][0]['StackStatus'] == 'ROLLBACK_IN_PROGRESS' or  status['Stacks'][0]['StackStatus'] == 'ROLLBACK_COMPLETE':
-#             print(f'INFO: Stack Failed: {GLOBAL_STACK_NAME}')
-#             exit(1)
-
-#         print(f"INFO: StackName: {GLOBAL_STACK_NAME}, Status: {status['Stacks'][0]['StackStatus']}")
-
-#         time.sleep(10)
-
-#     except Exception as e:
-#         print(e)
-#         exit(1)
-#######################################################################
-
 
 #######################################################################
 # Run POD Cloud Formation #############################################
@@ -223,6 +156,8 @@ print(f'INFO: Student Accounts Collection Created...')
 for student in STUDENTS_LIST:
 
     try:
+
+        outside_pod_ips = list(ipaddress.ip_network(f"{student['private_subnet']}/24").hosts())
 
         cloudformation = session.client('cloudformation')
         cloudformation_template = open(CFT_POD_FILE, 'r').read()
@@ -248,6 +183,12 @@ for student in STUDENTS_LIST:
             {'ParameterKey': 'Subnet02AvailabilityZone', 'ParameterValue': 'b'},
             {'ParameterKey': 'Subnet03AvailabilityZone', 'ParameterValue': 'a'},
 
+            {'ParameterKey': 'Win10EmployeePrivateIp', 'ParameterValue': str(outside_pod_ips[11])},
+            {'ParameterKey': 'Win10SysAdminPrivateIp', 'ParameterValue': str(outside_pod_ips[12])},
+            {'ParameterKey': 'AttackerPrivateIp', 'ParameterValue': str(outside_pod_ips[13])},
+            {'ParameterKey': 'IISOutsidePrivateIp', 'ParameterValue': str(outside_pod_ips[14])},
+            {'ParameterKey': 'ApacheOutsidePrivateIp', 'ParameterValue': str(outside_pod_ips[15])},
+
             {'ParameterKey': 'ASAvImageID', 'ParameterValue': params['asav_ami']},
             {'ParameterKey': 'LDAPImageID', 'ParameterValue': params['ldap_ami']},
             {'ParameterKey': 'MSSCImageID', 'ParameterValue': params['mssc_ami']},
@@ -258,8 +199,8 @@ for student in STUDENTS_LIST:
             {'ParameterKey': 'AnsibleImageID', 'ParameterValue': params['ansible_ami']},
             {'ParameterKey': 'TetrationDataIngestImageID', 'ParameterValue': params['tet_data_ami']},
             {'ParameterKey': 'TetrationEdgeImageID', 'ParameterValue': params['tet_edge_ami']},
-            {'ParameterKey': 'Win10UserImageID', 'ParameterValue': params['user_ami']},
-            {'ParameterKey': 'Win10DBAImageID', 'ParameterValue': params['dba_ami']},
+            {'ParameterKey': 'Win10EmployeeImageID', 'ParameterValue': params['employee_ami']},
+            {'ParameterKey': 'Win10SysAdminImageID', 'ParameterValue': params['sysadmin_ami']},
             {'ParameterKey': 'AttackerImageID', 'ParameterValue': params['attack_server_ami']},
             {'ParameterKey': 'GuacamoleImageID', 'ParameterValue': params['guacamole_ami']},
             {'ParameterKey': 'EKSWorkerImageID', 'ParameterValue': params['eks_worker_ami']}
@@ -269,7 +210,8 @@ for student in STUDENTS_LIST:
 
         result = cloudformation.create_stack(
             StackName=student['account_name'],
-            TemplateBody=cloudformation_template,
+            # TemplateBody=cloudformation_template,
+            TemplateURL=f"https://{S3_BUCKET}.s3.us-east-2.amazonaws.com/cisco-hol-pod-cft-template.yml",
             Parameters=aws_parameters,
             Capabilities=[
                 'CAPABILITY_IAM', 'CAPABILITY_NAMED_IAM',
@@ -327,33 +269,35 @@ while True:
 # Assemble EKS ELB DNS Records ########################################
 #######################################################################
 
-# try:
+try:
 
-#     print('INFO: Initializing EKS DNS Assembly...')
+    print('INFO: Initializing EKS DNS Assembly...')
 
-#     time.sleep(15)
+    time.sleep(60)
 
-#     for student in STUDENTS_LIST:
+    for student in STUDENTS_LIST:
 
-#         client = boto3.client('elb')
+        client = session.client('elb')
 
-#         eks_elbs = client.describe_load_balancers()['LoadBalancerDescriptions']
+        eks_elbs = client.describe_load_balancers()['LoadBalancerDescriptions']
 
-#         elb_tags = client.describe_tags(
-#             LoadBalancerNames=list(map(lambda e: e['LoadBalancerName'], eks_elbs))
-#         )
+        elb_tags = client.describe_tags(
+            LoadBalancerNames=list(map(lambda e: e['LoadBalancerName'], eks_elbs))
+        )
 
-#         for elb in elb_tags['TagDescriptions']:
-#             for tag in elb['Tags']:
-#                 if tag['Key'] == 'Account' and tag['Value'] == student['account_name']:
-#                     student['eks_dns'] = list(filter(lambda e: e['LoadBalancerName'] == elb['LoadBalancerName'], eks_elbs))[0]['DNSName']
-#                     break
+        for elb in elb_tags['TagDescriptions']:
+            for tag in elb['Tags']:
+                for key in tag:
+                    if student['account_name'] in tag[key]:
+                        student['eks_dns'] = list(filter(lambda e: e['LoadBalancerName'] == elb['LoadBalancerName'], eks_elbs))[0]['DNSName']
+                        break
     
-#     print('INFO: EKS DNS Assembly Completed...')
 
-# except Exception as e:
-#     print(e)
-#     exit(1)
+    print('INFO: EKS DNS Assembly Completed...')
+
+except Exception as e:
+    print(e)
+    exit(1)
 
 #######################################################################
 
@@ -375,6 +319,8 @@ try:
             StackName=stack_name
         )
 
+        student = list(filter(lambda student: student['account_name'] == stack_name, STUDENTS_LIST))[0]
+
         output = {}
 
         for o in stack['Stacks'][0]['Outputs']:
@@ -384,33 +330,39 @@ try:
             output['CiscoHOLStudentName'],
             output['CiscoHOLStudentPassword'],
             f"https://{output['CiscoHOLGuacamolePublic']}",
-            output['CiscoHOLApachePrivate'],
             output['CiscoHOLApachePublic'],
-            output['CiscoHOLIISPrivate'],
+            output['CiscoHOLApachePrivate'],
+            output['CiscoHOLApacheOutsidePrivate'],
             output['CiscoHOLIISPublic'],
+            output['CiscoHOLIISPrivate'],
+            output['CiscoHOLIISOutsidePrivate'],
             output['CiscoHOLMySql'],
             output['CiscoHOLMSSQL'],
             output['EKSClusterEndpoint'],
+            f"http://{student['eks_dns']}",
             output['CiscoHOLAnsible'],
             output['CiscoHOLTetrationEdge'],
             output['CiscoHOLTetrationData'],
             output['CiscoHOLASAv'],
             output['CiscoHOLAttacker'],
-            output['CiscoHOLWin10User'],
-            output['CiscoHOLWin10DBA'],
+            output['CiscoHOLWin10Employee'],
+            output['CiscoHOLWin10SysAdmin'],
         ])
 
     header = [
-        'Account', 
+        'Account',
         'Password', 
         'Web Console URL',
-        'Apache OpenCart',
         'Apache OpenCart Public',
-        'IIS nopCommerce',
+        'Apache OpenCart Private',
+        'Apache OpenCart Outside Private',
         'IIS nopCommerce Public',
+        'IIS nopCommerce Private',
+        'IIS nopCommerce Outside Private',
         'MySQL',
         'MSSQL',
         'EKS Clsuter',
+        'EKS SockShop Public',
         'Ansible',
         'Tetration Edge',
         'Tetration Data',
