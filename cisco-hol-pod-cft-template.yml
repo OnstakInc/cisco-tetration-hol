@@ -1178,7 +1178,7 @@ Resources:
           ${CiscoHOLEC2SQLServer.PrivateIp}
           ${CiscoHOLEC2ActiveDirectory.PrivateIp}
           [win:vars]
-          ansible_user=ciscolab@hol.local
+          ansible_user=HOL\ciscolab
           ansible_password=tet123\$\$!
           ansible_connection=winrm
           ansible_winrm_transport=ntlm
