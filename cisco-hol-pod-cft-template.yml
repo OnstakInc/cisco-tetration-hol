@@ -421,6 +421,7 @@ Resources:
           DeviceIndex: "0"
           GroupSet:
             - !Ref CiscoHOLPublicSecurityGroup
+            - !Ref CiscoHOLWebSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet01
   
   # MS Systems Center
@@ -507,6 +508,7 @@ Resources:
           DeviceIndex: "0"
           GroupSet:
             - !Ref CiscoHOLPublicSecurityGroup
+            - !Ref CiscoHOLWebSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet01
   
   # Windows IIS Server
@@ -607,6 +609,7 @@ Resources:
           DeviceIndex: "0"
           GroupSet: 
             - !Ref CiscoHOLPublicSecurityGroup
+            - !Ref CiscoHOLWebSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet01
   
   # # Create Elastic IP Addresse

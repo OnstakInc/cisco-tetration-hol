@@ -4,7 +4,7 @@ aws_secret_key: ""
 aws_region: us-east-2
 
 student_count: 1
-student_prefix: onstak-student
+student_prefix: cisco-student
 
 vpc_id: vpc-07e7ba44fadc5c271
 internet_gateway_id: igw-0f5e60daa68580ca8
