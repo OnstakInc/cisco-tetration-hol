@@ -7,7 +7,8 @@ In this module,  we'll configure Static Annotations for the endpoints in the lab
 
 
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/03_static_annotations.mp4" style="font-weight:bold" title="Collection Rules Title">Click here to view the first of two videos highlighting the creation of static Annotations.</a>
-</br></br>
+
+  
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/04_verify_static_annotations.mp4" style="font-weight:bold" title="Collection Rules Title">Click here to view the second of two videos highlighting the verification of those Annotations.</a>
 
 ### Steps for this Module  
