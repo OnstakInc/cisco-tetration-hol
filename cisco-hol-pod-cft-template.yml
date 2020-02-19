@@ -312,13 +312,9 @@ Resources:
           FromPort: 0
           ToPort: 65535
           CidrIp: !Ref Subnet02CidrBlock
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: !Ref ManagementCidrBlock
-        - IpProtocol: tcp
-          FromPort: 3389
-          ToPort: 3389
+        - IpProtocol: -1
+          FromPort: 0
+          ToPort: 65535
           CidrIp: !Ref ManagementCidrBlock
       SecurityGroupEgress:
         - IpProtocol: -1
@@ -351,14 +347,15 @@ Resources:
           FromPort: 0
           ToPort: 65535
           CidrIp: !Ref Subnet03CidrBlock
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
+        - IpProtocol: -1
+          FromPort: 0
+          ToPort: 65535
           CidrIp: !Ref ManagementCidrBlock
-        - IpProtocol: tcp
-          FromPort: 3389
-          ToPort: 3389
-          CidrIp: !Ref ManagementCidrBlock
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
           Value: !Sub "cisco-hol-${StudentName}-sg-private-${Region}"
