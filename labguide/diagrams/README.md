@@ -67,13 +67,13 @@ This is the flow that for a learner (that's you) accessing the lab environment. 
   
 As you can see from the diagram above, your lab contains one of each of the following apps:
 
-   1. Windows app - "nopCommerce" - consisting of: 
+   1. Windows app - "nopCommerce" 
       *  Win19 IIS App server
       *  Win19 MS SQL DB server
-   2. Linux app - "OpenCart" - consisting of: 
+   2. Linux app - "OpenCart"
       *  CentOS 7 Apache App server
       *  CentOS 7 MySQL DB server
-   3. Microservices Container app on Kubernetes - "Sock Shop" - consisting of: 
+   3. Microservices Container app on Kubernetes - "Sock Shop"
       *  Front End service
       *  Payment service
       *  Shipping service
