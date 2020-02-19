@@ -446,47 +446,47 @@ Resources:
             - !Ref CiscoHOLPublicSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet01
   
-  # MS Systems Center
-  CiscoHOLEC2MSSystemCenter:
-    DependsOn:
-      - CiscoHOLEC2ActiveDirectory
-    Type: AWS::EC2::Instance
-    Properties:
-      ImageId: !Ref MSSCImageID
-      InstanceType: t2.micro
-      Tags:
-        - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-ec2-ms-system-center-${Region}${Subnet01AvailabilityZone}"
-        - Key: Org
-          Value: Tetration
-        - Key: Geo
-          Value: US
-        - Key: Cloud
-          Value: AWS
-        - Key: Region
-          Value: !Sub "${Region}"
-        - Key: AppSDLC
-          Value: Lab
-        - Key: AppGroup
-          Value: Common
-        - Key: AppName
-          Value: SCCM
-        - Key: AppCluster
-          Value: SCCM
-      UserData:
-       Fn::Base64: !Sub |
-        <powershell>
-        $adapter = Get-NetAdapter -Name 'Ethernet*'
-        Set-DNSClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ("${CiscoHOLEC2ActiveDirectory.PrivateIp}")
-        ipconfig /flushdns
-        Clear-DnsClientCache
-        </powershell>
-      NetworkInterfaces:
-        - AssociatePublicIpAddress: "true"
-          DeviceIndex: "0"
-          GroupSet:
-            - !Ref CiscoHOLPublicSecurityGroup
-          SubnetId: !Ref CiscoHOLSubnet01
+#  # MS Systems Center
+#  CiscoHOLEC2MSSystemCenter:
+#    DependsOn:
+#      - CiscoHOLEC2ActiveDirectory
+#    Type: AWS::EC2::Instance
+#    Properties:
+#      ImageId: !Ref MSSCImageID
+#      InstanceType: t2.micro
+#      Tags:
+#        - Key: Name
+#          Value: !Sub "cisco-hol-${StudentName}-ec2-ms-system-center-${Region}${Subnet01AvailabilityZone}"
+#        - Key: Org
+#          Value: Tetration
+#        - Key: Geo
+#          Value: US
+#        - Key: Cloud
+#          Value: AWS
+#        - Key: Region
+#          Value: !Sub "${Region}"
+#        - Key: AppSDLC
+#          Value: Lab
+#        - Key: AppGroup
+#          Value: Common
+#        - Key: AppName
+#          Value: SCCM
+#        - Key: AppCluster
+#          Value: SCCM
+#      UserData:
+#       Fn::Base64: !Sub |
+#        <powershell>
+#        $adapter = Get-NetAdapter -Name 'Ethernet*'
+#        Set-DNSClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ("${CiscoHOLEC2ActiveDirectory.PrivateIp}")
+#        ipconfig /flushdns
+#        Clear-DnsClientCache
+#        </powershell>
+#      NetworkInterfaces:
+#        - AssociatePublicIpAddress: "true"
+#          DeviceIndex: "0"
+#          GroupSet:
+#            - !Ref CiscoHOLPublicSecurityGroup
+#          SubnetId: !Ref CiscoHOLSubnet01
 
   # Windows App Server
   CiscoHOLEC2SQLServer:
