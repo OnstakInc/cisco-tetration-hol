@@ -1,0 +1,55 @@
+AWSTemplateFormatVersion: 2010-09-09	
+
+Parameters:	
+  VpcIdParameter:	
+    Type: String	
+    # Default: vpc-07e7ba44fadc5c271	
+  RegionParameter:	
+    Type: String	
+    # Default: us-east-2	
+
+Resources:	
+  # Create Public Route Table	
+  PublicRouteTable:	
+    Type: AWS::EC2::RouteTable	
+    Properties:	
+      VpcId: !Ref VpcIdParameter	
+      Tags:	
+      - Key: Name	
+        Value: !Sub "cisco-hol-public-routetable-${RegionParameter}"	
+  # Create Private Route Table  	
+  PrivateRouteTable:	
+    Type: AWS::EC2::RouteTable	
+    Properties:	
+      VpcId: !Ref VpcIdParameter	
+      Tags:	
+      - Key: Name	
+        Value: !Sub "cisco-hol-private-routetable-${RegionParameter}"	
+  # Create Internet Gateway	
+  InternetGateway: 	
+    Type: AWS::EC2::InternetGateway	
+    Properties:	
+      Tags:	
+      - Key: Name	
+        Value: !Sub "cisco-hol-internet-gateway-${RegionParameter}"	
+  # Attach Internetgateway	
+  AttachGateway: 	
+    Type: AWS::EC2::VPCGatewayAttachment	
+    Properties: 	
+      InternetGatewayId: !Ref InternetGateway	
+      VpcId: !Ref VpcIdParameter  	
+  # Public Defalut Route 	
+  PublicDefaultRoute: 	
+   Type: AWS::EC2::Route	
+   Properties:	
+      DestinationCidrBlock: 0.0.0.0/0	
+      GatewayId: !Ref InternetGateway	
+      RouteTableId: !Ref PublicRouteTable	
+
+Outputs:	
+  PublicRouteTable:	
+    Description: Public Route Table Id	
+    Value: !Ref PublicRouteTable	
+  PrivateRouteTable:	
+    Description: Private Route Table Id	
+    Value: !Ref PrivateRouteTable 
