@@ -1039,6 +1039,7 @@ Resources:
           nat (inside,outside) static ${ApacheOutsidePrivateIp}
           access-group outside-in in interface outside
           aaa authentication ssh console LOCAL
+          aaa authorization exec LOCAL auto-enable
           user-identity default-domain LOCAL
           aaa authentication login-history
           http server enable
@@ -1234,11 +1235,13 @@ Resources:
           !
           ! Your ASA and AnyConnect Commands Will Go Here
           !
+          conf t
           webvpn
           anyconnect image disk0:/anyconnect-win-4.6.00362-webdeploy-k9.pkg 1 regex "Windows"
           anyconnect profiles anyconnect-profile disk0:/anyconnect-profile.xml
+          wr 
           EOF
-          sshpass -p 'tet123$$!' ssh -o StrictHostKeyChecking=no admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} < /home/ciscolab/annyconnect-init.sh &> /tmp/anyconnect-init.log
+          sshpass -p 'tet123$$!' ssh -o StrictHostKeyChecking=no admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} < /home/ciscolab/anyconnect-init.sh &> /tmp/anyconnect-init.log
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
