@@ -8,6 +8,8 @@ import re
 import collections
 import csv
 import os
+import json
+import urllib
 from datetime import datetime
 
 PARAMETERS_FILE = './parameters.yml'
@@ -42,12 +44,31 @@ session = boto3.Session(
     region_name=REGION
 )
 
+MANAGEMENT_CIDR = ''
+
 STACKS_LIST = []
 STUDENTS_LIST = []
 
-
 def password_generator(size=14, chars=string.ascii_letters + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
+
+
+def get_public_ip():
+    result = json.load(urllib.request.urlopen('https://api.ipify.org/?format=json'))
+    return result['ip']
+
+
+#######################################################################
+# Get Management Cidr Block ###########################################
+#######################################################################
+try:
+    print(f'INFO: Fetching Public IP Of The Orchestrator...')
+    MANAGEMENT_CIDR = f"{get_public_ip()}/32"
+    print('INFO: Management Cidr:', MANAGEMENT_CIDR)
+except:
+    print(f'ERROR: Unable To Assemble Management Cidr')
+    exit(1)
+#######################################################################
 
 
 #######################################################################
@@ -169,6 +190,8 @@ for student in STUDENTS_LIST:
             {'ParameterKey': 'StudentIndex', 'ParameterValue': str(STUDENTS_LIST.index(student))},
             {'ParameterKey': 'StudentName', 'ParameterValue': student['account_name']},
             {'ParameterKey': 'StudentPassword', 'ParameterValue': student['account_password']},
+            {'ParameterKey': 'ManagementCidrBlock', 'ParameterValue': MANAGEMENT_CIDR},
+
             {'ParameterKey': 'VpcID', 'ParameterValue': VPC_ID},
             {'ParameterKey': 'InternetGatewayId', 'ParameterValue': INTERNET_GATEWAY_ID},
             {'ParameterKey': 'Subnet01CidrBlock', 'ParameterValue': f"{student['public_subnet_01']}/24"},
@@ -188,6 +211,8 @@ for student in STUDENTS_LIST:
             {'ParameterKey': 'AttackerPrivateIp', 'ParameterValue': str(outside_pod_ips[13])},
             {'ParameterKey': 'IISOutsidePrivateIp', 'ParameterValue': str(outside_pod_ips[14])},
             {'ParameterKey': 'ApacheOutsidePrivateIp', 'ParameterValue': str(outside_pod_ips[15])},
+            {'ParameterKey': 'ASAvOutsidePrivateIp01', 'ParameterValue': str(outside_pod_ips[16])},
+            {'ParameterKey': 'ASAvOutsidePrivateIp02', 'ParameterValue': str(outside_pod_ips[17])},
 
             {'ParameterKey': 'ASAvImageID', 'ParameterValue': params['asav_ami']},
             {'ParameterKey': 'LDAPImageID', 'ParameterValue': params['ldap_ami']},
@@ -273,7 +298,7 @@ try:
 
     print('INFO: Initializing EKS DNS Assembly...')
 
-    time.sleep(60)
+    time.sleep(120)
 
     for student in STUDENTS_LIST:
 
@@ -343,7 +368,9 @@ try:
             output['CiscoHOLAnsible'],
             output['CiscoHOLTetrationEdge'],
             output['CiscoHOLTetrationData'],
-            output['CiscoHOLASAv'],
+            output['CiscoHOLASAvPrivate03'],
+            output['CiscoHOLASAvPrivate02'],
+            output['CiscoHOLASAvPrivate01'],
             output['CiscoHOLAttacker'],
             output['CiscoHOLWin10Employee'],
             output['CiscoHOLWin10SysAdmin'],
@@ -366,7 +393,9 @@ try:
         'Ansible',
         'Tetration Edge',
         'Tetration Data',
-        'ASAv',
+        'ASAv Inside Private',
+        'ASAv Outside Private',
+        'ASAv Outside Private',
         'Metasploit',
         'Employee',
         'SysAdmin'

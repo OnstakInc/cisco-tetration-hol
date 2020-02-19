@@ -14,13 +14,13 @@ subnet_range_secondary: 198.18.0.0/16
 s3_bucket: 'cisco-hol-cft-template'
 
 asav_ami: ami-018637632d5e62976
-ldap_ami: ami-0576c6538fb5b40c4
+ldap_ami: ami-036723f78ead98656
 mssc_ami: ami-0da00f363f93add92
 mssql_ami: ami-090ab21d87411b44e
 iis_ami: ami-0c4e857f7ec9de0dc
 mysql_ami: ami-0c170ef4a4f9b1789
 apache_ami: ami-0bb3d60453bbc693a
-ansible_ami: ami-00755f1788655b924
+ansible_ami: ami-0ee92e6a894621629
 tet_data_ami: ami-0c2276fc51ad25018
 tet_edge_ami: ami-0cb78ddba97ce6591
 employee_ami: ami-0da00f363f93add92

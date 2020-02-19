@@ -86,6 +86,9 @@ Parameters:
     NoEcho: True
     Type: String
     Description: Please enter password
+  ManagementCidrBlock:
+    Type: String
+    Description: Please enter the Management Cidr Block
   VpcID:
     Type: String
     Description: Please enter the VPC Id
@@ -128,6 +131,12 @@ Parameters:
   Win10SysAdminPrivateIp:
     Type: String
     Description: Please enter Private IP For SysAdmin
+  ASAvOutsidePrivateIp01:
+    Type: String
+    Description: Please enter Private IP For Outside ASAv Interface
+  ASAvOutsidePrivateIp02:
+    Type: String
+    Description: Please enter Private IP For Outside ASAv Interface
   IISOutsidePrivateIp:
     Type: String
     Description: Please enter Private IP For Outside IIS Interface
@@ -179,6 +188,7 @@ Parameters:
   EKSWorkerImageID:
     Type: String
     Description: Please enter Image Id for EKS Worker Node
+
 Resources:
 
   # Create Public Route Table
@@ -302,6 +312,14 @@ Resources:
           FromPort: 0
           ToPort: 65535
           CidrIp: !Ref Subnet02CidrBlock
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref ManagementCidrBlock
+        - IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: !Ref ManagementCidrBlock
       SecurityGroupEgress:
         - IpProtocol: -1
           FromPort: 0
@@ -333,6 +351,14 @@ Resources:
           FromPort: 0
           ToPort: 65535
           CidrIp: !Ref Subnet03CidrBlock
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref ManagementCidrBlock
+        - IpProtocol: tcp
+          FromPort: 3389
+          ToPort: 3389
+          CidrIp: !Ref ManagementCidrBlock
       Tags:
         - Key: Name
           Value: !Sub "cisco-hol-${StudentName}-sg-private-${Region}"
@@ -1092,6 +1118,9 @@ Resources:
         - !Ref CiscoHOLPrivateSecurityGroup
         - !Ref CiscoHOLWebSecurityGroup
         SubnetId: !Ref CiscoHOLSubnet03
+        PrivateIpAddresses:
+          - PrivateIpAddress: !Ref ASAvOutsidePrivateIp01
+            Primary: 'true'
         
   ASAvNetworkInterfaces02:
       Type: AWS::EC2::NetworkInterface
@@ -1106,8 +1135,12 @@ Resources:
         - !Ref CiscoHOLWebSecurityGroup
         SubnetId: !Ref CiscoHOLSubnet03
         PrivateIpAddresses:
-          - !Ref IISOutsidePrivateIp
-          - !Ref ApacheOutsidePrivateIp
+          - PrivateIpAddress: !Ref ASAvOutsidePrivateIp02
+            Primary: 'true'
+          - PrivateIpAddress: !Ref IISOutsidePrivateIp
+            Primary: 'false'
+          - PrivateIpAddress: !Ref ApacheOutsidePrivateIp
+            Primary: 'false'
   
   ASAvNetworkInterfaces03:
       Type: AWS::EC2::NetworkInterface
@@ -1194,6 +1227,14 @@ Resources:
           systemctl restart network
           sleep 15
           /bin/bash /var/eks-init/bootstrap.sh "${AccessKey}" "${SecretKey}" "${Region}" "${EKSCluster}" "${EKSCluster.Endpoint}" "${EKSCluster.CertificateAuthorityData}" "${EKSWorkerInstanceRole.Arn}"
+          sleep 300
+          sshpass -p 'tet123$$!' scp -o StrictHostKeyChecking=no /home/ciscolab/anyconnect-win-4.6.00362-webdeploy-k9.pkg ciscolab@172.40.0.88:disk0:anyconnect-win-4.6.00362-webdeploy-k9.pkg &> /tmp/anyconnect-init.log
+          cat <<EOF > /home/ciscolab/annyconnect-init.sh
+          !
+          ! Your ASA and AnyConnect Commands Will Go Here
+          !
+          EOF
+          sshpass -p 'tet123$$!' ssh -o StrictHostKeyChecking=no admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} < /home/ciscolab/annyconnect-init.sh &> /tmp/anyconnect-init.log
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
@@ -1578,9 +1619,16 @@ Outputs:
     Value: !Ref Subnet03CidrBlock
   
   # EC2 Instances Outputs
-  CiscoHOLASAv:
-    Description: ASAv Firewall Server Private IP
-    Value: !GetAtt CiscoHOLEC2ASAv.PrivateIp
+  CiscoHOLASAvPrivate01:
+    Description: ASAv Firewall Server Private IP Outside
+    Value: !GetAtt ASAvNetworkInterfaces01.PrimaryPrivateIpAddress
+  CiscoHOLASAvPrivate02:
+    Description: ASAv Firewall Server Private IP Outside
+    Value: !GetAtt ASAvNetworkInterfaces02.PrimaryPrivateIpAddress
+  CiscoHOLASAvPrivate03:
+    Description: ASAv Firewall Server Private IP Inside
+    Value: !GetAtt ASAvNetworkInterfaces03.PrimaryPrivateIpAddress
+
   CiscoHOLActiveDirectory:
     Description: Active Directory Server Private IP
     Value: !GetAtt CiscoHOLEC2ActiveDirectory.PrivateIp
