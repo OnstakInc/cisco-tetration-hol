@@ -1039,6 +1039,7 @@ Resources:
           nat (inside,outside) static ${ApacheOutsidePrivateIp}
           access-group outside-in in interface outside
           aaa authentication ssh console LOCAL
+          aaa authorization exec LOCAL auto-enable
           user-identity default-domain LOCAL
           aaa authentication login-history
           http server enable
