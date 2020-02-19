@@ -1106,8 +1106,8 @@ Resources:
         - !Ref CiscoHOLWebSecurityGroup
         SubnetId: !Ref CiscoHOLSubnet03
         PrivateIpAddresses:
-        - ${IISOutsidePrivateIp}
-        - ${ApacheOutsidePrivateIp}
+        - !Ref IISOutsidePrivateIp
+        - !Ref ApacheOutsidePrivateIp
   
   ASAvNetworkInterfaces03:
       Type: AWS::EC2::NetworkInterface
