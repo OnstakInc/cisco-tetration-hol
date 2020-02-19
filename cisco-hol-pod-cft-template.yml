@@ -1229,6 +1229,7 @@ Resources:
           /bin/bash /var/eks-init/bootstrap.sh "${AccessKey}" "${SecretKey}" "${Region}" "${EKSCluster}" "${EKSCluster.Endpoint}" "${EKSCluster.CertificateAuthorityData}" "${EKSWorkerInstanceRole.Arn}"
           sleep 300
           sshpass -p 'tet123$$!' scp -o StrictHostKeyChecking=no /home/ciscolab/anyconnect-win-4.6.00362-webdeploy-k9.pkg admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress}:disk0:anyconnect-win-4.6.00362-webdeploy-k9.pkg &> /tmp/anyconnect-init.log
+          sshpass -p 'tet123$$!' scp -o StrictHostKeyChecking=no /home/ciscolab/anyconnect-profile.xml admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress}:disk0:anyconnect-profile.xml &> /tmp/anyconnect-init.log
           cat <<EOF > /home/ciscolab/anyconnect-init.sh
           !
           ! Your ASA and AnyConnect Commands Will Go Here
