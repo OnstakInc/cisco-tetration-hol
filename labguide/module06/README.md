@@ -3,9 +3,9 @@
 ## Module06 - Scopes
 Scopes are really important, so we will say lots of really smart and important stuff here.  
 
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/05_scope_creation.mp4" style="font-weight:bold" title="Collection Rules Title">Click here to view a video highlighting the creation of Scopes.</a>
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/05_scope_creation.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video highlighting the creation of Scopes.</a>
 
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/06_scope_member_verify.mp4" style="font-weight:bold" title="Collection Rules Title">Click here to view a video showing the verification of Scope members.</a>
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/06_scope_member_verify.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video showing the verification of Scope members.</a>
 
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Navigate to Scopes</a>  

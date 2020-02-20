@@ -6,10 +6,10 @@ Annotations are metadata that can be associated with endpoint IP addresses that 
 In this module,  we'll configure Static Annotations for the endpoints in the lab environment.  Static Annotations are manually configured by the Tetration administrator by uploading a .CSV file,  or alternatively by configuring one at a time using the Assign Annotations wizard from the Inventory Upload screen.  Annotations can also be populated from external sources,  such as tags in VMware and AWS.  External annotations will be covered in <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/">Module 07 - External Orchestrators</a>.
 
 
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/03_static_annotations.mp4" style="font-weight:bold" title="Collection Rules Title">Click here to view the first of two videos highlighting the creation of static Annotations.</a>
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/03_static_annotations.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view the first of two videos highlighting the creation of static Annotations.</a>
 
   
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/04_verify_static_annotations.mp4" style="font-weight:bold" title="Collection Rules Title">Click here to view the second of two videos highlighting the verification of those Annotations.</a>
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/04_verify_static_annotations.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view the second of two videos highlighting the verification of those Annotations.</a>
 
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Open annotations file</a>  

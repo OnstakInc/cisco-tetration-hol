@@ -5,7 +5,7 @@
 
 ### Steps for this Module  
 
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/24_aws_lambda.mp4" style="font-weight:bold" title="AWS Lambda">Click here to view a video of the tasks to create policy necessary to allow workloads to recieve traffic from the AWS Serverless technology called Lambda.</a>
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/24_aws_lambda.mp4" style="font-weight:bold" title="AWS Lambda"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of the tasks to create policy necessary to allow workloads to recieve traffic from the AWS Serverless technology called Lambda.</a>
 
 
 #### Diagrams Used in this Module
