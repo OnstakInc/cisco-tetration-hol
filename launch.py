@@ -21,7 +21,6 @@ params = yaml.load(open(PARAMETERS_FILE), Loader=yaml.Loader)
 ACCESS_KEY = os.environ.get('AWS_ACCESS_KEY_ID')
 SECRET_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 
-
 if ACCESS_KEY == None or ACCESS_KEY == '':
     ACCESS_KEY = params['aws_access_key']
 
@@ -356,6 +355,7 @@ try:
             output['CiscoHOLStudentName'],
             output['CiscoHOLStudentPassword'],
             f"https://{output['CiscoHOLGuacamolePublic']}",
+            output['CiscoHOLActiveDirectory'],
             output['CiscoHOLIISPublic'],
             output['CiscoHOLIISPrivate'],
             output['CiscoHOLIISOutsidePrivate'],
@@ -384,6 +384,7 @@ try:
         'Student Guacamole Username',
         'Student Guacamole Password', 
         'Guacamole Web Console URL',
+        'MS Active Directory IP',
         'MS IIS nopCommerce Public IP',
         'MS IIS nopCommerce Inside IP',
         'MS IIS nopCommerce Outside IP',

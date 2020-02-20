@@ -1065,10 +1065,10 @@ Resources:
           tunnel-group LAB-PROFILE type remote-access
           tunnel-group LAB-PROFILE general-attributes
             address-pool LAB-POOL
-            ! Above ISE Auth off initially to enable LOCAL Auth
-            ! Students will enable once they have entered ISE Host in Object Group
             ! authentication-server-group ISE-R-AAA
             ! accounting-server-group ISE-R-AAA
+            ! Above ISE Auth and Acctg off initially to enable LOCAL Auth
+            ! Students will enable once they have entered ISE Host in Object Group
           default-group-policy LAB-PROFILE
           tunnel-group LAB-PROFILE webvpn-attributes
             group-alias LAB-PROFILE enable
