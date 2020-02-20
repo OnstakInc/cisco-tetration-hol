@@ -979,8 +979,8 @@ Resources:
            network-object 192.168.${StudentIndex}.0 255.255.255.0
           object network ISE-HOST-IP 
            host 172.16.171.48
-#         Students will enter actual ISE Host in directed by Lab Admin due to ISE only object not supported in AWS EC2
-#         Lab Admin will also need to add Student ASAv Internal IP to ISE Network Devices to allow authen/author
+          ! Students will enter actual ISE Host in directed by Lab Admin due to ISE only object not supported in AWS EC2
+          ! Lab Admin will also need to add Student ASAv Internal IP to ISE Network Devices to allow authen/author
           access-list ssh standard permit any4 
           access-list standard standard permit any4 
           access-list outside-in extended permit icmp any any 
@@ -1065,10 +1065,10 @@ Resources:
           tunnel-group LAB-PROFILE type remote-access
           tunnel-group LAB-PROFILE general-attributes
             address-pool LAB-POOL
-#            authentication-server-group ISE-R-AAA
-#            Above ISE Auth off initially to enable LOCAL Auth
-#            Students will enable once they have entered ISE Host in Object Group
-            accounting-server-group ISE-R-AAA
+            authentication-server-group ISE-R-AAA
+            ! Above ISE Auth off initially to enable LOCAL Auth
+            ! Students will enable once they have entered ISE Host in Object Group
+            ! accounting-server-group ISE-R-AAA
           default-group-policy LAB-PROFILE
           tunnel-group LAB-PROFILE webvpn-attributes
             group-alias LAB-PROFILE enable
