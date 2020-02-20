@@ -1626,7 +1626,12 @@ Resources:
   #     TrafficType: ALL
 
 Outputs:
-  # General Outputs
+  # AWS Outputs
+  CiscoHOLAWSRegion:
+    Description: AWS Region
+    Value: !Ref Region
+  
+  # Student Outputs
   CiscoHOLStudentName:
     Description: Student Account Name
     Value: !Ref StudentName
@@ -1649,24 +1654,24 @@ Outputs:
     Value: !GetAtt EKSWorkerInstanceRole.Arn
 
   CiscoHOLPublicSubnet01:
-    Description: Public Subnet Cidr Block
+    Description: Internal-Corporate Subnet Cidr Block
     Value: !Ref Subnet01CidrBlock
   CiscoHOLPublicSubnet02:
-    Description: Public Subnet Cidr Block
+    Description: Internal-not-used Subnet Cidr Block
     Value: !Ref Subnet02CidrBlock
   CiscoHOLPrivateSubnet:
-    Description: Public Subnet Cidr Block
+    Description: External-Internet Subnet Cidr Block
     Value: !Ref Subnet03CidrBlock
   
   # EC2 Instances Outputs
   CiscoHOLASAvPrivate01:
-    Description: ASAv Firewall Server Private IP Outside
+    Description: ASAv Firewall Management IP Address
     Value: !GetAtt ASAvNetworkInterfaces01.PrimaryPrivateIpAddress
   CiscoHOLASAvPrivate02:
-    Description: ASAv Firewall Server Private IP Outside
+    Description: ASAv Firewall Outside IP Address
     Value: !GetAtt ASAvNetworkInterfaces02.PrimaryPrivateIpAddress
   CiscoHOLASAvPrivate03:
-    Description: ASAv Firewall Server Private IP Inside
+    Description: ASAv Firewall Inside IP Address
     Value: !GetAtt ASAvNetworkInterfaces03.PrimaryPrivateIpAddress
 
   CiscoHOLActiveDirectory:
@@ -1676,7 +1681,7 @@ Outputs:
     Description: MS SQL Server Private IP
     Value: !GetAtt CiscoHOLEC2SQLServer.PrivateIp
   CiscoHOLIISPrivate:
-    Description: IIS Server Private IP
+    Description: IIS Server Inside Private IP
     Value: !GetAtt CiscoHOLEC2IIS.PrivateIp
   CiscoHOLIISPublic:
     Description: IIS Server Public IP
@@ -1688,7 +1693,7 @@ Outputs:
     Description: MySQL Server Private IP
     Value: !GetAtt CiscoHOLEC2MySQL.PrivateIp
   CiscoHOLApachePrivate:
-    Description: Apache Server Private IP
+    Description: Apache Server Inside Private IP
     Value: !GetAtt CiscoHOLEC2Apache.PrivateIp
   CiscoHOLApachePublic:
     Description: Apache Server Public IP
@@ -1699,24 +1704,27 @@ Outputs:
   CiscoHOLAnsible:
     Description: Ansible Server Private IP
     Value: !GetAtt CiscoHOLEC2Ansible.PrivateIp
-  CiscoHOLTetrationData:
-    Description: Tetration Data Ingest Server Private IP
-    Value: !GetAtt CiscoHOLEC2TetData.PrivateIp
+  TetNetworkInterfaces01Data:
+    Description: Tetration Data Ingest Private IP 1
+    Value: !GetAtt TetNetworkInterfaces01.PrimaryPrivateIpAddress
+  TetNetworkInterfaces02Data:
+    Description: Tetration Data Ingest Private IP 2
+    Value: !GetAtt TetNetworkInterfaces02.PrimaryPrivateIpAddress
+  TetNetworkInterfaces03Data:
+    Description: Tetration Data Ingest Private IP 3
+    Value: !GetAtt TetNetworkInterfaces03.PrimaryPrivateIpAddress
   CiscoHOLTetrationEdge:
-    Description: Tetration Edge Server Private IP
+    Description: Tetration Edge Private IP
     Value: !GetAtt CiscoHOLEC2TetEdge.PrivateIp
   CiscoHOLWin10Employee:
-    Description: Windows 10 Employee Server Private IP
+    Description: Windows 10 Employee Private IP
     Value: !GetAtt CiscoHOLEC2Win10Employee.PrivateIp
   CiscoHOLWin10SysAdmin:
-    Description: Windows 10 SysAdmin Server Private IP
+    Description: Windows 10 SysAdmin Private IP
     Value: !GetAtt CiscoHOLEC2Win10SysAdmin.PrivateIp
   CiscoHOLAttacker:
-    Description: Mire-based Attacker Server Private IP
+    Description: Metasploit Attacker Private IP
     Value: !GetAtt CiscoHOLEC2Attacker.PrivateIp
-  CiscoHOLGuacamolePrivate:  
-    Description: Guacamole Server Private IP
-    Value: !GetAtt CiscoHOLEC2Guacamole.PrivateIp
   CiscoHOLGuacamolePublic:
     Description: Guacamole Server Public IP
     Value: !Ref CiscoHOLGuacamoleEIP
