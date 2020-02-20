@@ -1353,8 +1353,6 @@ Resources:
                       <param name="domain">hol.local</param>
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
-                      <param name="width">1600</param>
-                      <param name="height">900</param>
                   </connection>	
                   <connection name="06) End Users - Windows10 - SysAdmin">
                       <protocol>rdp</protocol>
@@ -1365,8 +1363,6 @@ Resources:
                       <param name="domain">hol.local</param>
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
-                      <param name="width">1600</param>
-                      <param name="height">900</param>
                   </connection>	
                   <connection name="07) Common Services - Ansible">
                       <protocol>ssh</protocol>
