@@ -19,7 +19,9 @@
 <a href="#diagram-013" style="font-weight:bold">Diagram 013 - Tetration Edge & Data Ingest Appliance Traffic Flows</a>  
 <a href="#diagram-014" style="font-weight:bold">Diagram 014 - AWS Security Groups for Lab Administrator</a>  
 
+---
 
+> Move to Admin Section:
 
 The URL to access all of the workloads and assets for your lab environment are unique to you and will be provided to you by the lab administrator in a CSV or XLS format. 
 

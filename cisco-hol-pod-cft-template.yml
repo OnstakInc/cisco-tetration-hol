@@ -1284,7 +1284,6 @@ Resources:
     Type: AWS::EC2::Instance
     DependsOn:
       - CiscoHOLEC2ActiveDirectory
-      - CiscoHOLEC2MSSystemCenter
       - CiscoHOLEC2SQLServer
       - CiscoHOLEC2IIS
       - CiscoHOLEC2MySQL
@@ -1673,9 +1672,6 @@ Outputs:
   CiscoHOLActiveDirectory:
     Description: Active Directory Server Private IP
     Value: !GetAtt CiscoHOLEC2ActiveDirectory.PrivateIp
-  CiscoHOLMSSC:
-    Description: MS System Center Server Private IP
-    Value: !GetAtt CiscoHOLEC2MSSystemCenter.PrivateIp
   CiscoHOLMSSQL:
     Description: MS SQL Server Private IP
     Value: !GetAtt CiscoHOLEC2SQLServer.PrivateIp
