@@ -1,0 +1,49 @@
+Resources:
+  CiscoHOLFlowLogS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: cisco-hol-student-01-vpc-flow-log
+  CiscoHOLFlowLog:
+    Type: AWS::EC2::FlowLog
+    Properties:
+      LogDestinationType: s3
+      LogDestination: !GetAtt CiscoHOLFlowLogS3Bucket.Arn
+      ResourceId: vpc-07e7ba44fadc5c271
+      ResourceType: VPC
+      TrafficType: ALL
+
+  Role:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: 'vpc-flow-logs.amazonaws.com'
+          Action: 'sts:AssumeRole'
+      Policies:
+      - PolicyName: 'flowlogs-policy'
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+            - 'logs:CreateLogGroup'
+            - 'logs:CreateLogStream'
+            - 'logs:PutLogEvents'
+            - 'logs:DescribeLogGroups'
+            - 'logs:DescribeLogStreams'
+            - 'logs:CreateLogDelivery'
+            - 'logs:DeleteLogDelivery'
+            Resource: '*'
+
+  # FlowLog
+  MyFlowLog:
+    Type: AWS::EC2::FlowLog
+    Properties:
+      LogDestinationType: s3
+      LogDestination: arn:aws:s3:::cisco-hol-vpc-flow-log
+      ResourceId: !Ref VpcID
+      ResourceType: VPC
+      TrafficType: ALL

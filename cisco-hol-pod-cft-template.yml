@@ -979,8 +979,6 @@ Resources:
            network-object 192.168.${StudentIndex}.0 255.255.255.0
           object network ISE-HOST-IP 
            host 172.16.171.48
-#         Students will enter actual ISE Host in directed by Lab Admin due to ISE only object not supported in AWS EC2
-#         Lab Admin will also need to add Student ASAv Internal IP to ISE Network Devices to allow authen/author
           access-list ssh standard permit any4 
           access-list standard standard permit any4 
           access-list outside-in extended permit icmp any any 
@@ -1065,9 +1063,6 @@ Resources:
           tunnel-group LAB-PROFILE type remote-access
           tunnel-group LAB-PROFILE general-attributes
             address-pool LAB-POOL
-#            authentication-server-group ISE-R-AAA
-#            Above ISE Auth off initially to enable LOCAL Auth
-#            Students will enable once they have entered ISE Host in Object Group
             accounting-server-group ISE-R-AAA
           default-group-policy LAB-PROFILE
           tunnel-group LAB-PROFILE webvpn-attributes
@@ -1079,7 +1074,7 @@ Resources:
           DeviceIndex: '1'
         - NetworkInterfaceId: !Ref 'ASAvNetworkInterfaces03'
           DeviceIndex: '2'
-  
+          
   ASAvNetworkInterfaces01:
       Type: AWS::EC2::NetworkInterface
       Properties:
@@ -1206,50 +1201,50 @@ Resources:
           cat <<EOF > /home/ciscolab/anyconnect-profile.xml
           <?xml version="1.0" encoding="UTF-8"?>
           <AnyConnectProfile xmlns="http://schemas.xmlsoap.org/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.xmlsoap.org/encoding/ AnyConnectProfile.xsd">
-                  <ClientInitialization>
-                          <UseStartBeforeLogon UserControllable="true">false</UseStartBeforeLogon>
-                          <AutomaticCertSelection UserControllable="true">false</AutomaticCertSelection>
-                          <ShowPreConnectMessage>false</ShowPreConnectMessage>
-                          <CertificateStore>All</CertificateStore>
-                          <CertificateStoreMac>All</CertificateStoreMac>
-                          <CertificateStoreOverride>false</CertificateStoreOverride>
-                          <ProxySettings>Native</ProxySettings>
-                          <AllowLocalProxyConnections>true</AllowLocalProxyConnections>
-                          <AuthenticationTimeout>12</AuthenticationTimeout>
-                          <AutoConnectOnStart UserControllable="true">false</AutoConnectOnStart>
-                          <MinimizeOnConnect UserControllable="true">true</MinimizeOnConnect>
-                          <LocalLanAccess UserControllable="true">false</LocalLanAccess>
-                          <DisableCaptivePortalDetection UserControllable="true">false</DisableCaptivePortalDetection>
-                          <ClearSmartcardPin UserControllable="true">true</ClearSmartcardPin>
-                          <IPProtocolSupport>IPv4,IPv6</IPProtocolSupport>
-                          <AutoReconnect UserControllable="false">true
-                                  <AutoReconnectBehavior UserControllable="false">ReconnectAfterResume</AutoReconnectBehavior>
-                          </AutoReconnect>
-                          <AutoUpdate UserControllable="false">true</AutoUpdate>
-                          <RSASecurIDIntegration UserControllable="false">Automatic</RSASecurIDIntegration>
-                          <WindowsLogonEnforcement>SingleLocalLogon</WindowsLogonEnforcement>
-                          <LinuxLogonEnforcement>SingleLocalLogon</LinuxLogonEnforcement>
-                          <WindowsVPNEstablishment>AllowRemoteUsers</WindowsVPNEstablishment>
-                          <LinuxVPNEstablishment>LocalUsersOnly</LinuxVPNEstablishment>
-                          <AutomaticVPNPolicy>false</AutomaticVPNPolicy>
-                          <PPPExclusion UserControllable="false">Disable
-                                  <PPPExclusionServerIP UserControllable="false"></PPPExclusionServerIP>
-                          </PPPExclusion>
-                          <EnableScripting UserControllable="false">false</EnableScripting>
-                          <EnableAutomaticServerSelection UserControllable="false">false
-                                  <AutoServerSelectionImprovement>20</AutoServerSelectionImprovement>
-                                  <AutoServerSelectionSuspendTime>4</AutoServerSelectionSuspendTime>
-                          </EnableAutomaticServerSelection>
-                          <RetainVpnOnLogoff>false
-                          </RetainVpnOnLogoff>
-                          <AllowManualHostInput>true</AllowManualHostInput>
-                  </ClientInitialization>
-                  <ServerList>
-                          <HostEntry>
-                                  <HostName>Tet-HOL-ASAv</HostName>
-                                  <HostAddress>${ASAvNetworkInterfaces02.PrimaryPrivateIpAddress}</HostAddress>
-                          </HostEntry>
-                  </ServerList>
+            <ClientInitialization>
+                    <UseStartBeforeLogon UserControllable="true">false</UseStartBeforeLogon>
+                    <AutomaticCertSelection UserControllable="true">false</AutomaticCertSelection>
+                    <ShowPreConnectMessage>false</ShowPreConnectMessage>
+                    <CertificateStore>All</CertificateStore>
+                    <CertificateStoreMac>All</CertificateStoreMac>
+                    <CertificateStoreOverride>false</CertificateStoreOverride>
+                    <ProxySettings>Native</ProxySettings>
+                    <AllowLocalProxyConnections>true</AllowLocalProxyConnections>
+                    <AuthenticationTimeout>12</AuthenticationTimeout>
+                    <AutoConnectOnStart UserControllable="true">false</AutoConnectOnStart>
+                    <MinimizeOnConnect UserControllable="true">true</MinimizeOnConnect>
+                    <LocalLanAccess UserControllable="true">false</LocalLanAccess>
+                    <DisableCaptivePortalDetection UserControllable="true">false</DisableCaptivePortalDetection>
+                    <ClearSmartcardPin UserControllable="true">true</ClearSmartcardPin>
+                    <IPProtocolSupport>IPv4,IPv6</IPProtocolSupport>
+                    <AutoReconnect UserControllable="false">true
+                      <AutoReconnectBehavior UserControllable="false">ReconnectAfterResume</AutoReconnectBehavior>
+                    </AutoReconnect>
+                    <AutoUpdate UserControllable="false">true</AutoUpdate>
+                    <RSASecurIDIntegration UserControllable="false">Automatic</RSASecurIDIntegration>
+                    <WindowsLogonEnforcement>SingleLocalLogon</WindowsLogonEnforcement>
+                    <LinuxLogonEnforcement>SingleLocalLogon</LinuxLogonEnforcement>
+                    <WindowsVPNEstablishment>AllowRemoteUsers</WindowsVPNEstablishment>
+                    <LinuxVPNEstablishment>LocalUsersOnly</LinuxVPNEstablishment>
+                    <AutomaticVPNPolicy>false</AutomaticVPNPolicy>
+                    <PPPExclusion UserControllable="false">Disable
+                      <PPPExclusionServerIP UserControllable="false"></PPPExclusionServerIP>
+                    </PPPExclusion>
+                    <EnableScripting UserControllable="false">false</EnableScripting>
+                    <EnableAutomaticServerSelection UserControllable="false">false
+                      <AutoServerSelectionImprovement>20</AutoServerSelectionImprovement>
+                      <AutoServerSelectionSuspendTime>4</AutoServerSelectionSuspendTime>
+                    </EnableAutomaticServerSelection>
+                    <RetainVpnOnLogoff>false
+                    </RetainVpnOnLogoff>
+                    <AllowManualHostInput>true</AllowManualHostInput>
+            </ClientInitialization>
+            <ServerList>
+              <HostEntry>
+                <HostName>Tet-HOL-ASAv</HostName>
+                <HostAddress>${ASAvNetworkInterfaces02.PrimaryPrivateIpAddress}</HostAddress>
+              </HostEntry>
+            </ServerList>
           </AnyConnectProfile>
           EOF
           sshpass -p 'tet123$$!' scp -o StrictHostKeyChecking=no /home/ciscolab/anyconnect-profile.xml admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress}:disk0:anyconnect-profile.xml &> /tmp/anyconnect-init.log
@@ -1588,42 +1583,19 @@ Resources:
       Principal: events.amazonaws.com
       SourceArn: !Sub ${LambdaScheduleApache.Arn}
 
-  # # VPC Flow Log Role
-  # Role:
-  #   Type: 'AWS::IAM::Role'
-  #   Properties:
-  #     AssumeRolePolicyDocument:
-  #       Version: '2012-10-17'
-  #       Statement:
-  #       - Effect: Allow
-  #         Principal:
-  #           Service: 'vpc-flow-logs.amazonaws.com'
-  #         Action: 'sts:AssumeRole'
-  #     Policies:
-  #     - PolicyName: 'flowlogs-policy'
-  #       PolicyDocument:
-  #         Version: '2012-10-17'
-  #         Statement:
-  #         - Effect: Allow
-  #           Action:
-  #           - 'logs:CreateLogGroup'
-  #           - 'logs:CreateLogStream'
-  #           - 'logs:PutLogEvents'
-  #           - 'logs:DescribeLogGroups'
-  #           - 'logs:DescribeLogStreams'
-  #           - 'logs:CreateLogDelivery'
-  #           - 'logs:DeleteLogDelivery'
-  #           Resource: '*'
-
-  # # FlowLog
-  # MyFlowLog:
-  #   Type: AWS::EC2::FlowLog
-  #   Properties:
-  #     LogDestinationType: s3
-  #     LogDestination: arn:aws:s3:::cisco-hol-vpc-flow-log
-  #     ResourceId: !Ref VpcID
-  #     ResourceType: VPC
-  #     TrafficType: ALL
+  # VPC Flow Logs
+  CiscoHOLVPCFlowLogS3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "cisco-hol-${StudentName}-vpc-flow-logs-${Region}${Subnet01AvailabilityZone}"
+  CiscoHOLVPCFlowLog:
+    Type: AWS::EC2::FlowLog
+    Properties:
+      LogDestinationType: s3
+      LogDestination: !GetAtt CiscoHOLVPCFlowLogS3Bucket.Arn
+      ResourceId: !Ref VpcID
+      ResourceType: VPC
+      TrafficType: ALL
 
 Outputs:
   # AWS Outputs

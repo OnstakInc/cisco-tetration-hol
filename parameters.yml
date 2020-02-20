@@ -6,8 +6,8 @@ aws_region: us-east-2
 student_count: 1
 student_prefix: cisco-student
 
-vpc_id: vpc-07e7ba44fadc5c271
-internet_gateway_id: igw-0f5e60daa68580ca8
+vpc_id: vpc-082d43bff04cd342e
+internet_gateway_id: igw-0fec2ea47e798ea86
 subnet_range_primary: 10.0.0.0/16
 subnet_range_secondary: 198.18.0.0/16
 
