@@ -411,7 +411,7 @@ Resources:
     Type: AWS::EC2::Instance
     Properties:
       ImageId: !Ref LDAPImageID
-      InstanceType: t2.small
+      InstanceType: t2.medium
       Tags:
         - Key: Name
           Value: !Sub "cisco-hol-${StudentName}-ec2-active-directory-win-2019-${Region}${Subnet01AvailabilityZone}"
@@ -445,50 +445,8 @@ Resources:
           GroupSet:
             - !Ref CiscoHOLPublicSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet01
-  
-#  # MS Systems Center
-#  CiscoHOLEC2MSSystemCenter:
-#    DependsOn:
-#      - CiscoHOLEC2ActiveDirectory
-#    Type: AWS::EC2::Instance
-#    Properties:
-#      ImageId: !Ref MSSCImageID
-#      InstanceType: t2.micro
-#      Tags:
-#        - Key: Name
-#          Value: !Sub "cisco-hol-${StudentName}-ec2-ms-system-center-${Region}${Subnet01AvailabilityZone}"
-#        - Key: Org
-#          Value: Tetration
-#        - Key: Geo
-#          Value: US
-#        - Key: Cloud
-#          Value: AWS
-#        - Key: Region
-#          Value: !Sub "${Region}"
-#        - Key: AppSDLC
-#          Value: Lab
-#        - Key: AppGroup
-#          Value: Common
-#        - Key: AppName
-#          Value: SCCM
-#        - Key: AppCluster
-#          Value: SCCM
-#      UserData:
-#       Fn::Base64: !Sub |
-#        <powershell>
-#        $adapter = Get-NetAdapter -Name 'Ethernet*'
-#        Set-DNSClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ("${CiscoHOLEC2ActiveDirectory.PrivateIp}")
-#        ipconfig /flushdns
-#        Clear-DnsClientCache
-#        </powershell>
-#      NetworkInterfaces:
-#        - AssociatePublicIpAddress: "true"
-#          DeviceIndex: "0"
-#          GroupSet:
-#            - !Ref CiscoHOLPublicSecurityGroup
-#          SubnetId: !Ref CiscoHOLSubnet01
 
-  # Windows App Server
+  # Windows DB Server
   CiscoHOLEC2SQLServer:
     Type: AWS::EC2::Instance
     DependsOn:
@@ -783,7 +741,7 @@ Resources:
       - CiscoHOLEC2ActiveDirectory
     Properties:
       ImageId: !Ref Win10EmployeeImageID
-      InstanceType: t2.small
+      InstanceType: t2.medium
       Tags:
         - Key: Name
           Value: !Sub "cisco-hol-${StudentName}-ec2-win10-employee-${Region}${Subnet02AvailabilityZone}"
@@ -802,7 +760,7 @@ Resources:
       - CiscoHOLEC2ActiveDirectory
     Properties:
       ImageId: !Ref Win10SysAdminImageID
-      InstanceType: t2.small
+      InstanceType: t2.medium
       Tags:
         - Key: Name
           Value: !Sub "cisco-hol-${StudentName}-ec2-win10-sysadmin-${Region}${Subnet02AvailabilityZone}"
@@ -985,21 +943,21 @@ Resources:
           no mac-address auto
           ip local pool LAB-POOL 192.168.${StudentIndex}.1-192.168.${StudentIndex}.254 mask 255.255.255.0
           interface GigabitEthernet0/0
-          nameif outside
-          security-level 0
-          ip address dhcp 
-          no shutdown
+           nameif outside
+           security-level 0
+           ip address dhcp 
+           no shutdown
           interface GigabitEthernet0/1
-          nameif inside
-          security-level 100
-          ip address dhcp setroute 
-          no shutdown
+           nameif inside
+           security-level 100
+           ip address dhcp setroute 
+           no shutdown
           interface Management0/0
-          management-only
-          shutdown
-          nameif management
-          security-level 100
-          no ip address
+           management-only
+           shutdown
+           nameif management
+           security-level 100
+           no ip address
           ssh version 2
           ssh scopy enable
           username ciscolab password tet123$$! privilege 15
@@ -1009,37 +967,39 @@ Resources:
           dns domain-lookup inside
           dns domain-lookup management
           dns server-group DefaultDNS
-          name-server ${CiscoHOLEC2ActiveDirectory.PrivateIp}
-          domain-name hol.local
+           name-server ${CiscoHOLEC2ActiveDirectory.PrivateIp}
+           domain-name hol.local
           object network OBJ-LAB-SUBNET
-          subnet 192.168.${StudentIndex}.0 255.255.255.0
+           subnet 192.168.${StudentIndex}.0 255.255.255.0
           object network nopCommerce-IIS
-          host ${CiscoHOLEC2IIS.PrivateIp}
+           host ${CiscoHOLEC2IIS.PrivateIp}
           object network OpenCart-App
-          host ${CiscoHOLEC2Apache.PrivateIp}
+           host ${CiscoHOLEC2Apache.PrivateIp}
           object-group network RemoteAccessVPN
-          network-object 192.168.${StudentIndex}.0 255.255.255.0
+           network-object 192.168.${StudentIndex}.0 255.255.255.0
+          object network ISE-HOST-IP 
+           host 172.16.171.48
+#         Students will enter actual ISE Host in directed by Lab Admin due to ISE only object not supported in AWS EC2
+#         Lab Admin will also need to add Student ASAv Internal IP to ISE Network Devices to allow authen/author
           access-list ssh standard permit any4 
           access-list standard standard permit any4 
           access-list outside-in extended permit icmp any any 
           access-list outside-in extended permit tcp any object nopCommerce-IIS eq www 
           access-list outside-in extended permit tcp any object nopCommerce-IIS eq https 
+          access-list outside-in extended permit tcp any object nopCommerce-IIS eq 8080 
           access-list outside-in extended permit tcp any object OpenCart-App eq www 
           access-list outside-in extended permit tcp any object OpenCart-App eq https 
           access-list outside-in extended permit tcp any object OpenCart-App eq 8080 
-          access-list outside-in extended permit tcp any object nopCommerce-IIS eq 8080 
           access-list LAB-LIST standard permit ${ASAvInsideSubnet} 255.255.255.0 
-          nat (inside,outside) source static any any destination static RemoteAccessVPN RemoteAccessVPN
           object network nopCommerce-IIS
-          nat (inside,outside) static ${IISOutsidePrivateIp}
+           nat (inside,outside) static ${IISOutsidePrivateIp}
           object network OpenCart-App
-          nat (inside,outside) static ${ApacheOutsidePrivateIp}
+           nat (inside,outside) static ${ApacheOutsidePrivateIp}
+          nat (inside,outside) source static any any destination static RemoteAccessVPN RemoteAccessVPN
           access-group outside-in in interface outside
           aaa authentication ssh console LOCAL
           aaa authorization exec LOCAL auto-enable
           user-identity default-domain LOCAL
-          object network ISE-HOST-IP 
-          host 172.16.171.48
           flow-export destination inside ${TetNetworkInterfaces01.PrimaryPrivateIpAddress} 4729
           flow-export template timeout-rate 1
           policy-map global_policy
@@ -1047,6 +1007,7 @@ Resources:
           flow-export event-type all destination ${TetNetworkInterfaces01.PrimaryPrivateIpAddress}
           user-statistics accounting
           aaa-server ISE-R-AAA protocol radius
+            key tet123$$!
           accounting-mode simultaneous
           reactivation-mode timed
           max-failed-attempts 5
@@ -1058,59 +1019,59 @@ Resources:
           crypto ipsec security-association pmtu-aging infinite
           crypto key generate rsa label sslvpnkeypair modulus 1024
           crypto ca trustpoint self_trustpoint
-          enrollment self
-          fqdn ${ASAvNetworkInterfaces02.PrimaryPrivateIpAddress}
-          subject-name CN=${ASAvNetworkInterfaces02.PrimaryPrivateIpAddress}
-          serial-number
-          keypair sslvpnkeypair
-          crl configure
+           enrollment self
+           fqdn ${ASAvNetworkInterfaces02.PrimaryPrivateIpAddress}
+           subject-name CN=${ASAvNetworkInterfaces02.PrimaryPrivateIpAddress}
+           serial-number
+           keypair sslvpnkeypair
+           crl configure
           ssl trust-point self_trustpoint outside
           crypto ca trustpool policy
           auto-import
           ssh 0.0.0.0 0.0.0.0 outside
           ssh 0.0.0.0 0.0.0.0 inside
           ssh 0.0.0.0 0.0.0.0 management
+          ssh timeout 30
           ntp server time-c.nist.gov
           ntp server time-b.nist.gov
           ntp server time-a.nist.gov
           webvpn
           enable outside
-          enable inside
           hsts
-          enable
-          max-age 31536000
-          include-sub-domains
-          no preload
+           enable
+           max-age 31536000
+           include-sub-domains
+           no preload
           anyconnect enable
           tunnel-group-list enable
           cache
-          disable
+           disable
           error-recovery disable
           group-policy DfltGrpPolicy attributes
-          vpn-tunnel-protocol ikev1 ikev2 l2tp-ipsec ssl-client ssl-clientless
+           vpn-tunnel-protocol ikev1 ikev2 l2tp-ipsec ssl-client ssl-clientless
           group-policy LAB-PROFILE internal
           group-policy LAB-PROFILE attributes
-          dns-server value ${CiscoHOLEC2ActiveDirectory.PrivateIp}
-          vpn-tunnel-protocol ssl-client 
-          split-tunnel-policy tunnelspecified
-          split-tunnel-network-list value LAB-LIST
-          webvpn
-          anyconnect modules value dart
+            dns-server value ${CiscoHOLEC2ActiveDirectory.PrivateIp}
+            vpn-tunnel-protocol ssl-client 
+            split-tunnel-policy tunnelspecified
+            split-tunnel-network-list value LAB-LIST
           dynamic-access-policy-record DfltAccessPolicy
           username employee password tet123$$! privilege 15
           username employee attributes
-          service-type remote-access
+           service-type remote-access
           username sysadmin password tet123$$! privilege 15
           username sysadmin attributes
-          service-type remote-access
+           service-type remote-access
           tunnel-group LAB-PROFILE type remote-access
           tunnel-group LAB-PROFILE general-attributes
-          address-pool LAB-POOL
-          authentication-server-group ISE-R-AAA
-          accounting-server-group ISE-R-AAA
+            address-pool LAB-POOL
+#            authentication-server-group ISE-R-AAA
+#            Above ISE Auth off initially to enable LOCAL Auth
+#            Students will enable once they have entered ISE Host in Object Group
+            accounting-server-group ISE-R-AAA
           default-group-policy LAB-PROFILE
           tunnel-group LAB-PROFILE webvpn-attributes
-          group-alias LAB-PROFILE enable
+            group-alias LAB-PROFILE enable
       NetworkInterfaces: 
         - NetworkInterfaceId: !Ref 'ASAvNetworkInterfaces01'
           DeviceIndex: '0'
@@ -1242,6 +1203,55 @@ Resources:
           /bin/bash /var/eks-init/bootstrap.sh "${AccessKey}" "${SecretKey}" "${Region}" "${EKSCluster}" "${EKSCluster.Endpoint}" "${EKSCluster.CertificateAuthorityData}" "${EKSWorkerInstanceRole.Arn}"
           sleep 300
           sshpass -p 'tet123$$!' scp -o StrictHostKeyChecking=no /home/ciscolab/anyconnect-win-4.6.00362-webdeploy-k9.pkg admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress}:disk0:anyconnect-win-4.6.00362-webdeploy-k9.pkg &> /tmp/anyconnect-init.log
+          cat <<EOF > /home/ciscolab/anyconnect-profile.xml
+          <?xml version="1.0" encoding="UTF-8"?>
+          <AnyConnectProfile xmlns="http://schemas.xmlsoap.org/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.xmlsoap.org/encoding/ AnyConnectProfile.xsd">
+                  <ClientInitialization>
+                          <UseStartBeforeLogon UserControllable="true">false</UseStartBeforeLogon>
+                          <AutomaticCertSelection UserControllable="true">false</AutomaticCertSelection>
+                          <ShowPreConnectMessage>false</ShowPreConnectMessage>
+                          <CertificateStore>All</CertificateStore>
+                          <CertificateStoreMac>All</CertificateStoreMac>
+                          <CertificateStoreOverride>false</CertificateStoreOverride>
+                          <ProxySettings>Native</ProxySettings>
+                          <AllowLocalProxyConnections>true</AllowLocalProxyConnections>
+                          <AuthenticationTimeout>12</AuthenticationTimeout>
+                          <AutoConnectOnStart UserControllable="true">false</AutoConnectOnStart>
+                          <MinimizeOnConnect UserControllable="true">true</MinimizeOnConnect>
+                          <LocalLanAccess UserControllable="true">false</LocalLanAccess>
+                          <DisableCaptivePortalDetection UserControllable="true">false</DisableCaptivePortalDetection>
+                          <ClearSmartcardPin UserControllable="true">true</ClearSmartcardPin>
+                          <IPProtocolSupport>IPv4,IPv6</IPProtocolSupport>
+                          <AutoReconnect UserControllable="false">true
+                                  <AutoReconnectBehavior UserControllable="false">ReconnectAfterResume</AutoReconnectBehavior>
+                          </AutoReconnect>
+                          <AutoUpdate UserControllable="false">true</AutoUpdate>
+                          <RSASecurIDIntegration UserControllable="false">Automatic</RSASecurIDIntegration>
+                          <WindowsLogonEnforcement>SingleLocalLogon</WindowsLogonEnforcement>
+                          <LinuxLogonEnforcement>SingleLocalLogon</LinuxLogonEnforcement>
+                          <WindowsVPNEstablishment>AllowRemoteUsers</WindowsVPNEstablishment>
+                          <LinuxVPNEstablishment>LocalUsersOnly</LinuxVPNEstablishment>
+                          <AutomaticVPNPolicy>false</AutomaticVPNPolicy>
+                          <PPPExclusion UserControllable="false">Disable
+                                  <PPPExclusionServerIP UserControllable="false"></PPPExclusionServerIP>
+                          </PPPExclusion>
+                          <EnableScripting UserControllable="false">false</EnableScripting>
+                          <EnableAutomaticServerSelection UserControllable="false">false
+                                  <AutoServerSelectionImprovement>20</AutoServerSelectionImprovement>
+                                  <AutoServerSelectionSuspendTime>4</AutoServerSelectionSuspendTime>
+                          </EnableAutomaticServerSelection>
+                          <RetainVpnOnLogoff>false
+                          </RetainVpnOnLogoff>
+                          <AllowManualHostInput>true</AllowManualHostInput>
+                  </ClientInitialization>
+                  <ServerList>
+                          <HostEntry>
+                                  <HostName>Tet-HOL-ASAv</HostName>
+                                  <HostAddress>${ASAvNetworkInterfaces02.PrimaryPrivateIpAddress}</HostAddress>
+                          </HostEntry>
+                  </ServerList>
+          </AnyConnectProfile>
+          EOF
           sshpass -p 'tet123$$!' scp -o StrictHostKeyChecking=no /home/ciscolab/anyconnect-profile.xml admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress}:disk0:anyconnect-profile.xml &> /tmp/anyconnect-init.log
           cat <<EOF > /home/ciscolab/anyconnect-init.sh
           !
@@ -1250,7 +1260,15 @@ Resources:
           conf t
           webvpn
           anyconnect image disk0:/anyconnect-win-4.6.00362-webdeploy-k9.pkg 1 regex "Windows"
-          anyconnect profiles anyconnect-profile disk0:/anyconnect-profile.xml
+          anyconnect profiles HOL-LAB-PROFILE disk0:/anyconnect-profile.xml
+          group-policy LAB-PROFILE attributes
+            vpn-tunnel-protocol ssl-client 
+            split-tunnel-policy tunnelspecified
+            split-tunnel-network-list value LAB-LIST
+            webvpn
+              anyconnect modules value dart
+              anyconnect profiles value HOL-LAB-PROFILE type user
+          end
           wr 
           EOF
           sshpass -p 'tet123$$!' ssh -o StrictHostKeyChecking=no admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} < /home/ciscolab/anyconnect-init.sh &> /tmp/anyconnect-init.log
@@ -1336,6 +1354,8 @@ Resources:
                       <param name="domain">hol.local</param>
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
+                      <param name="width">1600</param>
+                      <param name="height">900</param>
                   </connection>	
                   <connection name="06) End Users - Windows10 - SysAdmin">
                       <protocol>rdp</protocol>
@@ -1346,6 +1366,8 @@ Resources:
                       <param name="domain">hol.local</param>
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
+                      <param name="width">1600</param>
+                      <param name="height">900</param>
                   </connection>	
                   <connection name="07) Common Services - Ansible">
                       <protocol>ssh</protocol>
