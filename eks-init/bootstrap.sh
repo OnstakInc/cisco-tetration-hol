@@ -11,7 +11,7 @@ EKS_WORKER_ROLE=$7
 
 export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY
 export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_KEY
-export AWS_REGION=$AWS_REGION
+export AWS_DEFAULT_REGION=$AWS_REGION
 
 token=$(aws eks get-token --cluster-name $EKS_CLUSTER | jq -r '.status.token')
 

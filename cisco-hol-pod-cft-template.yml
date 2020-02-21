@@ -528,6 +528,13 @@ Resources:
           Clear-DnsClientCache
           Start-Sleep -Seconds 60
           IISReset /Restart
+          $jobname = "Restart IIS Service Task"
+          $script =  "IISReset /Restart"
+          $repeat = (New-TimeSpan -Minutes 30)
+          $scriptblock = [scriptblock]::Create($script)
+          $trigger = New-JobTrigger -Once -At (Get-Date).Date -RepeatIndefinitely -RepetitionInterval $repeat
+          $options = New-ScheduledJobOption -RunElevated -ContinueIfGoingOnBattery -StartIfOnBattery
+          Register-ScheduledJob -Name $jobname -ScriptBlock $scriptblock -Trigger $trigger -ScheduledJobOption $options
           </powershell>
       NetworkInterfaces:
         - AssociatePublicIpAddress: "true"
@@ -887,6 +894,13 @@ Resources:
       UserData: !Base64
         "Fn::Sub": |
           #!/bin/bash
+          adduser --disabled-password --gecos "" ciscolab
+          (echo 'tet123$$!'; echo 'tet123$$!') | passwd ciscolab
+          (echo 'tet123$$!'; echo 'tet123$$!') | passwd root
+          usermod -aG sudo ciscolab
+          sed -i "s/^#PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
+          sed -i "s/^PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+          systemctl restart sshd
           set -o xtrace
           /etc/eks/bootstrap.sh --apiserver-endpoint '${EKSCluster.Endpoint}' --b64-cluster-ca '${EKSCluster.CertificateAuthorityData}' '${EKSCluster}'
           /opt/aws/bin/cfn-signal --exit-code $? --stack  ${AWS::StackName} --resource NodeGroup --region ${AWS::Region}     
@@ -1176,10 +1190,16 @@ Resources:
           rm -rf /opt/*
           sh -c 'cd /opt && git clone https://github.com/OnstakInc/ansible-tetration-sensor.git'
           cat <<EOF > /opt/ansible-tetration-sensor/inventory/hosts
-          [linux]
+          [centos]
           ${CiscoHOLEC2Apache.PrivateIp}
           ${CiscoHOLEC2MySQL.PrivateIp}
-          [linux:vars]
+          [centos:vars]
+          ansible_user=root
+          ansible_password=tet123\$\$!
+          ansible_sudo_pass=tet123\$\$!
+          [ubuntu]
+          $(/var/eks-init/eks-worker.sh '${AccessKey}' '${SecretKey}' '${Region}' '${StudentName}-eks-worker-${Region}')
+          [ubuntu:vars]
           ansible_user=root
           ansible_password=tet123\$\$!
           ansible_sudo_pass=tet123\$\$!
@@ -1195,10 +1215,12 @@ Resources:
           ansible_winrm_server_cert_validation=ignore
           validate_certs=false
           EOF
+          sed -i "s/^None//g" /opt/ansible-tetration-sensor/inventory/hosts
           sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
           systemctl restart sshd
           echo "DNS1=${CiscoHOLEC2ActiveDirectory.PrivateIp}" | tee -a /etc/sysconfig/network-scripts/ifcfg-eth0
           systemctl restart network
+          pip install paramiko
           sleep 15
           /bin/bash /var/eks-init/bootstrap.sh "${AccessKey}" "${SecretKey}" "${Region}" "${EKSCluster}" "${EKSCluster.Endpoint}" "${EKSCluster.CertificateAuthorityData}" "${EKSWorkerInstanceRole.Arn}"
           sleep 300
@@ -1589,6 +1611,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Sub "cisco-hol-${StudentName}-vpc-flow-logs-${Region}${Subnet01AvailabilityZone}"
+
   CiscoHOLVPCFlowLog:
     Type: AWS::EC2::FlowLog
     Properties:
@@ -1597,6 +1620,32 @@ Resources:
       ResourceId: !Ref VpcID
       ResourceType: VPC
       TrafficType: ALL
+  
+  CiscoHOLIAMUser:
+    Type: AWS::IAM::User
+    Properties: 
+      UserName: !Ref StudentName
+
+  CiscoHOLIAMPolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      Users:
+        - !Ref CiscoHOLIAMUser
+      PolicyName: !Ref StudentName
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+        - Effect: Allow
+          Action: ec2:Describe*
+          Resource: "*"
+        - Effect: Allow
+          Action: elasticloadbalancing:Describe*
+          Resource: "*"
+  
+  CiscoHOLIAMUserAccessKey:
+    Type: AWS::IAM::AccessKey
+    Properties:
+      UserName: !Ref CiscoHOLIAMUser
 
 Outputs:
   # AWS Outputs
@@ -1611,6 +1660,19 @@ Outputs:
   CiscoHOLStudentPassword:
     Description: Student Account Password
     Value: !Ref StudentPassword
+
+  # VPC Flow Log Bucket Name
+  CiscoHOLVPCFlowLogBucket:
+    Description: VPC Flow Log Bucket Name
+    Value: !Ref CiscoHOLVPCFlowLogS3Bucket
+
+  # Student AWS Credentials
+  StudentAccessKey:
+    Description: Student AWS Access Key
+    Value: !Ref CiscoHOLIAMUserAccessKey
+  StudentSecretKey:
+    Description: Student AWS Secret Key
+    Value: !GetAtt CiscoHOLIAMUserAccessKey.SecretAccessKey
 
   # EKS Cluster Outputs
   EKSClusterName:

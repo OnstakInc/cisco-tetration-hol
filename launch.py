@@ -292,7 +292,6 @@ while True:
 #######################################################################
 # Assemble EKS ELB DNS Records ########################################
 #######################################################################
-
 try:
 
     print('INFO: Initializing EKS DNS Assembly...')
@@ -322,7 +321,6 @@ try:
 except Exception as e:
     print(e)
     exit(1)
-
 #######################################################################
 
 #######################################################################
@@ -352,6 +350,8 @@ try:
 
         records.append([
             output['CiscoHOLAWSRegion'],
+            output['StudentAccessKey'],
+            output['StudentSecretKey'],
             output['CiscoHOLStudentName'],
             output['CiscoHOLStudentPassword'],
             f"https://{output['CiscoHOLGuacamolePublic']}",
@@ -383,6 +383,8 @@ try:
 
     header = [
         'AWS Region',
+        'AWS Access Key',
+        'AWS Secret Key',
         'Student Guacamole Username',
         'Student Guacamole Password', 
         'Guacamole Web Console URL',

@@ -3,7 +3,7 @@ aws_access_key:
 aws_secret_key: 
 aws_region: us-east-2
 
-student_count: 2
+student_count: 1
 student_prefix: cisco-student
 
 vpc_id: vpc-07e7ba44fadc5c271
@@ -20,7 +20,7 @@ mssql_ami: ami-090ab21d87411b44e
 iis_ami: ami-0c4e857f7ec9de0dc
 mysql_ami: ami-0c170ef4a4f9b1789
 apache_ami: ami-0bb3d60453bbc693a
-ansible_ami: ami-099cc45b1ba93bb83
+ansible_ami: ami-016b54a1c6e41069f
 tet_data_ami: ami-0c2276fc51ad25018
 tet_edge_ami: ami-0cb78ddba97ce6591
 employee_ami: ami-0da00f363f93add92
