@@ -818,7 +818,7 @@ Resources:
           Action:
             - sts:AssumeRole
       Path: "/"
-      RoleName: !Join [ "-", [ !Ref 'AWS::StackName', "EKS-Cluster-Role" ] ]
+      RoleName: !Join [ "-", [ !Ref 'AWS::StackName', "EKS-Cluster-Role", !Ref 'AWS::Region' ] ]
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonEKSClusterPolicy
         - arn:aws:iam::aws:policy/AmazonEKSServicePolicy
@@ -838,7 +838,7 @@ Resources:
             Action:
               - sts:AssumeRole
       Path: /
-      RoleName: !Join [ "-", [ !Ref 'AWS::StackName', "EKS-Worker-Role" ] ]
+      RoleName: !Join [ "-", [ !Ref 'AWS::StackName', "EKS-Worker-Role", !Ref 'AWS::Region' ] ]
       ManagedPolicyArns:
         - arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy
         - arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy
@@ -1624,7 +1624,7 @@ Resources:
   CiscoHOLIAMUser:
     Type: AWS::IAM::User
     Properties: 
-      UserName: !Ref StudentName
+      UserName: !Join [ "-", [ !Ref StudentName, !Ref 'AWS::Region' ] ]
 
   CiscoHOLIAMPolicy:
     Type: AWS::IAM::Policy
