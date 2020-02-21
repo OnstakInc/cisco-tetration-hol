@@ -386,8 +386,8 @@ try:
         'Student Guacamole Username',
         'Student Guacamole Password', 
         'Guacamole Web Console URL',
-        'Student Internal/Inside "Corporate" Subnet'
-        'Student External/Outside "Psuedo Internet" Subnet'
+        'Student Internal/Inside "Corporate" Subnet',
+        'Student External/Outside "Psuedo Internet" Subnet',
         'MS Active Directory IP',
         'MS IIS nopCommerce Public IP',
         'MS IIS nopCommerce Inside IP',
