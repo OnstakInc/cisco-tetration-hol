@@ -1177,7 +1177,6 @@ Resources:
           sh -c 'cd /opt && git clone https://github.com/OnstakInc/ansible-tetration-sensor.git'
           cat <<EOF > /opt/ansible-tetration-sensor/inventory/hosts
           [linux]
-          ${CiscoHOLEC2Ansible.PrivateIp}
           ${CiscoHOLEC2Apache.PrivateIp}
           ${CiscoHOLEC2MySQL.PrivateIp}
           [linux:vars]
