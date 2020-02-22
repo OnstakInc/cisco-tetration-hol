@@ -315,7 +315,7 @@ Resources:
         - IpProtocol: -1
           FromPort: 0
           ToPort: 65535
-          CidrIp: !Sub "192.168.${StudentIndex}.0"
+          CidrIp: !Sub "192.168.${StudentIndex}.0/24"
         - IpProtocol: -1
           FromPort: 0
           ToPort: 65535
@@ -1192,6 +1192,7 @@ Resources:
         Fn::Base64: !Sub |
           #!/bin/bash
           rm -rf /opt/*
+          pip install requests-ntlm --upgrade
           sh -c 'cd /opt && git clone https://github.com/OnstakInc/ansible-tetration-sensor.git'
           sh -c 'cd /opt && git clone https://github.com/OnstakInc/ansible_asa.git'
           cat <<EOF > /opt/ansible-tetration-sensor/inventory/hosts
@@ -1223,7 +1224,7 @@ Resources:
           ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress}
           [asa:vars]
           ansible_user=admin
-          ansible_password=tet123$$!
+          ansible_password=tet123\$\$!
           ansible_connection=network_cli
           ansible_network_os=asa
           EOF
