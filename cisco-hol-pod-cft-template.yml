@@ -29,7 +29,6 @@ Metadata:
         Parameters:
           - ASAvImageID
           - LDAPImageID
-          - MSSCImageID
           - MSSQLImageID
           - IISImageID
           - MySQLImageID
