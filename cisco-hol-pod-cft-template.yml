@@ -148,9 +148,6 @@ Parameters:
   LDAPImageID:
     Type: String
     Description: Please enter Image Id for Active Directory
-  MSSCImageID:
-    Type: String
-    Description: Please enter Image Id for MS System Center
   MSSQLImageID:
     Type: String
     Description: Please enter Image Id for MS Sql
