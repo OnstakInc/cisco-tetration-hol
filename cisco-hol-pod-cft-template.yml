@@ -1197,6 +1197,7 @@ Resources:
           #!/bin/bash
           rm -rf /opt/*
           sh -c 'cd /opt && git clone https://github.com/OnstakInc/ansible-tetration-sensor.git'
+          sh -c 'cd /opt && git clone https://github.com/OnstakInc/ansible_asa.git'
           cat <<EOF > /opt/ansible-tetration-sensor/inventory/hosts
           [centos]
           ${CiscoHOLEC2Apache.PrivateIp}
@@ -1225,6 +1226,10 @@ Resources:
           [asa]
           ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress}
           [asa:vars]
+          ansible_user=admin
+          ansible_password=tet123$$!
+          ansible_connection=network_cli
+          ansible_network_os=asa
           EOF
           sed -i "s/^None//g" /opt/ansible-tetration-sensor/inventory/hosts
           sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
@@ -1290,28 +1295,7 @@ Resources:
           </AnyConnectProfile>
           EOF
           sshpass -p 'tet123$$!' scp -o StrictHostKeyChecking=no /home/ciscolab/anyconnect-profile.xml admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress}:disk0:anyconnect-profile.xml &> /tmp/anyconnect-init.log
-          cat <<EOF > /home/ciscolab/anyconnect-init.sh
-          !
-          ! Your ASA and AnyConnect Commands Will Go Here
-          !
-          conf t
-          N
-          !
-          webvpn
-          anyconnect image disk0:/anyconnect-win-4.6.00362-webdeploy-k9.pkg 1 regex "Windows"
-          anyconnect profiles HOL-LAB-PROFILE disk0:/anyconnect-profile.xml
-          group-policy LAB-PROFILE attributes
-            vpn-tunnel-protocol ssl-client 
-            split-tunnel-policy tunnelspecified
-            split-tunnel-network-list value LAB-LIST
-            webvpn
-              anyconnect modules value none
-              anyconnect profiles value HOL-LAB-PROFILE type user
-          end
-          wr 
-          exit
-          EOF
-          sshpass -p 'tet123$$!' ssh -o StrictHostKeyChecking=no admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} < /home/ciscolab/anyconnect-init.sh &> /tmp/anyconnect-init.log
+          ansible-playbook /opt/ansible_asa/asa_vpn.yml -i /opt/ansible-tetration-sensor/inventory/hosts
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
