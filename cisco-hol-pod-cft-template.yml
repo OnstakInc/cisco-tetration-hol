@@ -315,6 +315,14 @@ Resources:
         - IpProtocol: -1
           FromPort: 0
           ToPort: 65535
+          CidrIp: !Ref Subnet03CidrBlock
+        - IpProtocol: -1
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: !Sub "192.168.${StudentIndex}.0"
+        - IpProtocol: -1
+          FromPort: 0
+          ToPort: 65535
           CidrIp: !Ref ManagementCidrBlock
       SecurityGroupEgress:
         - IpProtocol: -1
@@ -544,12 +552,6 @@ Resources:
             - !Ref CiscoHOLWebSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet01
 
-  # # Create Elastic IP Addresses
-  # CiscoHOLIISEIP:
-  #   Type: AWS::EC2::EIP
-  #   Properties:
-  #     InstanceId: !Ref CiscoHOLEC2IIS
-
   # Linux DB Server
   CiscoHOLEC2MySQL:
     Type: AWS::EC2::Instance
@@ -597,10 +599,6 @@ Resources:
             - !Ref CiscoHOLPublicSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet01
   
-  # # Create Elastic IP Addresse
-  # CiscoHOLApacheEIP:
-  #   Type: AWS::EC2::EIP
-
   # Linux App Server
   CiscoHOLEC2Apache:
     Type: AWS::EC2::Instance
@@ -661,13 +659,6 @@ Resources:
             - !Ref CiscoHOLWebSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet01
 
-  # # Elastic IP Association  
-  # CiscoHOLAssociateEIPApache:
-  #   Type: AWS::EC2::EIPAssociation
-  #   Properties:
-  #     AllocationId: !GetAtt CiscoHOLApacheEIP.AllocationId
-  #     InstanceId: !Ref CiscoHOLEC2Apache
-
   # Create Tetration Appliances
   CiscoHOLEC2TetData:
     Type: AWS::EC2::Instance
@@ -722,6 +713,23 @@ Resources:
         GroupSet:
         - !Ref CiscoHOLPublicSecurityGroup
         SubnetId: !Ref CiscoHOLSubnet01
+
+  # Create Elastic IP Addresses
+  CiscoHOLEC2TetDataIngestEIP1:
+    Type: AWS::EC2::EIP
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-eip-TetDataIngest-${Region}${Subnet01AvailabilityZone}"
+  
+  # Elastic IP Association  
+  CiscoHOLAssociateEIP1TetDataIngest:
+    Type: AWS::EC2::EIPAssociation
+    DependsOn:
+      - CiscoHOLEC2TetData
+    Properties:
+      AllocationId: !GetAtt CiscoHOLEC2TetDataIngestEIP1.AllocationId
+      NetworkInterfaceId: !Ref TetNetworkInterfaces01
 
   # Create Tet Edge EC2
   CiscoHOLEC2TetEdge:
@@ -1214,12 +1222,19 @@ Resources:
           ansible_winrm_transport=ntlm
           ansible_winrm_server_cert_validation=ignore
           validate_certs=false
+          [asa]
+          ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress}
+          [asa:vars]
           EOF
           sed -i "s/^None//g" /opt/ansible-tetration-sensor/inventory/hosts
           sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
           systemctl restart sshd
-          echo "DNS1=${CiscoHOLEC2ActiveDirectory.PrivateIp}" | tee -a /etc/sysconfig/network-scripts/ifcfg-eth0
           systemctl restart network
+          echo "DNS1=${CiscoHOLEC2ActiveDirectory.PrivateIp}" | tee -a /etc/sysconfig/network-scripts/ifcfg-eth0
+          route add -net 192.168.${StudentIndex}.0 netmask 255.255.255.0 gw ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0
+          route add -net ${ASAvOutsideSubnet} netmask 255.255.255.0 gw ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0
+          echo "192.168.${StudentIndex}.0/24 via ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0" > /etc/sysconfig/network-scripts/route-eth0
+          echo "${ASAvOutsideSubnet}/24 via ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0" >> /etc/sysconfig/network-scripts/route-eth0
           pip install paramiko
           sleep 15
           /bin/bash /var/eks-init/bootstrap.sh "${AccessKey}" "${SecretKey}" "${Region}" "${EKSCluster}" "${EKSCluster.Endpoint}" "${EKSCluster.CertificateAuthorityData}" "${EKSWorkerInstanceRole.Arn}"
@@ -1280,6 +1295,8 @@ Resources:
           ! Your ASA and AnyConnect Commands Will Go Here
           !
           conf t
+          N
+          !
           webvpn
           anyconnect image disk0:/anyconnect-win-4.6.00362-webdeploy-k9.pkg 1 regex "Windows"
           anyconnect profiles HOL-LAB-PROFILE disk0:/anyconnect-profile.xml
@@ -1288,10 +1305,11 @@ Resources:
             split-tunnel-policy tunnelspecified
             split-tunnel-network-list value LAB-LIST
             webvpn
-              anyconnect modules value dart
+              anyconnect modules value none
               anyconnect profiles value HOL-LAB-PROFILE type user
           end
           wr 
+          exit
           EOF
           sshpass -p 'tet123$$!' ssh -o StrictHostKeyChecking=no admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} < /home/ciscolab/anyconnect-init.sh &> /tmp/anyconnect-init.log
       NetworkInterfaces: 

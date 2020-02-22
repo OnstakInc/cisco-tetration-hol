@@ -1,7 +1,7 @@
 ---
-
-# VA (us-east-1)
-
+# Prefer using Env Vars to set AWS Access & Secret Keys named as such:
+# AWS_ACCESS_KEY_ID
+# AWS_SECRET_ACCESS_KEY 
 aws_access_key: 
 aws_secret_key: 
 aws_region: us-east-1
@@ -17,7 +17,6 @@ subnet_range_secondary: 198.18.0.0/16
 s3_bucket: 'cisco-hol-cft-template'
 
 asav_ami: ami-01b0bfec54ba93d12
-mssc_ami: ami-0da00f363f93add92
 ldap_ami: ami-028825c353dcebbf5
 mssql_ami: ami-026647c105e33d1e2
 iis_ami: ami-056344c5ab8499f66
