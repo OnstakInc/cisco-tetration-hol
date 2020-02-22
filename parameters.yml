@@ -2,31 +2,32 @@
 # Prefer using Env Vars to set AWS Access & Secret Keys named as such:
 # AWS_ACCESS_KEY_ID
 # AWS_SECRET_ACCESS_KEY 
+# This template for OnStak Ohio region 172.40 vpc
 aws_access_key: 
 aws_secret_key: 
-aws_region: us-east-1
+aws_region: us-east-2
 
 student_count: 1
 student_prefix: cisco-student
 
-vpc_id: vpc-09153a8a908e9fd82
-internet_gateway_id: igw-018de0b211b46db49
-subnet_range_primary: 10.1.0.0/16
+vpc_id: vpc-07e7ba44fadc5c271
+internet_gateway_id: igw-0ef1de0cd2fdc8ccd
+subnet_range_primary: 172.40.0.0/16
 subnet_range_secondary: 198.18.0.0/16
 
 s3_bucket: 'cisco-hol-cft-template'
 
-asav_ami: ami-01b0bfec54ba93d12
-ldap_ami: ami-028825c353dcebbf5
-mssql_ami: ami-026647c105e33d1e2
-iis_ami: ami-056344c5ab8499f66
-mysql_ami: ami-08da13b95d975309c
-apache_ami: ami-0632afd28934333ab
-ansible_ami: ami-0cf82484c962af005
-tet_data_ami: ami-0b9baab4aee1932c0
-tet_edge_ami: ami-0aea03f5f48950bcd
-employee_ami: ami-098c9dfaa8e66a018
-sysadmin_ami: ami-042dbd8a78d99e538
-attack_server_ami: ami-0c87027d46eea9a78
-guacamole_ami: ami-023987711fc51f2d6
-eks_worker_ami: ami-00c0ebc8b70d7e97c
+asav_ami: ami-018637632d5e62976
+ldap_ami: ami-036723f78ead98656
+mssql_ami: ami-090ab21d87411b44e
+iis_ami: ami-0c4e857f7ec9de0dc
+mysql_ami: ami-0c170ef4a4f9b1789
+apache_ami: ami-0bb3d60453bbc693a
+ansible_ami: ami-016b54a1c6e41069f
+tet_data_ami: ami-0c2276fc51ad25018
+tet_edge_ami: ami-0cb78ddba97ce6591
+employee_ami: ami-0da00f363f93add92
+sysadmin_ami: ami-0da00f363f93add92
+attack_server_ami: ami-09b253f6574754048
+guacamole_ami: ami-04e70edcc169673d7
+eks_worker_ami: ami-0c4c60006aa81c29b
