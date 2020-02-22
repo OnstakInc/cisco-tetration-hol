@@ -215,7 +215,6 @@ for student in STUDENTS_LIST:
 
             {'ParameterKey': 'ASAvImageID', 'ParameterValue': params['asav_ami']},
             {'ParameterKey': 'LDAPImageID', 'ParameterValue': params['ldap_ami']},
-            {'ParameterKey': 'MSSCImageID', 'ParameterValue': params['mssc_ami']},
             {'ParameterKey': 'MSSQLImageID', 'ParameterValue': params['mssql_ami']},
             {'ParameterKey': 'IISImageID', 'ParameterValue': params['iis_ami']},
             {'ParameterKey': 'MySQLImageID', 'ParameterValue': params['mysql_ami']},
