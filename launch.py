@@ -383,8 +383,8 @@ try:
 
     header = [
         'AWS Region',
-        'AWS Access Key',
-        'AWS Secret Key',
+        'Student AWS EC2 RO Access Key',
+        'Student AWS EC2 RO Secret Key',
         'Student Guacamole Username',
         'Student Guacamole Password', 
         'Guacamole Web Console URL',
