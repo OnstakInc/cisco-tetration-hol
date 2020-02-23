@@ -2,7 +2,7 @@ notes.txt
 run.ps1
 .DS_Store
 _config.yml
-reports
-parameters
+/reports/*
+/parameters/*
 test.py
 .vscode
