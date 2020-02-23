@@ -389,8 +389,6 @@ try:
             output['CiscoHOLApachePrivate'],
             output['CiscoHOLApacheOutsidePrivate'],
             output['CiscoHOLMySql'],
-            f"http://{student['eks_dns']}",
-            output['EKSClusterCertificate'],
             output['CiscoHOLAnsible'],
             output['CiscoHOLTetrationEdge'],
             output['TetNetworkInterfaces01Data'],
@@ -402,6 +400,8 @@ try:
             output['CiscoHOLAttacker'],
             output['CiscoHOLWin10Employee'],
             output['CiscoHOLWin10SysAdmin'],
+            f"http://{student['eks_dns']}",
+            output['EKSClusterCertificate'],
         ])
 
     header = [
@@ -422,8 +422,6 @@ try:
         'Apache OpenCart Inside IP',
         'Apache OpenCart Outside IP',
         'MySQL Private IP',
-        'EKS SockShop Public URL (Use for Tetration External Orchestrator)',
-        'EKS Cluster Cert (15 min cert?)',
         'Ansible IP',
         'Tetration Edge IP',
         'Tetration Data Ingest IP 1',
@@ -434,7 +432,9 @@ try:
         'ASAv Management IP',
         'Metasploit Attacker IP',
         'Employee IP',
-        'SysAdmin IP'
+        'SysAdmin IP',
+        'EKS SockShop Public URL (Use for Tetration External Orchestrator)',
+        'EKS Cluster Cert (15 min cert?)'
     ]
 
     filename = 'reports/' + datetime.today().strftime('%H-%M-%S %Y-%m-%d') + '-report.csv'
