@@ -372,12 +372,9 @@ try:
             output[o['OutputKey']] = o['OutputValue']
 
         records.append([
-            output['CiscoHOLAWSRegion'],
-            output['StudentAccessKey'],
-            output['StudentSecretKey'],
+            f"https://{output['CiscoHOLGuacamolePublic']}",
             output['CiscoHOLStudentName'],
             output['CiscoHOLStudentPassword'],
-            f"https://{output['CiscoHOLGuacamolePublic']}",
             output['CiscoHOLPublicSubnet01'],
             output['CiscoHOLPrivateSubnet'],
             output['CiscoHOLActiveDirectory'],
@@ -400,19 +397,21 @@ try:
             output['CiscoHOLAttacker'],
             output['CiscoHOLWin10Employee'],
             output['CiscoHOLWin10SysAdmin'],
+            output['CiscoHOLUbuntu1804Employee'],
+            output['CiscoHOLUbuntu1804SysAdmin'],
+            output['StudentAccessKey'],
+            output['StudentSecretKey'],
+            output['CiscoHOLAWSRegion'],
             f"http://{student['eks_dns']}",
             output['EKSClusterCertificate'],
         ])
 
     header = [
-        'AWS Region',
-        'Student AWS EC2 RO Access Key',
-        'Student AWS EC2 RO Secret Key',
-        'Student Guacamole Username',
-        'Student Guacamole Password', 
-        'Guacamole Web Console URL',
+        'Student Lab Access (Guac) Web Console URL',
+        'Student Lab Access (Guac) Password', 
+        'Student Lab Access (Guac) Username',
         'Student Internal/Inside Corporate Subnet',
-        'Student External/Outside Psuedo Internet Subnet',
+        'Student External/Outside "Internet" Subnet',
         'MS Active Directory IP',
         'MS IIS nopCommerce Public IP',
         'MS IIS nopCommerce Inside IP',
@@ -431,10 +430,15 @@ try:
         'ASAv Outside IP',
         'ASAv Management IP',
         'Metasploit Attacker IP',
-        'Employee IP',
-        'SysAdmin IP',
-        'EKS SockShop Public URL (Use for Tetration External Orchestrator)',
-        'EKS Cluster Cert (15 min cert?)'
+        'Win10 Employee IP',
+        'Win10 SysAdmin IP',
+        'Ubuntu18.04 Employee IP',
+        'Ubuntu18.04 SysAdmin IP',
+        'Student AWS External Orchestrator Access Key',
+        'Student AWS External Orchestrator Secret Key',
+        'Student AWS Region',
+        'EKS SockShop Public URL (also use for External Orchestrator)',
+        'EKS Cluster Cert'
     ]
 
     filename = 'reports/' + datetime.today().strftime('%H-%M-%S %Y-%m-%d') + '-report.csv'
