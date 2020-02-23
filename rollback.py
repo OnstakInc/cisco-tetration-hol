@@ -115,6 +115,17 @@ print(f'INFO: Student Accounts Collection Created...')
 
 
 #######################################################################
+# Confirm Destroy Before Proceeding ###################################
+#######################################################################
+print(f'You are about to DESTROY all student pod(s) in {VPC_ID} in the {REGION} Region')
+rusure_response = input('ARE YOU SURE YOU WISH TO DESTROY THESE PODS (y/Y to continue)? ')
+if rusure_response.lower() != 'y':
+    print('No pods were destroyed, exiting now.')
+    exit(1)
+#######################################################################
+
+
+#######################################################################
 # Delete VPC Flow Logs S3 Bcukets #####################################
 #######################################################################
 print(f'INFO: Initializing VPC Flow Logs S3 Bucket Deletion...')

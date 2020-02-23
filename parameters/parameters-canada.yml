@@ -1,4 +1,8 @@
 ---
+# Prefer using Env Vars to set AWS Access & Secret Keys named as such:
+# AWS_ACCESS_KEY_ID
+# AWS_SECRET_ACCESS_KEY 
+# This template is NOT UP TO DATE - Needs latest Ansible, Win10, and Ubuntu1804 AMIs copied over from either OH or VA
 aws_access_key: 
 aws_secret_key: 
 aws_region: ca-central-1

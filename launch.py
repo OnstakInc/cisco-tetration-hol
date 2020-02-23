@@ -37,8 +37,6 @@ STUDENT_PREFIX = params['student_prefix']
 
 S3_BUCKET = params['s3_bucket']
 
-
-
 session = boto3.Session(
     aws_access_key_id=ACCESS_KEY,
     aws_secret_access_key=SECRET_KEY,
@@ -98,6 +96,8 @@ subnets_count = len(list(ec2.subnets.filter(Filters=filters)))
 if subnets_count > 0:
     print(f'ERROR: {subnets_count} Subnets Found In Current VPC...')
     exit(1)
+
+
 print(f'INFO: Subnet Check Completed...')
 #######################################################################
 
@@ -126,6 +126,8 @@ try:
 except:
     print(f'ERROR: Invalid Subnet! Please provide a valid subnet range...')
     exit(1)
+
+
 print(f'INFO: Subnet Range Validation Completed...')
 #######################################################################
 
@@ -159,7 +161,20 @@ try:
 except:
     print(f'ERROR: Invalid Subnet! Please provide a valid subnet range...')
     exit(1)
+
+
 print(f'INFO: Student Accounts Collection Created...')
+#######################################################################
+
+
+#######################################################################
+# Confirm Deploy Before Proceeding ####################################
+#######################################################################
+print(f'You are about to deploy {STUDENT_COUNT} student pod(s) to {VPC_ID} in the {REGION} Region')
+rusure_response = input('Are you sure you wish to proceed with this deployment (y/Y to continue)? ')
+if rusure_response.lower() != 'y':
+    print('No pods were created, exiting now.')
+    exit(1)
 #######################################################################
 
 
@@ -171,6 +186,7 @@ s3 = boto3.resource('s3')
 s3.meta.client.upload_file('cisco-hol-pod-cft-template.yml', S3_BUCKET, 'cisco-hol-pod-cft-template.yml')
 print('INFO: CFT Template Uploaded To S3...')
 #######################################################################
+
 
 #######################################################################
 # Run POD Cloud Formation #############################################
@@ -207,7 +223,7 @@ for student in STUDENTS_LIST:
             {'ParameterKey': 'Subnet02AvailabilityZone', 'ParameterValue': 'b'},
             {'ParameterKey': 'Subnet03AvailabilityZone', 'ParameterValue': 'a'},
 
-            {'ParameterKey': 'ISEAddress', 'ParameterValue': params['ise_server_ip']},
+            {'ParameterKey': 'ISEIPAddress', 'ParameterValue': params['ise_server_ip']},
 
             {'ParameterKey': 'Win10EmployeePrivateIp', 'ParameterValue': str(outside_pod_ips[11])},
             {'ParameterKey': 'Win10SysAdminPrivateIp', 'ParameterValue': str(outside_pod_ips[12])},
@@ -216,6 +232,8 @@ for student in STUDENTS_LIST:
             {'ParameterKey': 'ApacheOutsidePrivateIp', 'ParameterValue': str(outside_pod_ips[15])},
             {'ParameterKey': 'ASAvOutsidePrivateIp01', 'ParameterValue': str(outside_pod_ips[16])},
             {'ParameterKey': 'ASAvOutsidePrivateIp02', 'ParameterValue': str(outside_pod_ips[17])},
+            {'ParameterKey': 'Ubuntu1804EmployeePrivateIp', 'ParameterValue': str(outside_pod_ips[18])},
+            {'ParameterKey': 'Ubuntu1804SysAdminPrivateIp', 'ParameterValue': str(outside_pod_ips[19])},
 
             {'ParameterKey': 'ASAvImageID', 'ParameterValue': params['asav_ami']},
             {'ParameterKey': 'LDAPImageID', 'ParameterValue': params['ldap_ami']},

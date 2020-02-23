@@ -1,3 +1,4 @@
+
 AWSTemplateFormatVersion: 2010-09-09
 
 Metadata:
@@ -23,7 +24,7 @@ Metadata:
           - Subnet03CidrBlock
           - Subnet03AvailabilityZone
           - Region
-          - ISEAddress
+          - ISEIPAddress
       -
         Label:
           default: "AMI ID's"
@@ -68,6 +69,8 @@ Metadata:
         default: "Subnet 3 Availability Zone"
       Region:
         default: "Region of VPC"
+      ISEIPAddress:
+        default: "IP Address of On-Prem ISE"
 
 Parameters:
   AccessKey:
@@ -115,6 +118,9 @@ Parameters:
   Region:
     Type: String
     Description: Please enter the Region in which VPC is present
+  ISEIPAddress:
+    Type: String
+    Description: Please enter the IP address of the on-prem ISE
   Subnet01AvailabilityZone:
     Type: String
     Description: Please enter the AZ for 1st Subnet
@@ -181,15 +187,15 @@ Parameters:
   Win10EmployeeImageID:
     Type: String
     Description: Please enter Image Id for Win10 Employee
+  Win10SysAdminImageID:
+    Type: String
+    Description: Please enter Image Id for Win10 SysAdmin
   Ubuntu1804EmployeeImageID:
     Type: String
     Description: Please enter Image Id for Ubuntu18.04 Employee
   Ubuntu1804SysAdminImageID:
     Type: String
     Description: Please enter Image Id for Ubuntu18.04 SysAdmin
-  SysAdminImageID:
-    Type: String
-    Description: Please enter Image Id for Win10 SysAdmin
   AttackerImageID:
     Type: String
     Description: Please enter Image Id for Mire-based Attacker
@@ -202,7 +208,7 @@ Parameters:
 
 Resources:
 
-  # Create Public Route Table
+  # Create Public Route Table  
   PublicRouteTable:
     Type: AWS::EC2::RouteTable
     Properties:
@@ -210,7 +216,7 @@ Resources:
       Tags:
       - Key: Name
         Value: !Sub "cisco-hol-${StudentName}-public-rt-${Region}"
-  
+
   # Create Private Route Table  
   PrivateRouteTable:
     Type: AWS::EC2::RouteTable
@@ -334,7 +340,7 @@ Resources:
         - IpProtocol: -1
           FromPort: 0
           ToPort: 65535
-          CidrIp: !Sub ${ISEAddress}/32
+          CidrIp: !Sub ${ISEIPAddress}/32
         - IpProtocol: -1
           FromPort: 0
           ToPort: 65535
