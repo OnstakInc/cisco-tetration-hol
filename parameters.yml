@@ -30,8 +30,8 @@ tet_data_ami: ami-0c2276fc51ad25018
 tet_edge_ami: ami-0cb78ddba97ce6591
 employee_ami: ami-03a948df14a70d159
 sysadmin_ami: ami-03a948df14a70d159
-employee_ubuntu_ami: 0b2c6608e751d6ee4
-sysadmin_ubuntu_ami: 0b2c6608e751d6ee4
+employee_ubuntu_ami: ami-0b2c6608e751d6ee4
+sysadmin_ubuntu_ami: ami-0b2c6608e751d6ee4
 attack_server_ami: ami-09b253f6574754048
 guacamole_ami: ami-04e70edcc169673d7
 eks_worker_ami: ami-0c4c60006aa81c29b
