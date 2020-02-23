@@ -23,6 +23,7 @@ Metadata:
           - Subnet03CidrBlock
           - Subnet03AvailabilityZone
           - Region
+          - ISEAddress
       -
         Label:
           default: "AMI ID's"
@@ -38,6 +39,8 @@ Metadata:
           - TetrationEdgeImageID
           - Win10EmployeeImageID
           - Win10SysAdminImageID
+          - Ubuntu1804EmployeeImageID
+          - Ubuntu1804SysAdminImageID
           - AttackerImageID
           - GuacamoleImageID 
     ParameterLabels:
@@ -126,10 +129,16 @@ Parameters:
     Description: Please enter Private IP For Attacker
   Win10EmployeePrivateIp:
     Type: String
-    Description: Please enter Private IP For Employee
+    Description: Please enter Private IP For Win10 Employee
   Win10SysAdminPrivateIp:
     Type: String
-    Description: Please enter Private IP For SysAdmin
+    Description: Please enter Private IP For Win10 SysAdmin
+  Ubuntu1804EmployeePrivateIp:
+    Type: String
+    Description: Please enter Private IP For Ubuntu 18.04 Employee
+  Ubuntu1804SysAdminPrivateIp:
+    Type: String
+    Description: Please enter Private IP For Ubuntu 18.04 SysAdmin
   ASAvOutsidePrivateIp01:
     Type: String
     Description: Please enter Private IP For Outside ASAv Interface
@@ -172,7 +181,13 @@ Parameters:
   Win10EmployeeImageID:
     Type: String
     Description: Please enter Image Id for Win10 Employee
-  Win10SysAdminImageID:
+  Ubuntu1804EmployeeImageID:
+    Type: String
+    Description: Please enter Image Id for Ubuntu18.04 Employee
+  Ubuntu1804SysAdminImageID:
+    Type: String
+    Description: Please enter Image Id for Ubuntu18.04 SysAdmin
+  SysAdminImageID:
     Type: String
     Description: Please enter Image Id for Win10 SysAdmin
   AttackerImageID:
@@ -316,6 +331,10 @@ Resources:
           FromPort: 0
           ToPort: 65535
           CidrIp: !Sub "192.168.${StudentIndex}.0/24"
+        - IpProtocol: -1
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: !Sub ${ISEAddress}/32
         - IpProtocol: -1
           FromPort: 0
           ToPort: 65535
@@ -575,14 +594,12 @@ Resources:
           Value: OpenCart
         - Key: AppCluster
           Value: DB
-        
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
           sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
           systemctl restart sshd
           echo "DNS1=${CiscoHOLEC2ActiveDirectory.PrivateIp}" | tee -a /etc/sysconfig/network-scripts/ifcfg-eth0
-          systemctl restart network
           route add -net 192.168.${StudentIndex}.0 netmask 255.255.255.0 gw ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0
           route add -net ${ASAvOutsideSubnet} netmask 255.255.255.0 gw ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0
           echo "192.168.${StudentIndex}.0/24 via ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0" > /etc/sysconfig/network-scripts/route-eth0
@@ -641,12 +658,12 @@ Resources:
           sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
           chown apache:apache -R /var/www/html
           systemctl restart sshd
-          systemctl restart network
           echo "DNS1=${CiscoHOLEC2ActiveDirectory.PrivateIp}" | tee -a /etc/sysconfig/network-scripts/ifcfg-eth0
           route add -net 192.168.${StudentIndex}.0 netmask 255.255.255.0 gw ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0
           route add -net ${ASAvOutsideSubnet} netmask 255.255.255.0 gw ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0
           echo "192.168.${StudentIndex}.0/24 via ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0" > /etc/sysconfig/network-scripts/route-eth0
           echo "${ASAvOutsideSubnet}/24 via ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} dev eth0" >> /etc/sysconfig/network-scripts/route-eth0
+          systemctl restart network
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
@@ -711,20 +728,20 @@ Resources:
         SubnetId: !Ref CiscoHOLSubnet01
 
   # Create Elastic IP Addresses
-  CiscoHOLEC2TetDataIngestEIP1:
+  CiscoHOLEC2TetDataEIP1:
     Type: AWS::EC2::EIP
     Properties:
       Tags:
         - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-eip-TetDataIngest-${Region}${Subnet01AvailabilityZone}"
+          Value: !Sub "cisco-hol-${StudentName}-eip-TetData-${Region}${Subnet01AvailabilityZone}"
   
   # Elastic IP Association  
-  CiscoHOLAssociateEIP1TetDataIngest:
+  CiscoHOLAssociateEIP1TetData:
     Type: AWS::EC2::EIPAssociation
     DependsOn:
       - CiscoHOLEC2TetData
     Properties:
-      AllocationId: !GetAtt CiscoHOLEC2TetDataIngestEIP1.AllocationId
+      AllocationId: !GetAtt CiscoHOLEC2TetDataEIP1.AllocationId
       NetworkInterfaceId: !Ref TetNetworkInterfaces01
 
   # Create Tet Edge EC2
@@ -745,7 +762,7 @@ Resources:
             - !Ref CiscoHOLPublicSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet01
   
-  # Windows 10 user (AnyConnect, ASDM, Putty, CMD-Telnet, WinSCP)
+  # Windows 10 Employee (AnyConnect, Putty, CMD-Telnet, WinSCP)
   CiscoHOLEC2Win10Employee:
     Type: AWS::EC2::Instance
     DependsOn:
@@ -764,7 +781,7 @@ Resources:
             - !Ref CiscoHOLPrivateSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet03
   
-  # Windows 10 SysAdmin (AnyConnect, ASDM, Putty, CMD-Telnet, WinSCP)
+  # Windows 10 SysAdmin (AnyConnect, Putty, CMD-Telnet, WinSCP)
   CiscoHOLEC2Win10SysAdmin:
     Type: AWS::EC2::Instance
     DependsOn:
@@ -782,7 +799,57 @@ Resources:
           GroupSet: 
             - !Ref CiscoHOLPrivateSecurityGroup
           SubnetId: !Ref CiscoHOLSubnet03
-  
+
+  # Ubuntu 18.04 Employee (AnyConnect)
+  CiscoHOLEC2Ubuntu1804Employee:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - CiscoHOLEC2ActiveDirectory
+    Properties:
+      ImageId: !Ref Ubuntu1804EmployeeImageID
+      InstanceType: t2.small
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-ec2-ubuntu1804-employee-${Region}${Subnet02AvailabilityZone}"
+      UserData:
+        Fn::Base64: !Sub |
+          !/bin/bash
+          sed -i "s/^PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
+          sed -i "s/^PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+          systemctl restart sshd
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          PrivateIpAddress: !Ref Ubuntu1804EmployeePrivateIp
+          DeviceIndex: "0"
+          GroupSet: 
+            - !Ref CiscoHOLPrivateSecurityGroup
+          SubnetId: !Ref CiscoHOLSubnet03
+
+  # Ubuntu 18.04 SysAdmin (AnyConnect)
+  CiscoHOLEC2Ubuntu1804SysAdmin:
+    Type: AWS::EC2::Instance
+    DependsOn:
+      - CiscoHOLEC2ActiveDirectory
+    Properties:
+      ImageId: !Ref Ubuntu1804SysAdminImageID
+      InstanceType: t2.small
+      Tags:
+        - Key: Name
+          Value: !Sub "cisco-hol-${StudentName}-ec2-ubuntu1804-sysadmin-${Region}${Subnet02AvailabilityZone}"
+      UserData:
+        Fn::Base64: !Sub |
+          !/bin/bash
+          sed -i "s/^PermitRootLogin.*/PermitRootLogin yes/g" /etc/ssh/sshd_config
+          sed -i "s/^PasswordAuthentication.*/PasswordAuthentication yes/g" /etc/ssh/sshd_config
+          systemctl restart sshd
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "true"
+          PrivateIpAddress: !Ref Ubuntu1804SysAdminPrivateIp
+          DeviceIndex: "0"
+          GroupSet: 
+            - !Ref CiscoHOLPrivateSecurityGroup
+          SubnetId: !Ref CiscoHOLSubnet03
+
   # Metasploit Attack Server
   CiscoHOLEC2Attacker:
     Type: AWS::EC2::Instance
@@ -1147,18 +1214,19 @@ Resources:
         - !Ref CiscoHOLWebSecurityGroup
         SubnetId: !Ref CiscoHOLSubnet01
 
-  # Create Elastic IP Addresses
-  CiscoHOLASAvEIP:
-    Type: AWS::EC2::EIP
-  
-  # Elastic IP Association  
-  CiscoHOLAssociateEIPASAv:
-    Type: AWS::EC2::EIPAssociation
-    DependsOn:
-      - CiscoHOLEC2ASAv
-    Properties:
-      AllocationId: !GetAtt CiscoHOLASAvEIP.AllocationId
-      NetworkInterfaceId: !Ref ASAvNetworkInterfaces03
+#  We shouldn't need EIP for ASAv if contacting ISE via AWS VGW (should be case unless ISE happens to be NAT to Internet)
+#  # Create Elastic IP Addresses
+#  CiscoHOLASAvEIP:
+#    Type: AWS::EC2::EIP
+#  
+#  # Elastic IP Association  
+#  CiscoHOLAssociateEIPASAv:
+#    Type: AWS::EC2::EIPAssociation
+#    DependsOn:
+#      - CiscoHOLEC2ASAv
+#    Properties:
+#      AllocationId: !GetAtt CiscoHOLASAvEIP.AllocationId
+#      NetworkInterfaceId: !Ref ASAvNetworkInterfaces03
 
   # Ansible Server
   CiscoHOLEC2Ansible:
@@ -1187,7 +1255,6 @@ Resources:
           Value: Ansible
         - Key: AppCluster
           Value: Ansible
-        
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
@@ -1220,6 +1287,9 @@ Resources:
           ansible_winrm_transport=ntlm
           ansible_winrm_server_cert_validation=ignore
           validate_certs=false
+          EOF
+          sed -i "s/^None//g" /opt/ansible-tetration-sensor/inventory/hosts
+          cat <<EOF > /opt/ansible_asa/inventory/hosts
           [asa]
           ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress}
           [asa:vars]
@@ -1228,7 +1298,7 @@ Resources:
           ansible_connection=network_cli
           ansible_network_os=asa
           EOF
-          sed -i "s/^None//g" /opt/ansible-tetration-sensor/inventory/hosts
+          sed -i "s/^None//g" /opt/ansible_asa/inventory/hosts
           sed -i "s/^PasswordAuthentication no/PasswordAuthentication yes/g" /etc/ssh/sshd_config
           systemctl restart sshd
           systemctl restart network
@@ -1241,7 +1311,8 @@ Resources:
           sleep 15
           /bin/bash /var/eks-init/bootstrap.sh "${AccessKey}" "${SecretKey}" "${Region}" "${EKSCluster}" "${EKSCluster.Endpoint}" "${EKSCluster.CertificateAuthorityData}" "${EKSWorkerInstanceRole.Arn}"
           sleep 300
-          sshpass -p 'tet123$$!' scp -o StrictHostKeyChecking=no /home/ciscolab/anyconnect-win-4.6.00362-webdeploy-k9.pkg admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress}:disk0:anyconnect-win-4.6.00362-webdeploy-k9.pkg &> /tmp/anyconnect-init.log
+          sshpass -p 'tet123$$!' scp -o StrictHostKeyChecking=no /home/ciscolab/anyconnect-win-4.8.02045-webdeploy-k9.pkg admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress}:disk0:anyconnect-win-4.8.02045-webdeploy-k9.pkg &> /tmp/anyconnect-init.log
+          sshpass -p 'tet123$$!' scp -o StrictHostKeyChecking=no /home/ciscolab/anyconnect-linux64-4.8.02045-webdeploy-k9.pkg admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress}:disk0:anyconnect-linux64-4.8.02045-webdeploy-k9.pkg &> /tmp/anyconnect-init.log
           cat <<EOF > /home/ciscolab/anyconnect-profile.xml
           <?xml version="1.0" encoding="UTF-8"?>
           <AnyConnectProfile xmlns="http://schemas.xmlsoap.org/encoding/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.xmlsoap.org/encoding/ AnyConnectProfile.xsd">
@@ -1257,7 +1328,7 @@ Resources:
                     <AuthenticationTimeout>12</AuthenticationTimeout>
                     <AutoConnectOnStart UserControllable="true">false</AutoConnectOnStart>
                     <MinimizeOnConnect UserControllable="true">true</MinimizeOnConnect>
-                    <LocalLanAccess UserControllable="true">false</LocalLanAccess>
+                    <LocalLanAccess UserControllable="true">true</LocalLanAccess>
                     <DisableCaptivePortalDetection UserControllable="true">false</DisableCaptivePortalDetection>
                     <ClearSmartcardPin UserControllable="true">true</ClearSmartcardPin>
                     <IPProtocolSupport>IPv4,IPv6</IPProtocolSupport>
@@ -1292,7 +1363,7 @@ Resources:
           </AnyConnectProfile>
           EOF
           sshpass -p 'tet123$$!' scp -o StrictHostKeyChecking=no /home/ciscolab/anyconnect-profile.xml admin@${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress}:disk0:anyconnect-profile.xml &> /tmp/anyconnect-init.log
-          ansible-playbook /opt/ansible_asa/asa_vpn.yml -i /opt/ansible-tetration-sensor/inventory/hosts
+          ansible-playbook /opt/ansible_asa/asa_vpn.yml -i /opt/ansible_asa/inventory/hosts
       NetworkInterfaces: 
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
@@ -1314,6 +1385,8 @@ Resources:
       - CiscoHOLEC2TetEdge
       - CiscoHOLEC2Win10Employee
       - CiscoHOLEC2Win10SysAdmin
+      - CiscoHOLEC2Ubuntu1804Employee
+      - CiscoHOLEC2Ubuntu1804SysAdmin
       - CiscoHOLEC2ASAv
     Properties:
       ImageId: !Ref GuacamoleImageID
@@ -1385,7 +1458,25 @@ Resources:
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
                   </connection>	
-                  <connection name="07) Common Services - Ansible">
+                  <connection name="07) End Users - Ubuntu18.04 - Employee Alternative">
+                      <protocol>rdp</protocol>
+                      <param name="hostname">${CiscoHOLEC2Ubuntu1804Employee.PrivateIp}</param>
+                      <param name="port">3389</param>
+                      <param name="username">ciscolab</param>
+                      <param name="password">tet123\$\$!</param>
+                      <param name="security">any</param>
+                      <param name="ignore-cert">true</param>
+                  </connection>	
+                  <connection name="08) End Users - Ubuntu18.04 - SysAdmin Alternative">
+                      <protocol>rdp</protocol>
+                      <param name="hostname">${CiscoHOLEC2Ubuntu1804SysAdmin.PrivateIp}</param>
+                      <param name="port">3389</param>
+                      <param name="username">ciscolab</param>
+                      <param name="password">tet123\$\$!</param>
+                      <param name="security">any</param>
+                      <param name="ignore-cert">true</param>
+                  </connection>	
+                  <connection name="09) Common Services - Ansible">
                       <protocol>ssh</protocol>
                       <param name="hostname">${CiscoHOLEC2Ansible.PrivateIp}</param>
                       <param name="port">22</param>
@@ -1394,7 +1485,7 @@ Resources:
                       <param name="font-name">terminus</param>
                       <param name="enable-sftp">true</param>
                   </connection>	
-                  <connection name="08) Common Services - Microsoft Active Directory 2019">
+                  <connection name="10) Common Services - Microsoft Active Directory 2019">
                       <protocol>rdp</protocol>
                       <param name="hostname">${CiscoHOLEC2ActiveDirectory.PrivateIp}</param>
                       <param name="port">3389</param>
@@ -1404,7 +1495,7 @@ Resources:
                       <param name="security">any</param>
                       <param name="ignore-cert">true</param>
                   </connection>
-                  <connection name="09) Attack Host - KaliLinux - Metasploit">
+                  <connection name="11) Attack Host - KaliLinux - Metasploit">
                       <protocol>ssh</protocol>
                       <param name="hostname">${CiscoHOLEC2Attacker.PrivateIp}</param>
                       <param name="port">22</param>
@@ -1413,7 +1504,7 @@ Resources:
                       <param name="font-name">terminus</param>
                       <param name="enable-sftp">true</param>
                   </connection>	
-                  <connection name="10) Tetration Edge Appliance">
+                  <connection name="12) Tetration Edge Appliance">
                       <protocol>ssh</protocol>
                       <param name="hostname">${CiscoHOLEC2TetEdge.PrivateIp}</param>
                       <param name="port">22</param>
@@ -1422,7 +1513,7 @@ Resources:
                       <param name="font-name">terminus</param>
                       <param name="enable-sftp">true</param>
                   </connection>
-                  <connection name="11) Tetration Data Ingest Appliance">
+                  <connection name="13) Tetration Data Ingest Appliance">
                       <protocol>ssh</protocol>
                       <param name="hostname">${CiscoHOLEC2TetData.PrivateIp}</param>
                       <param name="port">22</param>
@@ -1756,6 +1847,12 @@ Outputs:
   CiscoHOLWin10SysAdmin:
     Description: Windows 10 SysAdmin Private IP
     Value: !GetAtt CiscoHOLEC2Win10SysAdmin.PrivateIp
+  CiscoHOLUbuntu1804Employee:
+    Description: Windows 10 Employee Private IP
+    Value: !GetAtt CiscoHOLEC2Ubuntu1804Employee.PrivateIp
+  CiscoHOLUbuntu1804SysAdmin:
+    Description: Windows 10 SysAdmin Private IP
+    Value: !GetAtt CiscoHOLEC2Ubuntu1804SysAdmin.PrivateIp
   CiscoHOLAttacker:
     Description: Metasploit Attacker Private IP
     Value: !GetAtt CiscoHOLEC2Attacker.PrivateIp

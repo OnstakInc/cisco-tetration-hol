@@ -37,6 +37,8 @@ STUDENT_PREFIX = params['student_prefix']
 
 S3_BUCKET = params['s3_bucket']
 
+
+
 session = boto3.Session(
     aws_access_key_id=ACCESS_KEY,
     aws_secret_access_key=SECRET_KEY,
@@ -205,6 +207,8 @@ for student in STUDENTS_LIST:
             {'ParameterKey': 'Subnet02AvailabilityZone', 'ParameterValue': 'b'},
             {'ParameterKey': 'Subnet03AvailabilityZone', 'ParameterValue': 'a'},
 
+            {'ParameterKey': 'ISEAddress', 'ParameterValue': params['ise_server_ip']},
+
             {'ParameterKey': 'Win10EmployeePrivateIp', 'ParameterValue': str(outside_pod_ips[11])},
             {'ParameterKey': 'Win10SysAdminPrivateIp', 'ParameterValue': str(outside_pod_ips[12])},
             {'ParameterKey': 'AttackerPrivateIp', 'ParameterValue': str(outside_pod_ips[13])},
@@ -224,6 +228,8 @@ for student in STUDENTS_LIST:
             {'ParameterKey': 'TetrationEdgeImageID', 'ParameterValue': params['tet_edge_ami']},
             {'ParameterKey': 'Win10EmployeeImageID', 'ParameterValue': params['employee_ami']},
             {'ParameterKey': 'Win10SysAdminImageID', 'ParameterValue': params['sysadmin_ami']},
+            {'ParameterKey': 'Ubuntu1804EmployeeImageID', 'ParameterValue': params['employee_ubuntu_ami']},
+            {'ParameterKey': 'Ubuntu1804SysAdminImageID', 'ParameterValue': params['sysadmin_ubuntu_ami']},
             {'ParameterKey': 'AttackerImageID', 'ParameterValue': params['attack_server_ami']},
             {'ParameterKey': 'GuacamoleImageID', 'ParameterValue': params['guacamole_ami']},
             {'ParameterKey': 'EKSWorkerImageID', 'ParameterValue': params['eks_worker_ami']}
