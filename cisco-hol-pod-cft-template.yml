@@ -813,7 +813,7 @@ Resources:
       - CiscoHOLEC2ActiveDirectory
     Properties:
       ImageId: !Ref Ubuntu1804EmployeeImageID
-      InstanceType: t2.small
+      InstanceType: t2.medium
       Tags:
         - Key: Name
           Value: !Sub "cisco-hol-${StudentName}-ec2-ubuntu1804-employee-${Region}${Subnet02AvailabilityZone}"
@@ -838,7 +838,7 @@ Resources:
       - CiscoHOLEC2ActiveDirectory
     Properties:
       ImageId: !Ref Ubuntu1804SysAdminImageID
-      InstanceType: t2.small
+      InstanceType: t2.medium
       Tags:
         - Key: Name
           Value: !Sub "cisco-hol-${StudentName}-ec2-ubuntu1804-sysadmin-${Region}${Subnet02AvailabilityZone}"
