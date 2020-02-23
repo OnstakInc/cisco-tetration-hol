@@ -15,7 +15,7 @@ internet_gateway_id: igw-0ef1de0cd2fdc8ccd
 subnet_range_primary: 172.40.0.0/16
 subnet_range_secondary: 198.18.0.0/16
 
-s3_bucket: 'cisco-hol-cft-template'
+s3_bucket: cisco-hol-cft-template
 
 ise_server_ip: '172.16.171.49'
 

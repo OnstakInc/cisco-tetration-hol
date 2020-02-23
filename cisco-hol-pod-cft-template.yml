@@ -1837,7 +1837,7 @@ Outputs:
     Value: !GetAtt CiscoHOLEC2Ansible.PrivateIp
   CiscoHOLISE:
     Description: ISE Server IP
-    Value: !GetAtt ISEIPAddress
+    Value: !Ref ISEIPAddress
   TetNetworkInterfaces01Data:
     Description: Tetration Data Ingest Private IP 1
     Value: !GetAtt TetNetworkInterfaces01.PrimaryPrivateIpAddress
