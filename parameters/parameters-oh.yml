@@ -3,8 +3,8 @@
 # AWS_ACCESS_KEY_ID
 # AWS_SECRET_ACCESS_KEY 
 # This template for OnStak Ohio region 172.40 vpc
-aws_access_key: AKIAYDCA7S3Y5O3DDEVI
-aws_secret_key: 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
+aws_access_key: 
+aws_secret_key: 
 aws_region: us-east-2
 
 student_count: 1

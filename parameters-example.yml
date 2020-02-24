@@ -2,7 +2,7 @@
 # Prefer using Env Vars to set AWS Access & Secret Keys named as such:
 # AWS_ACCESS_KEY_ID
 # AWS_SECRET_ACCESS_KEY 
-# This template for Deft Ohio region 10.0 vpc
+# This template for Ohio region 10.0 vpc
 aws_access_key: 
 aws_secret_key: 
 aws_region: us-east-2
@@ -15,7 +15,7 @@ internet_gateway_id: igw-0dbfdfc228666cee0
 subnet_range_primary: 10.0.0.0/16
 subnet_range_secondary: 198.18.0.0/16
 
-s3_bucket: 'deft-tetration-hol-cft-template' # << S3 Bucket is global DNS unique name - change to any arbitrary desired non-overlapping name
+s3_bucket: 'tetration-hol-cft-template' # << S3 Bucket is global DNS unique name - change to any arbitrary desired non-overlapping name
 
 ise_server_ip: '172.16.171.49' # << This is your own private on-prem ISE instance - needs VPN with AWS VGW
 
