@@ -482,6 +482,8 @@ Resources:
           route add ${ASAvOutsideSubnet} mask 255.255.255.0 ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} -p
           ipconfig /flushdns
           Clear-DnsClientCache
+          Add-DnsServerResourceRecordA -Name tet-edge -ZoneName hol.local -IPv4Address ${CiscoHOLEC2TetEdge.PrivateIp}
+          Add-DnsServerResourceRecordA -Name isev-small-2-4 -ZoneName hol.local -IPv4Address ${ISEIPAddress}
           </powershell>
       NetworkInterfaces:
         - AssociatePublicIpAddress: "true"
