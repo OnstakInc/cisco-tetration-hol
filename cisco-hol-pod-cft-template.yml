@@ -1,4 +1,3 @@
-
 AWSTemplateFormatVersion: 2010-09-09
 
 Metadata:
@@ -157,6 +156,21 @@ Parameters:
   ApacheOutsidePrivateIp:
     Type: String
     Description: Please enter Private IP For Outside Apache Interface
+  GuacamoleOutsidePrivateIp:
+    Type: String
+    Description: Please enter Private IP For Outside Guacamole Interface
+  GuacamoleElasticIp:
+    Type: String
+    Description: Please enter Elastic IP Guacamole Interface
+  GuacamoleElasticIpAllocationId:
+    Type: String
+    Description: Please enter Elastic IP Allocation Id for Guacamole Interface
+  TetDataElasticIp:
+    Type: String
+    Description: Please enter Elastic IP For Tet Data Interface
+  TetDataElasticIpAllocationId:
+    Type: String
+    Description: Please enter Elastic IP Allocation Id for Tet Data Interface
   ASAvImageID:
     Type: String
     Description: Please enter Image Id for ASAv
@@ -463,6 +477,7 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           <powershell>
+          Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
           route add 192.168.${StudentIndex}.0 mask 255.255.255.0 ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} -p
           route add ${ASAvOutsideSubnet} mask 255.255.255.0 ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} -p
           ipconfig /flushdns
@@ -505,6 +520,7 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           <powershell>
+          Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
           $adapter = Get-NetAdapter -Name 'Ethernet*'
           Set-DNSClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ("${CiscoHOLEC2ActiveDirectory.PrivateIp}")
           route add 192.168.${StudentIndex}.0 mask 255.255.255.0 ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} -p
@@ -549,6 +565,7 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           <powershell>
+          Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled False
           $adapter = Get-NetAdapter -Name 'Ethernet*'
           Set-DNSClientServerAddress -InterfaceAlias $adapter.Name -ServerAddresses ("${CiscoHOLEC2ActiveDirectory.PrivateIp}")
           route add 192.168.${StudentIndex}.0 mask 255.255.255.0 ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} -p
@@ -734,20 +751,20 @@ Resources:
         SubnetId: !Ref CiscoHOLSubnet01
 
   # Create Elastic IP Addresses
-  CiscoHOLEC2TetDataEIP1:
-    Type: AWS::EC2::EIP
-    Properties:
-      Tags:
-        - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-eip-TetData-${Region}${Subnet01AvailabilityZone}"
+  # CiscoHOLEC2TetDataEIP1:
+  #   Type: AWS::EC2::EIP
+  #   Properties:
+  #     Tags:
+  #       - Key: Name
+  #         Value: !Sub "cisco-hol-${StudentName}-eip-TetData-${Region}${Subnet01AvailabilityZone}"
   
   # Elastic IP Association  
-  CiscoHOLAssociateEIP1TetData:
+  CiscoHOLAssociateEIPTetData:
     Type: AWS::EC2::EIPAssociation
     DependsOn:
       - CiscoHOLEC2TetData
     Properties:
-      AllocationId: !GetAtt CiscoHOLEC2TetDataEIP1.AllocationId
+      AllocationId: !Ref TetDataElasticIpAllocationId
       NetworkInterfaceId: !Ref TetNetworkInterfaces01
 
   # Create Tet Edge EC2
@@ -1170,13 +1187,13 @@ Resources:
       Type: AWS::EC2::NetworkInterface
       Properties:
         Tags:
-        - Key: name
-          Value: !Sub "${StudentName}-nic01-asav"
+          - Key: name
+            Value: !Sub "${StudentName}-nic01-asav"
         Description: !Sub "${StudentName} ASAv Network Interface 01"
         SourceDestCheck: 'false'
         GroupSet:
-        - !Ref CiscoHOLPrivateSecurityGroup
-        - !Ref CiscoHOLWebSecurityGroup
+          - !Ref CiscoHOLPrivateSecurityGroup
+          - !Ref CiscoHOLWebSecurityGroup
         SubnetId: !Ref CiscoHOLSubnet03
         PrivateIpAddresses:
           - PrivateIpAddress: !Ref ASAvOutsidePrivateIp01
@@ -1186,13 +1203,13 @@ Resources:
       Type: AWS::EC2::NetworkInterface
       Properties:
         Tags:
-        - Key: name
-          Value: !Sub "${StudentName}-nic02-asav"
+          - Key: name
+            Value: !Sub "${StudentName}-nic02-asav"
         Description: !Sub "${StudentName} ASAv Network Interface 02"
         SourceDestCheck: 'false'
         GroupSet:
-        - !Ref CiscoHOLPrivateSecurityGroup
-        - !Ref CiscoHOLWebSecurityGroup
+          - !Ref CiscoHOLPrivateSecurityGroup
+          - !Ref CiscoHOLWebSecurityGroup
         SubnetId: !Ref CiscoHOLSubnet03
         PrivateIpAddresses:
           - PrivateIpAddress: !Ref ASAvOutsidePrivateIp02
@@ -1206,13 +1223,13 @@ Resources:
       Type: AWS::EC2::NetworkInterface
       Properties:
         Tags:
-        - Key: name
-          Value: !Sub "${StudentName}-nic03-asav"
+          - Key: name
+            Value: !Sub "${StudentName}-nic03-asav"
         Description: !Sub "${StudentName} ASAv Network Interface 03"
         SourceDestCheck: 'false'
         GroupSet:
-        - !Ref CiscoHOLPublicSecurityGroup
-        - !Ref CiscoHOLWebSecurityGroup
+          - !Ref CiscoHOLPublicSecurityGroup
+          - !Ref CiscoHOLWebSecurityGroup
         SubnetId: !Ref CiscoHOLSubnet01
 
 #  We shouldn't need EIP for ASAv if contacting ISE via AWS VGW (should be case unless ISE happens to be NAT to Internet)
@@ -1541,40 +1558,43 @@ Resources:
     Type: AWS::EC2::NetworkInterface
     Properties:
       Tags:
-      - Key: name
-        Value: !Sub "${StudentName}-nic01-guacamole"
+        - Key: name
+          Value: !Sub "${StudentName}-nic01-guacamole"
       Description: !Sub "${StudentName} Guacamole Network Interface 01"
       SourceDestCheck: 'false'
       GroupSet: 
-      - !Ref CiscoHOLPublicSecurityGroup
-      - !Ref CiscoHOLWebSecurityGroup
+        - !Ref CiscoHOLPublicSecurityGroup
+        - !Ref CiscoHOLWebSecurityGroup
       SubnetId: !Ref CiscoHOLSubnet01
 
   GuacamoleNetworkInterfaces02:
     Type: AWS::EC2::NetworkInterface
     Properties:
       Tags:
-      - Key: name
-        Value: !Sub "${StudentName}-nic02-guacamole"
+        - Key: name
+          Value: !Sub "${StudentName}-nic02-guacamole"
       Description: !Sub "${StudentName} Guacamole Network Interface 02"
       SourceDestCheck: 'false'
       GroupSet: 
-      - !Ref CiscoHOLPrivateSecurityGroup
+        - !Ref CiscoHOLPrivateSecurityGroup
       SubnetId: !Ref CiscoHOLSubnet03
+      PrivateIpAddresses:
+        - PrivateIpAddress: !Ref GuacamoleOutsidePrivateIp
+          Primary: 'true'
 
   # Create Elastic IP Addresses
-  CiscoHOLGuacamoleEIP:
-    Type: AWS::EC2::EIP
-    Properties:
-      Tags:
-        - Key: Name
-          Value: !Sub "cisco-hol-${StudentName}-eip-guacamole-${Region}${Subnet01AvailabilityZone}"
+  # CiscoHOLGuacamoleEIP:
+  #   Type: AWS::EC2::EIP
+  #   Properties:
+  #     Tags:
+  #       - Key: Name
+  #         Value: !Sub "cisco-hol-${StudentName}-eip-guacamole-${Region}${Subnet01AvailabilityZone}"
   
   # Elastic IP Association  
   CiscoHOLAssociateEIPGuacamole:
     Type: AWS::EC2::EIPAssociation
     Properties:
-      AllocationId: !GetAtt CiscoHOLGuacamoleEIP.AllocationId
+      AllocationId: !Ref GuacamoleElasticIpAllocationId
       NetworkInterfaceId: !Ref GuacamoleNetworkInterfaces01
 
   # Lambda Function Basic Execution Role
@@ -1862,4 +1882,4 @@ Outputs:
     Value: !GetAtt CiscoHOLEC2Attacker.PrivateIp
   CiscoHOLGuacamolePublic:
     Description: Guacamole Server Public IP
-    Value: !Ref CiscoHOLGuacamoleEIP
+    Value: !Ref GuacamoleElasticIp

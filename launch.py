@@ -47,6 +47,7 @@ MANAGEMENT_CIDR = ''
 
 STACKS_LIST = []
 STUDENTS_LIST = []
+ELASTIC_IPS = []
 
 def password_generator(size=14, chars=string.ascii_letters + string.digits):
     return ''.join(random.choice(chars) for _ in range(size))
@@ -103,6 +104,34 @@ print(f'INFO: Subnet Check Completed...')
 
 
 #######################################################################
+# Check Available Elastic IPs #########################################
+#######################################################################
+try:
+    print('INFO: Checking Available Elastic IPs...')
+
+    client = session.client('ec2')
+
+    addresses_dict = client.describe_addresses()
+
+    for eip_dict in addresses_dict['Addresses']:
+        if 'NetworkInterfaceId' not in eip_dict:
+            ELASTIC_IPS.append({
+                'public_ip': eip_dict['PublicIp'],
+                'allocation_id': eip_dict['AllocationId']
+            })
+
+    if len(ELASTIC_IPS) < (STUDENT_COUNT * 2):
+        print(f'ERROR: Number Of Required Elastic IPs Are {STUDENT_COUNT * 2} But Only {len(ELASTIC_IPS)} Are Available...')
+        exit(1)
+
+    print('INFO: Created Available Elastic IPs Collection...')
+except:
+    print('ERROR: Unable To Get Available Elastic IPs...')
+    exit(1)
+#######################################################################
+
+
+#######################################################################
 # Calculate & Verify Subnet Range #####################################
 #######################################################################
 try:
@@ -146,6 +175,8 @@ try:
     public_subnet_01 = primary_ips[:len(primary_ips)//2]
     public_subnet_02 = primary_ips[len(primary_ips)//2:]
 
+    eip_index = 0
+
     for i in range(STUDENT_COUNT):
         STUDENTS_LIST.append({
             'account_name': f'{STUDENT_PREFIX}-0{i}',
@@ -153,8 +184,14 @@ try:
             'public_subnet_01': f'{public_subnet_01[i]}',
             'public_subnet_02': f'{public_subnet_02[i]}',
             'private_subnet': f'{secondary_ips[i]}',
-            'eks_dns': ''
+            'eks_dns': '',
+            'guacamole_elastic_ip': ELASTIC_IPS[eip_index]['public_ip'],
+            'guacamole_elastic_ip_allocation_id': ELASTIC_IPS[eip_index]['allocation_id'],
+            'tet_data_elastic_ip': ELASTIC_IPS[eip_index + 1]['public_ip'],
+            'tet_data_elastic_ip_allocation_id': ELASTIC_IPS[eip_index + 1]['allocation_id']
         })
+
+        eip_index = eip_index + 2
 
     print(f'INFO: {STUDENTS_LIST}')
 
@@ -218,6 +255,12 @@ for student in STUDENTS_LIST:
             {'ParameterKey': 'ASAvInsideSubnet', 'ParameterValue': student['public_subnet_01']},
             {'ParameterKey': 'ASAvOutsideSubnet', 'ParameterValue': student['private_subnet']},
 
+            {'ParameterKey': 'GuacamoleElasticIp', 'ParameterValue': student['guacamole_elastic_ip']},
+            {'ParameterKey': 'GuacamoleElasticIpAllocationId', 'ParameterValue': student['guacamole_elastic_ip_allocation_id']},
+
+            {'ParameterKey': 'TetDataElasticIp', 'ParameterValue': student['tet_data_elastic_ip']},
+            {'ParameterKey': 'TetDataElasticIpAllocationId', 'ParameterValue': student['tet_data_elastic_ip_allocation_id']},
+
             {'ParameterKey': 'Region', 'ParameterValue': REGION},
             {'ParameterKey': 'Subnet01AvailabilityZone', 'ParameterValue': 'a'},
             {'ParameterKey': 'Subnet02AvailabilityZone', 'ParameterValue': 'b'},
@@ -234,6 +277,7 @@ for student in STUDENTS_LIST:
             {'ParameterKey': 'ASAvOutsidePrivateIp02', 'ParameterValue': str(outside_pod_ips[17])},
             {'ParameterKey': 'Ubuntu1804EmployeePrivateIp', 'ParameterValue': str(outside_pod_ips[18])},
             {'ParameterKey': 'Ubuntu1804SysAdminPrivateIp', 'ParameterValue': str(outside_pod_ips[19])},
+            {'ParameterKey': 'GuacamoleOutsidePrivateIp', 'ParameterValue': str(outside_pod_ips[20])},
 
             {'ParameterKey': 'ASAvImageID', 'ParameterValue': params['asav_ami']},
             {'ParameterKey': 'LDAPImageID', 'ParameterValue': params['ldap_ami']},
