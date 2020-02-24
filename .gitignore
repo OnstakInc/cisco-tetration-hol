@@ -3,6 +3,6 @@ run.ps1
 .DS_Store
 _config.yml
 /reports/*
-/parameters/*
+#/parameters/*
 test.py
 .vscode

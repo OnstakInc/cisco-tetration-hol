@@ -1068,10 +1068,6 @@ Resources:
            host ${CiscoHOLEC2Apache.PrivateIp}
           object-group network RemoteAccessVPN
            network-object 192.168.${StudentIndex}.0 255.255.255.0
-          object network ISE-HOST-IP 
-           host 172.16.171.48
-          ! Students will enter actual ISE Host in directed by Lab Admin due to ISE only object not supported in AWS EC2
-          ! Lab Admin will also need to add Student ASAv Internal IP to ISE Network Devices to allow authen/author
           access-list ssh standard permit any4 
           access-list standard standard permit any4 
           access-list outside-in extended permit icmp any any 
@@ -1098,11 +1094,11 @@ Resources:
           flow-export event-type all destination ${TetNetworkInterfaces01.PrimaryPrivateIpAddress}
           user-statistics accounting
           aaa-server ISE-R-AAA protocol radius
-            key tet123$$!
-          accounting-mode simultaneous
-          reactivation-mode timed
-          max-failed-attempts 5
-          aaa-server ISE-R-AAA (inside) host ISE-HOST-IP
+           accounting-mode simultaneous
+           reactivation-mode timed
+           max-failed-attempts 5
+          aaa-server ISE-R-AAA (inside) host ${ISEIPAddress}
+           key tet123$$!
           aaa authentication login-history
           http server enable
           http 0.0.0.0 0.0.0.0 management
@@ -1156,10 +1152,9 @@ Resources:
           tunnel-group LAB-PROFILE type remote-access
           tunnel-group LAB-PROFILE general-attributes
             address-pool LAB-POOL
-            ! authentication-server-group ISE-R-AAA
-            ! accounting-server-group ISE-R-AAA
-            ! Above ISE Auth and Acctg off initially to enable LOCAL Auth
-            ! Students will enable once they have entered ISE Host in Object Group
+            authentication-server-group ISE-R-AAA
+            accounting-server-group ISE-R-AAA
+            ! Above ISE Auth and Acctg can be commented out to enable LOCAL Auth if no ISE host present
           default-group-policy LAB-PROFILE
           tunnel-group LAB-PROFILE webvpn-attributes
             group-alias LAB-PROFILE enable
