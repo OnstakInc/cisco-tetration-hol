@@ -81,7 +81,7 @@ Also due to AWS strict requirement that there be at least two subnets available 
 
 Say you chose `10.0.0.0/16` as your primary range, and `198.18.0.0/16` as your secondary. You could expect to see three subnets generated, only the first two of which would ever be populated with any workloads. 
 
-##### Examples
+##### Examples:
 
 **_Student 1_**
 * 10.0.1.0/24    < "Internal / Corporate" workload subnet (Inside ASAv)
@@ -196,7 +196,7 @@ INFO: [{'account_name': 'cisco-student-00', 'public_subnet_01': '10.1.0.0', 'pub
 INFO: Student Accounts Collection Created...
 You are about to DESTROY all student pod(s) in vpc-082d43bff04cd342e in the us-east-2 Region
 Are you sure you wish to destory all of these pods (type "Y" to continue)? Y
-ARE YOU ABSOLUTELY SURE (type "YES" to continue)? YES
+ARE YOU ABSOLUTELY SURE (type "YES" to continue)? **YES**
 INFO: Initializing VPC Flow Logs S3 Bucket Deletion...
 INFO: S3 Bucket Deleted: cisco-hol-cisco-student-00-vpc-flow-logs-us-east-2a
 INFO: S3 Bucket Deletion Complete...
