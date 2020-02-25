@@ -60,7 +60,7 @@ eks_worker_ami: ami-0c4c60006aa81c29b   # << Global AWS Marketplace - will chang
 
 ```
 
-#### Dependancies
+#### Requirements / Dependancies
 
 `launch.py` requires Python 3.7 as well as a number of dependancies that one can easily see with the first few `import` statements in the script.
 
@@ -68,10 +68,32 @@ It is important to note that prior to running `launch.py`, you must have a few t
 1. VPC: This probably goes without saying, but we recommend a non-default VPC. Place your VPC ID in `parameters.yml` in the `vpc_id:` line (no quotes surounding the value). This VPC must have at least two CIDR blocks, one for `subnet_range_primary` and one for `subnet_range_secondary`. It is important that **no** subnets be created in this VPC whatsoever, else the script will error out. `launch.py` will create the subnets and we have a brief discussion about them below. 
 2. IGW: You must have one IGW created in your `vpc_id` and designated in the `parameters.yml` in the `internet_gateway_id:` lin (no quotes surounding the value).
 3. S3 Bucket: Due to the size of the CFT, AWS requires that we first upload it to an S3 bucket prior to calling it and executing against it. It is required that you have already created the empty S3 bucket and placed the name of the bucket in the `parameters.yml` in the `internet_gateway_id:` lin (no quotes surounding the value).
+4. Two (2) Elastic IPs per student pod. These must be already *allocated* to your region, but not yet *assigned* to any ENIs. This requirement exists due to AWS not allowing a Public IP to be assigned to any EC2 instance with more than a single ENI. There are currently three instances that have multiple ENIs, including Guacamole, Tet Data Ingest, and ASAv. Guac requires one so that students can access the environment from the public internet, and Tet Data Ingest requires the ability to communicate out to the internet to reach the TaaS cluster. ASAv only communicates internally, even if you have ISE running on-prem, assuming you have a VGW back to your CGW. If you need ASAv to speak externally, there is some code that can be uncommented in the `cisco-hol-pod-cft-template.yml` file. 
 
 #### Subnets
 
-A quick discussion on subnets to be created at launch time is in order. This VPC must have at least two CIDR blocks, one for `subnet_range_primary` and one for `subnet_range_secondary`. Due to AWS strict requirement that there be at least two subnets available in order to spin up an EKS cluster, there will be two subnets created in `subnet_range_primary` per student. Say you chose `10.0.0.0
+A quick discussion on subnets to be created at launch time is in order. This VPC must have at least two CIDR blocks, one for `subnet_range_primary` and one for `subnet_range_secondary`.
+
+
+The `subnet_range_primary` and `subnet_range_secondary` field both require that you give them /16 address space. This is due to the fact that for every student pod to be created, the third octet will be used to indicate the student index #. 
+
+Also due to AWS strict requirement that there be at least two subnets available in order to spin up an EKS cluster, there will be two subnets created in `subnet_range_primary` per student - one will begin at the base and the other will be calculated to begin much higher, so that each subnet's third octet should (for the most part) follow the student numbering index value. 
+
+Say you chose `10.0.0.0/16` as your primary range, and `198.18.0.0/16` as your secondary. You could expect to see three subnets generated, only the first two of which would ever be populated with any workloads. 
+
+__Examples__
+**_Student 1_**
+* 10.0.1.0/24    < "Internal / Corporate" workload subnet (Inside ASAv)
+* 198.18.1.0/24  < "External / Internet" workload subnet (Outside ASAv)
+* 10.0.128.0/24  < not used, simply required by AWS
+
+**_Student 2_**
+* 10.0.2.0/24    < "Internal / Corporate" workload subnet (Inside ASAv)
+* 198.18.2.0/24  < "External / Internet" workload subnet (Outside ASAv)
+* 10.0.129.0/24  < not used, simply required by AWS
+
+
+> Note that the default subnet value for the secondary range is `198.18.0.0/16` and was chosen specifically becuase it both represented a "real internet, non-RFC1918 IP range", and also that it falls in the *'Reserved'* range, specifically that "This block has been allocated for use in benchmark tests of network interconnect devices" per [RFC5735](https://tools.ietf.org/html/rfc5735). It could initially be argued that a range such as `198.51.100.0/24` or `203.0.113.0/24` would seem more appropos as they were created so that "This block is assigned as "TEST-NET-2/3" for use in documentation and example code", but they weren't large enough (/24), so the decision was made soundly to provide a real-world-like environment whilst simultaneously avoiding any blackholing any legitimate internet traffic from within the lab environment. 
 
 #### IAM Role API Credentials - Scope and Permissions
 
@@ -199,6 +221,12 @@ INFO: StackName: cisco-student-00, Status: DELETE_IN_PROGRESS
 WARN: cisco-student-00 Does Not Exist...
 INFO: CloudFormation Rollback Completed Successfully...
 ```
+
+
+#### Limitations
+
+Currently deploying this lab environment only supports a single 'deployment set' per region (deployment set is defined as any number of student )
+
 
 ##### LICENSE
 
