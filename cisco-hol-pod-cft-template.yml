@@ -354,7 +354,7 @@ Resources:
         - IpProtocol: -1
           FromPort: 0
           ToPort: 65535
-          CidrIp: !Sub ${ISEIPAddress}/32
+          CidrIp: !Sub "${ISEIPAddress}/32"
         - IpProtocol: -1
           FromPort: 0
           ToPort: 65535
@@ -482,8 +482,9 @@ Resources:
           route add ${ASAvOutsideSubnet} mask 255.255.255.0 ${ASAvNetworkInterfaces03.PrimaryPrivateIpAddress} -p
           ipconfig /flushdns
           Clear-DnsClientCache
+          Add-DnsServerPrimaryZone -NetworkId "${ASAvInsideSubnet}/24" -ReplicationScope Forest
           Add-DnsServerResourceRecordA -Name tet-edge -ZoneName hol.local -IPv4Address ${CiscoHOLEC2TetEdge.PrivateIp}
-          Add-DnsServerResourceRecordA -Name tet-ingest -ZoneName hol.local -IPv4Address ${CiscoHOLEC2TetData.PrivateIp}
+          Add-DnsServerResourceRecordA -Name tet-data -ZoneName hol.local -IPv4Address ${CiscoHOLEC2TetData.PrivateIp}
           Add-DnsServerResourceRecordA -Name isev-small-2-4 -ZoneName hol.local -IPv4Address ${ISEIPAddress}
           </powershell>
       NetworkInterfaces:
@@ -596,8 +597,6 @@ Resources:
   # Linux DB Server
   CiscoHOLEC2MySQL:
     Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ActiveDirectory
     Properties:
       ImageId: !Ref MySQLImageID
       InstanceType: t2.micro
@@ -641,8 +640,6 @@ Resources:
   # Linux App Server
   CiscoHOLEC2Apache:
     Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ActiveDirectory
     Properties:
       ImageId: !Ref ApacheImageID
       InstanceType: t2.micro
@@ -701,8 +698,6 @@ Resources:
   # Create Tetration Appliances
   CiscoHOLEC2TetData:
     Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ActiveDirectory
     Properties:
       ImageId: !Ref TetrationDataIngestImageID
       InstanceType: t2.small
@@ -764,8 +759,6 @@ Resources:
   # Elastic IP Association  
   CiscoHOLAssociateEIPTetData:
     Type: AWS::EC2::EIPAssociation
-    DependsOn:
-      - CiscoHOLEC2TetData
     Properties:
       AllocationId: !Ref TetDataElasticIpAllocationId
       NetworkInterfaceId: !Ref TetNetworkInterfaces01
@@ -773,8 +766,6 @@ Resources:
   # Create Tet Edge EC2
   CiscoHOLEC2TetEdge:
     Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ActiveDirectory
     Properties:
       ImageId: !Ref TetrationEdgeImageID
       InstanceType: t2.micro
@@ -791,8 +782,6 @@ Resources:
   # Windows 10 Employee (AnyConnect, Putty, CMD-Telnet, WinSCP)
   CiscoHOLEC2Win10Employee:
     Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ActiveDirectory
     Properties:
       ImageId: !Ref Win10EmployeeImageID
       InstanceType: t2.medium
@@ -810,8 +799,6 @@ Resources:
   # Windows 10 SysAdmin (AnyConnect, Putty, CMD-Telnet, WinSCP)
   CiscoHOLEC2Win10SysAdmin:
     Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ActiveDirectory
     Properties:
       ImageId: !Ref Win10SysAdminImageID
       InstanceType: t2.medium
@@ -829,8 +816,6 @@ Resources:
   # Ubuntu 18.04 Employee (AnyConnect)
   CiscoHOLEC2Ubuntu1804Employee:
     Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ActiveDirectory
     Properties:
       ImageId: !Ref Ubuntu1804EmployeeImageID
       InstanceType: t2.medium
@@ -854,8 +839,6 @@ Resources:
   # Ubuntu 18.04 SysAdmin (AnyConnect)
   CiscoHOLEC2Ubuntu1804SysAdmin:
     Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ActiveDirectory
     Properties:
       ImageId: !Ref Ubuntu1804SysAdminImageID
       InstanceType: t2.medium
@@ -879,8 +862,6 @@ Resources:
   # Metasploit Attack Server
   CiscoHOLEC2Attacker:
     Type: AWS::EC2::Instance
-    DependsOn:
-      - CiscoHOLEC2ActiveDirectory
     Properties:
       ImageId: !Ref AttackerImageID
       InstanceType: t2.micro
@@ -1024,7 +1005,6 @@ Resources:
   CiscoHOLEC2ASAv:
     Type: AWS::EC2::Instance
     DependsOn:
-      - CiscoHOLEC2ActiveDirectory
       - CiscoHOLEC2IIS
       - CiscoHOLEC2Apache
     Properties:
@@ -1735,6 +1715,7 @@ Resources:
       ResourceType: VPC
       TrafficType: ALL
   
+  # IAM User and API Keys
   CiscoHOLIAMUser:
     Type: AWS::IAM::User
     Properties: 
@@ -1755,7 +1736,10 @@ Resources:
         - Effect: Allow
           Action: elasticloadbalancing:Describe*
           Resource: "*"
-  
+        # - Effect: Allow
+        #   Action: subnet:Describe*
+        #   Resource: "*"
+          
   CiscoHOLIAMUserAccessKey:
     Type: AWS::IAM::AccessKey
     Properties:

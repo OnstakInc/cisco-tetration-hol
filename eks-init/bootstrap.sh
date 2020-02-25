@@ -58,7 +58,7 @@ kubectl create namespace tetration --kubeconfig=/tmp/kubeconfig
 kubectl create serviceaccount tetration --namespace=tetration --kubeconfig=/tmp/kubeconfig
 kubectl create clusterrolebinding tetration-role-binding --clusterrole=cluster-admin --serviceaccount=tetration:tetration --namespace=tetration --kubeconfig=/tmp/kubeconfig
 
-kubectl describe secrets --namespace=tetration --kubeconfig=/tmp/kubeconfig | grep 'token:' | tail -n 1 | sed -En "s/token:      //p" > /opt/eks-credentials
+kubectl describe secrets --namespace=tetration --kubeconfig=/tmp/kubeconfig | grep 'token:' | tail -n 1 | sed -En "s/token:      //p" > /home/ciscolab/eks-credentials
 
 kubectl apply -f /tmp/aws-auth.yml --kubeconfig=/tmp/kubeconfig
 

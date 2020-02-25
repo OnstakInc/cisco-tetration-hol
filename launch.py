@@ -24,8 +24,10 @@ SECRET_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
 if ACCESS_KEY == None or ACCESS_KEY == '':
     ACCESS_KEY = params['aws_access_key']
 
+
 if SECRET_KEY == None or SECRET_KEY == '':
     SECRET_KEY = params['aws_secret_key']
+
 
 REGION = params['aws_region']
 VPC_ID = params['vpc_id']
@@ -392,7 +394,7 @@ except Exception as e:
 
 #######################################################################
 # Generate CSV Reports ################################################
-#######################################################################
+######################################################################
 
 try:
 
@@ -415,15 +417,18 @@ try:
         for o in stack['Stacks'][0]['Outputs']:
             output[o['OutputKey']] = o['OutputValue']
 
+        eks_endpoint = output['EKSClusterEndpoint']
+        eks_endpoint_fqdn_only = (eks_endpoint.split('//'))[1]
+
         records.append([
             f"https://{output['CiscoHOLGuacamolePublic']}",
             output['CiscoHOLStudentName'],
             output['CiscoHOLStudentPassword'],
+            f"http://{output['CiscoHOLIISPublic']}",
+            f"http://{output['CiscoHOLApachePublic']}",
+            f"http://{student['eks_dns']}",
             output['CiscoHOLPublicSubnet01'],
             output['CiscoHOLPrivateSubnet'],
-            output['CiscoHOLIISPublic'],
-            output['CiscoHOLApachePublic'],
-            f"http://{student['eks_dns']}",
             output['CiscoHOLActiveDirectory'],
             output['CiscoHOLISE'],
             output['CiscoHOLIISPrivate'],
@@ -447,19 +452,24 @@ try:
             output['StudentAccessKey'],
             output['StudentSecretKey'],
             output['CiscoHOLAWSRegion'],
-            output['EKSClusterEndpoint'],
+            output['CiscoHOLVPCFlowLogBucket'],
+            f"{eks_endpoint_fqdn_only}",
             output['EKSClusterCertificate'],
+            # output['cisco-hol-cisco-student-00-public-subnet-01-us-east-2a'],
+            # cisco-hol-cisco-student-00-vpc-flow-logs-us-east-2a
+            # aws key will need perms to read this log
+
         ])
 
     header = [
         'Student Lab Access (Guac) Web Console URL',
         'Student Lab Access (Guac) Password', 
         'Student Lab Access (Guac) Username',
-        'Student Internal/Inside Corporate Subnet',
-        'Student External/Outside "Internet" Subnet',
         'nopCommerce Windows App URL',
         'OpenCart Linux App URL',
         'EKS SockShop App URL',
+        'Student Internal/Inside Corporate Subnet',
+        'Student External/Outside "Internet" Subnet',
         'MS Active Directory IP',
         'ISE Server IP',
         'MS IIS nopCommerce Inside IP',
@@ -483,8 +493,9 @@ try:
         'Student AWS External Orchestrator Access Key',
         'Student AWS External Orchestrator Secret Key',
         'Student AWS Region',
-        'EKS Cluster API Endpoint',
-        'EKS Cluster CA Cert'
+        'Student VPC Flow Log S3 Bucket',
+        'EKS Cluster API Endpoint (use for external orchestrator)',
+        'EKS Cluster CA Cert (should not need)'
     ]
 
     filename = 'reports/' + datetime.today().strftime('%H-%M-%S %Y-%m-%d') + '-report.csv'
