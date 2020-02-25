@@ -81,7 +81,7 @@ Also due to AWS strict requirement that there be at least two subnets available 
 
 Say you chose `10.0.0.0/16` as your primary range, and `198.18.0.0/16` as your secondary. You could expect to see three subnets generated, only the first two of which would ever be populated with any workloads. 
 
-__Examples__
+##### Examples
 
 **_Student 1_**
 * 10.0.1.0/24    < "Internal / Corporate" workload subnet (Inside ASAv)
