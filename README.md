@@ -1,6 +1,6 @@
 # Cisco Tetration - Hands On Lab
-  
-[Lab Guide Documentation](https://onstakinc.github.io/cisco-tetration-hol/labguide/)
+
+Firstly, if you are here for the Lab Guide, it is co-hosted here in the repo using [GitHub Pages](https://pages.github.com/), currently with a [Jekyll theme](https://jekyllrb.com/), and can be found here: [Lab Guide Documentation](https://onstakinc.github.io/cisco-tetration-hol/labguide/).
 
 ## Lab Environment Deployment and Git Repo Usage
 
