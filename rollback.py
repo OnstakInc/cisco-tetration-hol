@@ -118,8 +118,13 @@ print(f'INFO: Student Accounts Collection Created...')
 # Confirm Destroy Before Proceeding ###################################
 #######################################################################
 print(f'You are about to DESTROY all student pod(s) in {VPC_ID} in the {REGION} Region')
-rusure_response = input('ARE YOU SURE YOU WISH TO DESTROY THESE PODS (y/Y to continue)? ')
-if rusure_response.lower() != 'y':
+rusure_response1 = input('Are you sure you wish to destory all of these pods (type "Y" to continue)? ')
+if rusure_response1 == 'Y':
+    rusure_response2 = input('ARE YOU ABSOLUTELY SURE (type "YES" to continue)? ')
+    if rusure_response2 != 'YES':
+        print('No pods were destroyed, exiting now.')
+        exit(1)
+else:
     print('No pods were destroyed, exiting now.')
     exit(1)
 #######################################################################
