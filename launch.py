@@ -453,7 +453,7 @@ try:
             output['StudentSecretKey'],
             output['CiscoHOLAWSRegion'],
             output['CiscoHOLVPCFlowLogBucket'],
-            f"{eks_endpoint_fqdn_only}",
+            output[eks_endpoint_fqdn_only],
             output['EKSClusterCertificate'],
             # output['cisco-hol-cisco-student-00-public-subnet-01-us-east-2a'],
             # cisco-hol-cisco-student-00-vpc-flow-logs-us-east-2a
