@@ -2,7 +2,7 @@
 
 ## Student/Learner Lab Guide
 
-Firstly, if you are here for the Lab Guide, it is co-hosted here in the repo using [GitHub Pages](https://pages.github.com/), currently with a [Jekyll theme](https://jekyllrb.com/), and can be found here: [Lab Guide Documentation](https://onstakinc.github.io/cisco-tetration-hol/labguide/).
+Firstly, if you are here for the Lab Guide, it is co-hosted here under the `/labguide/` folderin the repo using [GitHub Pages](https://pages.github.com/), currently with a [Jekyll theme](https://jekyllrb.com/), and can be found here: [Lab Guide Documentation](https://onstakinc.github.io/cisco-tetration-hol/labguide/).
 
 ## Lab Environment Deployment and Git Repo Usage
 
@@ -228,7 +228,9 @@ INFO: CloudFormation Rollback Completed Successfully...
 
 #### Limitations
 
-Currently deploying this lab environment only supports a single 'deployment set' per region (deployment set is defined as any number of student )
+Currently deploying this lab environment only supports a single 'deployment set' per region, where 'deployment set' is defined as any numerical value defined in `parameters.yml` under the `student_count` field. It essentially is the number of student pods you are deploying at any one time. You must have 2x EIPs per student allocated to your region, as per the above section labeled "Requirements / Dependancies". Removing the single deployment option per region is an enhancement that we aim to add shortly. 
+
+Currently there is a limitation that prevents any abilitiy to increment student pod count once deployed. Since it would take a bit of an effort to add, it is something we will be looking at however, don't aim to add anytime soon.
 
 
 ##### LICENSE
