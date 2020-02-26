@@ -5,12 +5,12 @@ Scopes are used in Tetration to break down an IP scheme of an organization into 
 ```
   Root  
     └── Pod (PodSubnet=internal)    
-    └── Cloud (orchestrator_Cloud=AWS)      
-        └── Region (orchestrator_Region=us-east-1)  
-            ├── CommonApps (orchestrator_AppName=Common)  
-                ├── OpenCart (orchestrator_AppName=OpenCart)  
-                ├── SockShop (orchestrator_AppName=SockShop)  
-                └── nopCommerce (orchestrator_AppName=nopCommerce)  
+        └── Cloud (orchestrator_Cloud=AWS)      
+            └── Region (orchestrator_Region=us-east-1)  
+                ├── CommonApps (orchestrator_AppName=Common)  
+                    ├── OpenCart (orchestrator_AppName=OpenCart)  
+                    ├── SockShop (orchestrator_AppName=SockShop)  
+                    └── nopCommerce (orchestrator_AppName=nopCommerce)  
 ```
 In this tree structure, the Pod matches our annotation PodSubnet=internal which is assigned in our annotations file to match all RFC1918 IP address space. At each level of the tree our query results will become less broad until at the bottom of the tree we are matching workloads that are specific to an application.  With this scope hierarchy,  policy can be applied at any level of the tree and will be collapsed into a single policy that will be applied on matching workloads.  This allows us to create very broad policy,  such as policy that applies to everything in AWS by applying the policy at the Cloud level,  while applying policy that is required specifically for the application to function at the lower-level application scopes. This way we can define policy for the services that are common across the organization or across a particular region or cloud, such as DNS, DHCP, Active Directory, etc. once in the higher level scope and have those policies applied across all workloads,  while creating smaller rulesets at the lower level application scopes. Breaking the policy into smaller subsets of rules makes the ruleset much easier to digest by administrators. It also provides the ability for the security team to set broad policy at a higher level of the scope tree that implements a corporate policy, for example "Dev can't talk to Prod".  
 
