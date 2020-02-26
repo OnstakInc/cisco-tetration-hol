@@ -8,27 +8,29 @@ In this module, we'll download the installation scripts for Windows and Linux fr
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/03_agent_installation.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of the tasks being performed to install Tetration sensors.</a>  
 
 ### Steps for this Module  
-<a href="#step-001" style="font-weight:bold">Step 001</a>  
-<a href="#step-002" style="font-weight:bold">Step 002</a>  
-<a href="#step-003" style="font-weight:bold">Step 003</a>  
-<a href="#step-004" style="font-weight:bold">Step 004</a>  
-<a href="#step-005" style="font-weight:bold">Step 005</a>  
-<a href="#step-006" style="font-weight:bold">Step 006</a>  
-<a href="#step-007" style="font-weight:bold">Step 007</a>  
-<a href="#step-008" style="font-weight:bold">Step 008</a>  
-<a href="#step-009" style="font-weight:bold">Step 009</a>  
-<a href="#step-010" style="font-weight:bold">Step 010</a>  
-<a href="#step-011" style="font-weight:bold">Step 011</a>  
-<a href="#step-012" style="font-weight:bold">Step 012</a>  
-<a href="#step-013" style="font-weight:bold">Step 013</a>  
-<a href="#step-014" style="font-weight:bold">Step 014</a>  
-<a href="#step-015" style="font-weight:bold">Step 015</a>  
-<a href="#step-016" style="font-weight:bold">Step 016</a>  
-<a href="#step-017" style="font-weight:bold">Step 017</a>  
-<a href="#step-018" style="font-weight:bold">Step 018</a>  
+<a href="#step-001" style="font-weight:bold">Step 001 - Navigate to Agent Config</a>  
+<a href="#step-002" style="font-weight:bold">Step 002 - Click on Software Agent Download</a>  
+<a href="#step-003" style="font-weight:bold">Step 003 - Select the Linux Enforcement Agent</a>  
+<a href="#step-004" style="font-weight:bold">Step 004 - Save the Linux shell script</a>  
+<a href="#step-005" style="font-weight:bold">Step 005 - Select the Windows Enforcement Agent</a>  
+<a href="#step-006" style="font-weight:bold">Step 006 - Save the Windows Powershell script</a>  
+<a href="#step-007" style="font-weight:bold">Step 007 - Open a session to the Ansible machine</a>  
+<a href="#step-008" style="font-weight:bold">Step 008 - Copy the scripts to the Ansible machine</a>  
+<a href="#step-009" style="font-weight:bold">Step 009 - Examine the Ansible inventory</a>  
+<a href="#step-010" style="font-weight:bold">Step 010 - Run the Ansible playbook</a>  
+<a href="#step-011" style="font-weight:bold">Step 011 - Verify Ansible playbook results</a>  
+<a href="#step-012" style="font-weight:bold">Step 012 - Open a session to the IIS web server</a>  
+<a href="#step-013" style="font-weight:bold">Step 013 - Locate the Services console</a>  
+<a href="#step-014" style="font-weight:bold">Step 014 - Verify the Tetration services are active</a>  
+<a href="#step-015" style="font-weight:bold">Step 015 - Open a session to the Apache web server</a>  
+<a href="#step-016" style="font-weight:bold">Step 016 - Verify the Tetration services are active</a>  
+<a href="#step-017" style="font-weight:bold">Step 017 - Navigate to Software Agents</a>  
+<a href="#step-018" style="font-weight:bold">Step 018 - Verify the agents are registered</a>  
 
 
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  
+
+Navigate to Agent Config.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_001.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_001.png" style="width:100%;height:100%;"></a>  
 
@@ -36,11 +38,15 @@ In this module, we'll download the installation scripts for Windows and Linux fr
 
 <div class="step" id="step-002"><a href="#step-002" style="font-weight:bold">Step 002</a></div>  
 
+Select the Software Agent Download tab.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_002.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_002.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-003"><a href="#step-003" style="font-weight:bold">Step 003</a></div>  
+
+Select the Linux platform,  Enforcement Agent,  and then click Download Installer.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_003.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_003.png" style="width:100%;height:100%;"></a>  
 
@@ -48,11 +54,15 @@ In this module, we'll download the installation scripts for Windows and Linux fr
 
 <div class="step" id="step-004"><a href="#step-004" style="font-weight:bold">Step 004</a></div>  
 
+Save the file to the desktop and rename it to `tet-linux.sh`.  
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_004.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_004.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-005"><a href="#step-005" style="font-weight:bold">Step 005</a></div>  
+
+Select the Windows platform, Enforcement Agent,  and then Download Installer.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_005.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_005.png" style="width:100%;height:100%;"></a>  
 
@@ -60,11 +70,15 @@ In this module, we'll download the installation scripts for Windows and Linux fr
 
 <div class="step" id="step-006"><a href="#step-006" style="font-weight:bold">Step 006</a></div>  
 
+Name the file `tet-win.ps1` and save the file to the desktop.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_006.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_006.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-007"><a href="#step-007" style="font-weight:bold">Step 007</a></div>  
+
+Log into the Apache Guacamole server and open a session to the Ansible machine.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_007.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_007.png" style="width:100%;height:100%;"></a>  
 
@@ -72,11 +86,15 @@ In this module, we'll download the installation scripts for Windows and Linux fr
 
 <div class="step" id="step-008"><a href="#step-008" style="font-weight:bold">Step 008</a></div>  
 
+Copy the scripts from the desktop to the Ansible machine by clicking and dragging them from the desktop to the Ansible console window.  A file copy dialogue should be displayed in the lower right-hand corner.   Once complete,  do an `ls` to list the directory on the Ansible machine and make sure the files are present.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_008.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_008.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-009"><a href="#step-009" style="font-weight:bold">Step 009</a></div>  
+
+Switch to the directory containing the Ansible playbooks with the command `cd /opt/ansible-tetration-sensor/` and then `cd inventory` to switch to the Inventory directory.  Type the command `cat hosts` and examine the contents in the inventory file. The Linux and Windows machine IP addresses as listed in your student spreadsheet should already be populated in the [centos] section for Linux and the [win] section for Windows.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_009.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_009.png" style="width:100%;height:100%;"></a>  
 
@@ -84,11 +102,19 @@ In this module, we'll download the installation scripts for Windows and Linux fr
 
 <div class="step" id="step-010"><a href="#step-010" style="font-weight:bold">Step 010</a></div>  
 
+Type `cd ..` to exit the Inventory directory and run the following command to execute the Ansible playbook:
+
+`ansible-playbook playbooks/clean-install-with-script.yml`
+
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_010.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_010.png" style="width:100%;height:100%;"></a>  
 
-
-
 <div class="step" id="step-011"><a href="#step-011" style="font-weight:bold">Step 011</a></div>  
+
+The Ansible playbook will take a few minutes to complete.  When finished, you should see a PLAY RECAP section indicating the success or failure of installation on each machine.  
+
+> Ignore the failure of host 10.1.0.162 in the image below, the machine was undergoing maintenance when the installation was performed.
+
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_011.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_011.png" style="width:100%;height:100%;"></a>  
 
