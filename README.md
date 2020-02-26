@@ -19,7 +19,7 @@ Deployment of the environment for lab pod(s) requires the use of three files - n
 
 #### Parameters File Example
 
-Below is an example of a `parameters.yml` file, however with additional inline commented markup, which can also be found in the directory `parameters-templates` under the name `parameters-example.yml`. The inline comments should be fairly self-explanatory. 
+Below is an example of a `parameters.yml` file, however with additional inline commented markup, which can also be found in the directory `parameters-templates` under the name `parameters-example.yml`. The inline comments should be fairly self-explanatory, although much will be parsed out and explained following the example file. 
 
 
 ```yaml
