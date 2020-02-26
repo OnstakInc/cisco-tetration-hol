@@ -1,11 +1,12 @@
 # Cisco Tetration - Hands-On Lab
   
-## Module14: Policy Analysis - Global Services
+## Module14: Policy Creation - ADM and Clusters - NopCommerce
   
 
 ### Steps for this Module  
 
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/19_global_policy_analysis.mp4" style="font-weight:bold" title="Policy Analysis - Global Services"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of the tasks necessary to perform policy analysis for the services provided at the hierarchical Global level.</a>
-  
+
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/14_policy_creation_adm_clusters_nopcommerce.mp4" style="font-weight:bold" title="nopCommerce ADM & Clusters">Click here to view a video of the tasks necessary to setup an Workspace, run ADM, configure Clusters, and customize the security Policy for the Windows-based app called nopCommerce.</a>
+
 
 | [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module14/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/module15/) |

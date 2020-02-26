@@ -28,6 +28,7 @@
 [Module24: Policy Enforcement - OpenCart](https://onstakinc.github.io/cisco-tetration-hol/labguide/module24/)  
 [Module25: Container Policies and Enforcement](https://onstakinc.github.io/cisco-tetration-hol/labguide/module25/)  
 [Module26: Security Visibility & Monitoring](https://onstakinc.github.io/cisco-tetration-hol/labguide/module26/)  
+[Appendix: Legacy Alternative Policy](https://onstakinc.github.io/cisco-tetration-hol/labguide/z-appendix-legacy-policy/)  
 
 
 This lab is provided using the [GPL-3.0](https://github.com/OnstakInc/cisco-tetration-hol/blob/master/LICENSE). You may fork this repo and use it mostly as you like, however you must retain the same GPL license, and you must give credit. This lab was created by [Raheel Anwar](https://github.com/raheel-anwar), Muneeb Ali, [Matt Mullen](https://github.com/mamullen13316), and [Mark Snow](https://github.com/highspeedsnow) with [OnStak](https://onstak.com). 
