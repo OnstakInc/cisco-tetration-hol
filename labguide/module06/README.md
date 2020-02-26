@@ -20,6 +20,8 @@ In this module,  we'll define the Scope tree that will be used throughout the re
 
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/06b_scope_member_verify.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video showing the verification of Scope members.</a>
 
+---
+
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Navigate to Scopes</a>  
 <a href="#step-002" style="font-weight:bold">Step 002 - Create a new scope under the root</a>  
@@ -46,6 +48,7 @@ In this module,  we'll define the Scope tree that will be used throughout the re
 <a href="#step-023" style="font-weight:bold">Step 023 - View the query results for AppGroup = OpenCart</a>  
 <a href="#step-024" style="font-weight:bold">Step 024 - Observe workloads associated with OpenCart</a>  
 
+---
 
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  
 

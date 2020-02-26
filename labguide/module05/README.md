@@ -27,6 +27,8 @@ In this module,  we'll configure Static Annotations for the endpoints in the lab
 <a href="#step-013" style="font-weight:bold">Step 013 - Annotations on the workload</a>  
 
 
+---
+
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  
 
 Open the provided annotations.csv file in a text editor.

@@ -23,6 +23,7 @@ Agent Config Intent defines what features will be enabled for a group of sensors
 <a href="#step-014" style="font-weight:bold">Step 014 - Configure Inventory Filter for Linux OS</a>  
 <a href="#step-015" style="font-weight:bold">Step 015 - Apply the Inventory Filter to the Config Intent</a>  
 
+---
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>
 
 Select the Gear icon and select Agent Config.  
