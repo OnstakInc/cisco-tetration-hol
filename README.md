@@ -64,7 +64,10 @@ eks_worker_ami: ami-0c4c60006aa81c29b   # << Global AWS Marketplace - will chang
 
 #### Requirements / Dependancies
 
-`launch.py` requires Python 3.7 as well as a number of dependancies that one can easily see with the first few `import` statements in the script.
+`launch.py` requires Python 3.7 as well as the boto3 and pyyaml packages which can be installed by executing the following commands:
+
+`pip install boto3`
+`pip install pyyaml`
 
 It is important to note that prior to running `launch.py`, you must have a few things already created in your AWS environment - namely a VPC, an IGW, and a S3 bucket.
 1. VPC: This probably goes without saying, but we recommend a non-default VPC. Place your VPC ID in `parameters.yml` in the `vpc_id:` line (no quotes surounding the value). This VPC must have at least two CIDR blocks, one for `subnet_range_primary` and one for `subnet_range_secondary`. It is important that **no** subnets be created in this VPC whatsoever, else the script will error out. `launch.py` will create the subnets and we have a brief discussion about them below. 
