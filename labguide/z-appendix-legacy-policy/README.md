@@ -23,7 +23,7 @@ At any rate, enjoy.
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/legacy/09_common_pol_ADM_begin.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Common Policy ADM</a>
 
 
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/legacy/10_common_pol_ADM_clusters" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Common Policy Clusters</a>
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/legacy/10_common_pol_ADM_clusters.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Common Policy Clusters</a>
 
 
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/legacy/11_common_policy_tuning.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Common Policy Tuning</a>
@@ -64,7 +64,7 @@ At any rate, enjoy.
 
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/legacy/23_enforcement_tuning.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Enforcement Policy Tuning</a>
 
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/legacy/24_aws_lambda.mp4" style="font-weight:bold" title="AWS Lambda"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of the tasks to create policy necessary to allow workloads to recieve traffic from the AWS Serverless technology called Lambda when used within the bounds of a VPC.</a>
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/legacy/24_aws_lambda.mp4" style="font-weight:bold" title="AWS Lambda"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> AWS Lambda when run from within a VPC</a>
 
 
 | [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module27/) | 
