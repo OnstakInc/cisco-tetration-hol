@@ -66,7 +66,7 @@ eks_worker_ami: ami-0c4c60006aa81c29b   # << Global AWS Marketplace - will chang
 
 `launch.py` requires Python 3.7 as well as the boto3 and pyyaml packages which can be installed by executing the following commands:
 
-`pip install boto3`
+`pip install boto3`  
 `pip install pyyaml`
 
 It is important to note that prior to running `launch.py`, you must have a few things already created in your AWS environment - namely a VPC, an IGW, and a S3 bucket.
