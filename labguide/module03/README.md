@@ -99,7 +99,6 @@ Switch to the directory containing the Ansible playbooks with the command `cd /o
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_009.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_009.png" style="width:100%;height:100%;"></a>  
 
 
-
 <div class="step" id="step-010"><a href="#step-010" style="font-weight:bold">Step 010</a></div>  
 
 Type `cd ..` to exit the Inventory directory and run the following command to execute the Ansible playbook:
@@ -115,12 +114,15 @@ The Ansible playbook will take a few minutes to complete.  When finished, you sh
 
 > Ignore the failure of host 10.1.0.162 in the image below, the machine was undergoing maintenance when the installation was performed.
 
-
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_011.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_011.png" style="width:100%;height:100%;"></a>  
 
+> The playbook may display an error such as the one below for the Windows machines. Ignore the error,  the installation actually completed successfully but the connection from the Ansible machine was disrupted briefly by the sensor installation.  We are currently investigating workarounds to avoid the error in the future.    
 
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_010.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_011b.jpg" style="width:100%;height:100%;"></a>
 
 <div class="step" id="step-012"><a href="#step-012" style="font-weight:bold">Step 012</a></div>  
+
+Open a session to the IIS Web Server.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_012.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_012.png" style="width:100%;height:100%;"></a>  
 
@@ -128,17 +130,24 @@ The Ansible playbook will take a few minutes to complete.  When finished, you sh
 
 <div class="step" id="step-013"><a href="#step-013" style="font-weight:bold">Step 013</a></div>  
 
+Click on the Search button and enter "services",  and then open up Services Control Panel.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_013.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_013.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-014"><a href="#step-014" style="font-weight:bold">Step 014</a></div>  
 
+Scroll down and locate the WindowsAgentEngine and WindowsTetEngine services and ensure they are in Running state.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_014.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_014.png" style="width:100%;height:100%;"></a>  
 
 
+### REPEAT STEPS 012-14 FOR THE MS-SQL DB SERVER AND MICROSOFT ACTIVE DIRECTORY SERVER
 
 <div class="step" id="step-015"><a href="#step-015" style="font-weight:bold">Step 015</a></div>  
+
+Open a session to the Apache Web Server.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_015.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_015.png" style="width:100%;height:100%;"></a>  
 
@@ -146,11 +155,15 @@ The Ansible playbook will take a few minutes to complete.  When finished, you sh
 
 <div class="step" id="step-016"><a href="#step-016" style="font-weight:bold">Step 016</a></div>  
 
+Run the command `ps -ef | grep tet` and ensure that the tet-engine, and ensure that the tet-engine, tet-enforcer, and tet-sensor services are displayed.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_016.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_016.png" style="width:100%;height:100%;"></a>  
 
-
+### REPEAT STEPS 15-16 FOR THE MYSQL DB SERVER
 
 <div class="step" id="step-017"><a href="#step-017" style="font-weight:bold">Step 017</a></div>  
+
+Navigate to Agent Config. 
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_017.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_017.png" style="width:100%;height:100%;"></a>  
 
@@ -158,9 +171,11 @@ The Ansible playbook will take a few minutes to complete.  When finished, you sh
 
 <div class="step" id="step-018"><a href="#step-018" style="font-weight:bold">Step 018</a></div>  
 
+Click on the Software Agents tab,  and ensure that all of the sensors that were installed are displayed.  
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_018.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/images/module03_018.png" style="width:100%;height:100%;"></a>  
 
-
+YOU HAVE FINISHED THIS MODULE
 
 
 
