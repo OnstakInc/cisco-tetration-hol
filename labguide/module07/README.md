@@ -1,44 +1,58 @@
 # Cisco Tetration - Hands-On Lab
 
-## Module06 - External Orchestrators
+## Module07 - Scopes
+Scopes are used in Tetration to break down an IP scheme of an organization into manageable blocks that represent a function,  such as an application.  Scopes are organized in a tree structure,  with a Root Scope at the top of the tree which represents all IP addresses;  both internal and external.  The root scope is tied to the VRF,  which in turn represents the IP space of a Tenant.  In Tetration Cloud,  there can be only a single Tenant and hence only a single VRF and Root Scope.  With an on-prem Tetration cluster,  you could possibly have multiple Tenants and VRFs.  Each leaf of the scope tree is tied to a query, with the queries typically being more broad at the higher levels of the tree and becoming more specific as you traverse down the tree structure.  For example,  consider the following scope structure that will be used in this lab:
+```
+  Root  
+    └── Pod (PodSubnet=internal)    
+        └── Cloud (orchestrator_Cloud=AWS)      
+            └── Region (orchestrator_Region=us-east-1)  
+                ├── CommonApps (orchestrator_AppName=Common)  
+                    ├── OpenCart (orchestrator_AppName=OpenCart)  
+                    ├── SockShop (orchestrator_AppName=SockShop)  
+                    └── nopCommerce (orchestrator_AppName=nopCommerce)  
+```
+In this tree structure, the Pod matches our annotation PodSubnet=internal which is assigned in our annotations file to match all RFC1918 IP address space. At each level of the tree our query results will become less broad until at the bottom of the tree we are matching workloads that are specific to an application.  With this scope hierarchy,  policy can be applied at any level of the tree and will be collapsed into a single policy that will be applied on matching workloads.  This allows us to create very broad policy,  such as policy that applies to everything in AWS by applying the policy at the Cloud level,  while applying policy that is required specifically for the application to function at the lower-level application scopes. This way we can define policy for the services that are common across the organization or across a particular region or cloud, such as DNS, DHCP, Active Directory, etc. once in the higher level scope and have those policies applied across all workloads,  while creating smaller rulesets at the lower level application scopes. Breaking the policy into smaller subsets of rules makes the ruleset much easier to digest by administrators. It also provides the ability for the security team to set broad policy at a higher level of the scope tree that implements a corporate policy, for example "Dev can't talk to Prod".  
 
-In this section we will configure External Orchestrators.  Tetration provides the ability to pull in annotations from various external sources such as VMware vCenter, AWS, Kubernetes, F5 Big-IP, Citrix Netscaler, Infoblox, DNS, and AVI Vantage.  These are in addition to static annotations which we configured in the previous module.  
+In this module,  we'll define the Scope tree that will be used throughout the rest of the lab exercises.  
 
-Follow the below steps to deploy AWS and Kubernetes as External Orchestrators in Tetration.
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/07a_scope_creation.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video highlighting the creation of Scopes.</a>
 
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/07_external_orchestrators.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video highlighting the creation of two External Orchestrators providing the ability to drive dynamic policy - namely AWS tags and Kubernetes labels.</a>
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/07b_scope_member_verify.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video showing the verification of Scope members.</a>
+
+---
 
 ### Steps for this Module  
-<a href="#step-001" style="font-weight:bold">Step 001 - Navigate to External Orchestrators</a>  
-<a href="#step-002" style="font-weight:bold">Step 002 - Create New Configuration</a>  
-<a href="#step-003" style="font-weight:bold">Step 003 - Specify AWS Parameters</a>  
-<a href="#step-004" style="font-weight:bold">Step 004 - Specify AWS Parameters</a>  
-<a href="#step-005" style="font-weight:bold">Step 005 - Verify AWS Status</a>  
-<a href="#step-006" style="font-weight:bold">Step 006 - Verify AWS Status</a>  
-<a href="#step-007" style="font-weight:bold">Step 007 - Create Kubernetes Configuration</a>  
-<a href="#step-008" style="font-weight:bold">Step 008 - Ignore certificate checking</a>  
-<a href="#step-009" style="font-weight:bold">Step 009 - Open a session to the Ansible machine</a>  
-<a href="#step-010" style="font-weight:bold">Step 010 - Display the eks_credentials file</a>  
-<a href="#step-011" style="font-weight:bold">Step 011 - Downloading the eks_credentials file</a>  
-<a href="#step-012" style="font-weight:bold">Step 012 - Downloading the eks_credentials file</a>  
-<a href="#step-013" style="font-weight:bold">Step 013 - Downloading the eks_credentials file</a>  
-<a href="#step-014" style="font-weight:bold">Step 014 - Open the eks_credentials file</a>  
-<a href="#step-015" style="font-weight:bold">Step 015 - Paste the eks_credentials contents</a>  
-<a href="#step-016" style="font-weight:bold">Step 016 - Enter the hostname of the Kubernetes API server</a>  
-<a href="#step-017" style="font-weight:bold">Step 017 - Verify Kubernetes orchestrator status</a>  
-<a href="#step-018" style="font-weight:bold">Step 018 - Verify Kubernetes orchestrator status</a>  
-<a href="#step-019" style="font-weight:bold">Step 019 - Navigate to Inventory Search</a>  
-<a href="#step-020" style="font-weight:bold">Step 020 - Click on Filters</a>  
-<a href="#step-021" style="font-weight:bold">Step 021 - View orchestrator annotations</a>  
-<a href="#step-022" style="font-weight:bold">Step 022 - Search for nopCommerce workloads</a>  
-<a href="#step-023" style="font-weight:bold">Step 023 - Search for nopCommerce web server</a>  
-<a href="#step-024" style="font-weight:bold">Step 024 - Search for Sock Shop namespace</a>  
-<a href="#step-025" style="font-weight:bold">Step 025 - Search for Sock Shop front-end container</a>  
+<a href="#step-001" style="font-weight:bold">Step 001 - Navigate to Scopes</a>  
+<a href="#step-002" style="font-weight:bold">Step 002 - Create a new scope under the root</a>  
+<a href="#step-003" style="font-weight:bold">Step 003 - Create the Pod scope</a>  
+<a href="#step-004" style="font-weight:bold">Step 004 - Enter the Pod scope</a>  
+<a href="#step-005" style="font-weight:bold">Step 005 - Create a new scope under the Pod scope</a>  
+<a href="#step-006" style="font-weight:bold">Step 006 - Create the Cloud scope</a>  
+<a href="#step-007" style="font-weight:bold">Step 007 - Enter the Cloud scope</a>  
+<a href="#step-008" style="font-weight:bold">Step 008 - Create a new scope under the Cloud scope</a>  
+<a href="#step-009" style="font-weight:bold">Step 009 - Create the Region scope</a>  
+<a href="#step-010" style="font-weight:bold">Step 010 - Enter the Region scope</a>  
+<a href="#step-011" style="font-weight:bold">Step 011 - Create a scope under the Region scope</a>  
+<a href="#step-012" style="font-weight:bold">Step 012 - Create the nopCommerce scope</a>  
+<a href="#step-013" style="font-weight:bold">Step 013 - Create a second scope under the Region</a>  
+<a href="#step-014" style="font-weight:bold">Step 014 - Create the OpenCart scope</a>  
+<a href="#step-015" style="font-weight:bold">Step 015 - Create a third scope under the Region</a>  
+<a href="#step-016" style="font-weight:bold">Step 016 - Create the Common Apps scope</a>  
+<a href="#step-017" style="font-weight:bold">Step 017 - Commit scope updates</a>  
+<a href="#step-018" style="font-weight:bold">Step 018 - Observe the commit status</a>  
+<a href="#step-019" style="font-weight:bold">Step 019 - View the query results for AppGroup = Common</a>  
+<a href="#step-020" style="font-weight:bold">Step 020 - Observe workloads associated with Common Apps</a>  
+<a href="#step-021" style="font-weight:bold">Step 021 - View the query results for AppGroup = nopCommerce</a>  
+<a href="#step-022" style="font-weight:bold">Step 022 - Observe workloads associated with nopCommerce</a>  
+<a href="#step-023" style="font-weight:bold">Step 023 - View the query results for AppGroup = OpenCart</a>  
+<a href="#step-024" style="font-weight:bold">Step 024 - Observe workloads associated with OpenCart</a>  
 
+---
 
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  
 
-Navigate to External Orchestrators.
+Click the Gear icon in the right-hand corner and select Scopes
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_001.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_001.png" style="width:100%;height:100%;"></a>  
 
@@ -46,7 +60,9 @@ Navigate to External Orchestrators.
 
 <div class="step" id="step-002"><a href="#step-002" style="font-weight:bold">Step 002</a></div>  
 
-Click on Create New Configuration.
+Here we will create our first scope under the root scope. Click Create New Scope.
+
+> Your root scope will be named based on your StudentID in the lab.  In a real customer deployment in Tetration Cloud, it would be the company name.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_002.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_002.png" style="width:100%;height:100%;"></a>  
 
@@ -54,7 +70,7 @@ Click on Create New Configuration.
 
 <div class="step" id="step-003"><a href="#step-003" style="font-weight:bold">Step 003</a></div>  
 
-Enter the type as AWS and fill in the Name field with AWS.  Enter the AWS Access Key ID and Secret from the provided student workbook.  
+The name of the first scope will be Pod, to represent your student Pod.  Set the query to * PodSubnet = internal.  This was a static annotation that we set in the previous module on annotations.  It matches all RFC1918 private address space.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_003.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_003.png" style="width:100%;height:100%;"></a>  
 
@@ -62,7 +78,7 @@ Enter the type as AWS and fill in the Name field with AWS.  Enter the AWS Access
 
 <div class="step" id="step-004"><a href="#step-004" style="font-weight:bold">Step 004</a></div>  
 
-Enter the AWS Region as us-east-1.  Uncheck the Secure Connector tunnel and ensure that Insecure is checked.  Then click Create.  
+Click on Pod to navigate to the next level in the scope tree.  Notice how the path at the top now changes to ROOT : Pod.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_004.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_004.png" style="width:100%;height:100%;"></a>  
 
@@ -70,9 +86,7 @@ Enter the AWS Region as us-east-1.  Uncheck the Secure Connector tunnel and ensu
 
 <div class="step" id="step-005"><a href="#step-005" style="font-weight:bold">Step 005</a></div>  
 
-Initially the configuration will show Failure status, this is normal and expected.  Click on the Failure status to display the details,  and the status should say "Waiting to connect"
-
-> The connection will take a few minutes to come up. Keep refreshing the page until you see Success for Connection Status.  If Failed continues to be displayed, examine the Configuration Details to ensure that no other errors are being seen.  
+Create a new child scope under the Pod scope.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_005.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_005.png" style="width:100%;height:100%;"></a>  
 
@@ -80,7 +94,7 @@ Initially the configuration will show Failure status, this is normal and expecte
 
 <div class="step" id="step-006"><a href="#step-006" style="font-weight:bold">Step 006</a></div>  
 
-No action required here, the Connection Status should be a green Success after a few minutes.
+Name this scope Cloud,  and enter the query *orchestrator_Cloud = AWS.  From here on out, we'll be matching on tags that are set on your instances running in AWS. Recall that these tags are being pulled in from the External Orchestrator configuration for AWS. All instances will be tagged with the Cloud = AWS tag.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_006.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_006.png" style="width:100%;height:100%;"></a>  
 
@@ -88,14 +102,15 @@ No action required here, the Connection Status should be a green Success after a
 
 <div class="step" id="step-007"><a href="#step-007" style="font-weight:bold">Step 007</a></div>  
 
-Click on Create New Configuration and select Kubernetes as the type.  Enter a name and description. It is not required to enter a username, password, or certificate.  We will be using token-based authentication.
+Click on the Cloud scope to move down to the next level in the scope tree.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_007.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_007.png" style="width:100%;height:100%;"></a>  
 
 
+
 <div class="step" id="step-008"><a href="#step-008" style="font-weight:bold">Step 008</a></div>  
 
-Scroll down and check the Insecure check box.
+Create a new Scope under the Cloud scope.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_008.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_008.png" style="width:100%;height:100%;"></a>  
 
@@ -103,7 +118,7 @@ Scroll down and check the Insecure check box.
 
 <div class="step" id="step-009"><a href="#step-009" style="font-weight:bold">Step 009</a></div>  
 
-Open a session to the Ansible machine through Apache Guacamole.  
+Name the new scope Region,  and enter the query *orchestrator_Region = us-east-1.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_009.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_009.png" style="width:100%;height:100%;"></a>  
 
@@ -111,7 +126,7 @@ Open a session to the Ansible machine through Apache Guacamole.
 
 <div class="step" id="step-010"><a href="#step-010" style="font-weight:bold">Step 010</a></div>  
 
-There should be a file called `eks_credentials` in the home directory,  enter the command `ls` to list the directory and locate the file.  
+Click on the Region scope to navigate to the next level in the scope tree.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_010.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_010.png" style="width:100%;height:100%;"></a>  
 
@@ -119,7 +134,7 @@ There should be a file called `eks_credentials` in the home directory,  enter th
 
 <div class="step" id="step-011"><a href="#step-011" style="font-weight:bold">Step 011</a></div>  
 
-With the focus still on the Ansible console, enter the sequence `CTRL-COMMAND-SHIFT` on a Mac or `CTRL-ALT-SHIFT` on a Windows machine to pop up an input menu on the left-hand side of the browser.  Double-click on Devices.  
+Create a new scope under the Region scope.  We will create three scopes under the Region.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_011.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_011.png" style="width:100%;height:100%;"></a>  
 
@@ -127,7 +142,7 @@ With the focus still on the Ansible console, enter the sequence `CTRL-COMMAND-SH
 
 <div class="step" id="step-012"><a href="#step-012" style="font-weight:bold">Step 012</a></div>  
 
-Double-click on the home folder.
+Name the first scope under the Region nopCommerce,  and set the query to *orchestrator_AppName = nopCommerce.  This query will match the Windows app servers.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_012.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_012.png" style="width:100%;height:100%;"></a>  
 
@@ -135,7 +150,7 @@ Double-click on the home folder.
 
 <div class="step" id="step-013"><a href="#step-013" style="font-weight:bold">Step 013</a></div>  
 
-Double-click on the eks-credentials file and save the file to your desktop.
+Create another scope under the Region scope.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_013.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_013.png" style="width:100%;height:100%;"></a>  
 
@@ -143,7 +158,7 @@ Double-click on the eks-credentials file and save the file to your desktop.
 
 <div class="step" id="step-014"><a href="#step-014" style="font-weight:bold">Step 014</a></div>  
 
-Open the eks_credentials file in a text editor,  and copy the token to the clipboard.  
+Name the scope OpenCart,  and enter the query *orchestrator_AppName = OpenCart.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_014.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_014.png" style="width:100%;height:100%;"></a>  
 
@@ -151,7 +166,7 @@ Open the eks_credentials file in a text editor,  and copy the token to the clipb
 
 <div class="step" id="step-015"><a href="#step-015" style="font-weight:bold">Step 015</a></div>  
 
-Paste the copied token in the Auth Token field in the External Orchestrator Configuration.  Ensure that there are no blank spaces at the end of the string.
+Create another scope under the Region scope.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_015.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_015.png" style="width:100%;height:100%;"></a>  
 
@@ -159,7 +174,7 @@ Paste the copied token in the Auth Token field in the External Orchestrator Conf
 
 <div class="step" id="step-016"><a href="#step-016" style="font-weight:bold">Step 016</a></div>  
 
-Here we provide the path to the Kubernetes API running on the master node. Click on Hosts List,  and click the + icon to add a new host.  Enter the EKS endpoint, which is provided in the student worksheet.  Enter 443 as the TCP port,  then click Create.
+Enter Common Apps for the name and enter the query *orchestrator_AppGroup = Common.  This will match the Windows Active Directory and Ansible servers.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_016.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_016.png" style="width:100%;height:100%;"></a>  
 
@@ -167,7 +182,7 @@ Here we provide the path to the Kubernetes API running on the master node. Click
 
 <div class="step" id="step-017"><a href="#step-017" style="font-weight:bold">Step 017</a></div>  
 
-The Connection Status will initiall report Failure.  Click on the red Failure status and it should display status of "Waiting to connect".
+Click Commit Scope Updates to approve the new scopes and have the new scope structure take affect.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_017.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_017.png" style="width:100%;height:100%;"></a>  
 
@@ -175,9 +190,9 @@ The Connection Status will initiall report Failure.  Click on the red Failure st
 
 <div class="step" id="step-018"><a href="#step-018" style="font-weight:bold">Step 018</a></div>  
 
-It will take a few minutes for the connection to become active.  Refresh the screen until the status indicates Success.  
+After a few minutes, the warning icon that indicates scopes have not been committed will disappear.  
 
-> If the Connection Status does not change to Success,  check the messages in the Configuration Details.
+> You may have to refresh your screen a few times.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_018.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_018.png" style="width:100%;height:100%;"></a>  
 
@@ -185,9 +200,7 @@ It will take a few minutes for the connection to become active.  Refresh the scr
 
 <div class="step" id="step-019"><a href="#step-019" style="font-weight:bold">Step 019</a></div>  
 
-Now that the External Orchestrators are configured, we can use the annotations that they provide as search criteria throughout the Tetration platform.   They can be used to search for workloads with Inventory Search or flows with Flow Search,  and can be used in matching criteria when defining Inventory Filters and Scopes. We will see many examples of this throughout the upcoming modules,  but for now we will use Inventory search to search for workloads that are annotated with the tags from the External Orchestrators.
-
-Click on Visibility and Inventory Search.
+Now we will verify that the queries match the workloads in the lab environment.  Click on the query orchestrator_AppGroup = Common.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_019.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_019.png" style="width:100%;height:100%;"></a>  
 
@@ -195,7 +208,7 @@ Click on Visibility and Inventory Search.
 
 <div class="step" id="step-020"><a href="#step-020" style="font-weight:bold">Step 020</a></div>  
 
-Click on Filters to drop down the help for the available annotations that can be used as filter criteria.
+Here you should see listed the Active Directory server as well as CentOS machine which is the Ansible server.  Cross check the IP addressing against your pod information.  Click the back button on the browser to return to the previous screen.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_020.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_020.png" style="width:100%;height:100%;"></a>  
 
@@ -203,7 +216,7 @@ Click on Filters to drop down the help for the available annotations that can be
 
 <div class="step" id="step-021"><a href="#step-021" style="font-weight:bold">Step 021</a></div>  
 
-Note the annotations coming from external orchestrators or static annotations will be prefixed with a *.
+Click on the query *orchestrator_AppName = nopCommerce.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_021.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_021.png" style="width:100%;height:100%;"></a>  
 
@@ -211,7 +224,7 @@ Note the annotations coming from external orchestrators or static annotations wi
 
 <div class="step" id="step-022"><a href="#step-022" style="font-weight:bold">Step 022</a></div>  
 
-Enter the search criteria `* orchestrator_AppName = nopCommerce` and select Search. This is matching on the AWS tag AppName,  which has been assigned the value of nopCommerce on the Microsoft IIS and Microsoft SQL servers in the AWS environment.
+Here we should see the IIS and MSSqlServer Windows servers that make up the nopCommerce application.  Click back in the browser to return to the previous screen.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_022.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_022.png" style="width:100%;height:100%;"></a>  
 
@@ -219,7 +232,9 @@ Enter the search criteria `* orchestrator_AppName = nopCommerce` and select Sear
 
 <div class="step" id="step-023"><a href="#step-023" style="font-weight:bold">Step 023</a></div>  
 
-Enter the search criteria `* orchestrator_AppCluster = App` and select Search. This query matches on the AWS tag AppCluster, which has been assiged the value App on the IIS Web Server and the Apache web server.
+Click on the *orchestrator_AppName = OpenCart query.
+
+
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_023.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_023.png" style="width:100%;height:100%;"></a>  
 
@@ -227,20 +242,12 @@ Enter the search criteria `* orchestrator_AppCluster = App` and select Search. T
 
 <div class="step" id="step-024"><a href="#step-024" style="font-weight:bold">Step 024</a></div>  
 
-Enter the search criteria `* orchestrator_system/namespace = sock-shop` and press Search. This query matches the Kubernetes namespace that has been created for the microservices application running on the EKS cluster.  The addresses returned are pods associated with the application tiers.  
+The workloads listed here are the Linux machines running Apache and MySQL that make up the OpenCart web application.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_024.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_024.png" style="width:100%;height:100%;"></a>  
 
 
-
-<div class="step" id="step-025"><a href="#step-025" style="font-weight:bold">Step 025</a></div>  
-
-Enter the search criteria `* orchestrator_AppCluster` = front-end and select Search.  This query matches the Kubernetes label placed on the pod providing front-end web services for the application.  Notice that in addition to being a Kubernetes label, the name AppCluster is also an AWS tag. The name overlap between the Kubernetes labels and AWS tags does not cause any issues.
-
-<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_025.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/images/module07_025.png" style="width:100%;height:100%;"></a>  
+You have reached the end of this module.  
 
 
-YOU HAVE COMPLETED THIS MODULE
-
-
-| [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/module08/) |
+| [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/) |
