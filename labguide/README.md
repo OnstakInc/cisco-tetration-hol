@@ -7,7 +7,7 @@
 [Module03: Agent Installation](https://onstakinc.github.io/cisco-tetration-hol/labguide/module03/)  
 [Module04: Agent Config](https://onstakinc.github.io/cisco-tetration-hol/labguide/module04/)  
 [Module05: Annotations](https://onstakinc.github.io/cisco-tetration-hol/labguide/module05/)   
-[Module06: External Orchestrators](https://onstakinc.github.io/cisco-tetration-hol/labguide/module06/)
+[Module06: External Orchestrators](https://onstakinc.github.io/cisco-tetration-hol/labguide/module06/)  
 [Module07: Scopes](https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/)  
 [Module08: Ingest Appliance - AWS VPC Flow Logs and ASA NAT Stitching](https://onstakinc.github.io/cisco-tetration-hol/labguide/module08/)  
 [Module09: Edge Appliance - ISE](https://onstakinc.github.io/cisco-tetration-hol/labguide/module09/)  
