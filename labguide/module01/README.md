@@ -28,9 +28,9 @@ This lab is structured in a way that allows the learner to follow along a consis
 
 Credentials, specifically the *usernames* and *passwords* used in this lab are quite straightforward and are broken down into two very simple categories. 
 
-1. Credentials used to *access to the lab environment*
+1. Credentials used to __*access to the lab environment*__
    * Used with your instance of TaaS, as well as Guacamole **ONLY** and unique to every student (see CSV section above)
-2. Credentials used once *inside the lab environment*
+2. Credentials used once __*inside the lab environment*__
    * Once inside the environment, __*ALL*__ usernames and passwords are the same:
      * Username: `ciscolab`
      * Password:  `tet123$$!`
