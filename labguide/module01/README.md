@@ -30,7 +30,7 @@ Credentials, specifically the *usernames* and *passwords* used in this lab are q
 
 1. Credentials used to __*access to the lab environment*__
    * Used **ONLY** with your instance of Guacamole (and possibly TaaS) and is unique to every student (see CSV section below)
-2. Credentials used once __*inside the lab environment*__
+2. Credentials used __*once inside the lab environment*__
    * Once inside the environment, __*ALL*__ usernames and passwords are the same:
      * Username: `ciscolab`
      * Password:  `tet123$$!`
