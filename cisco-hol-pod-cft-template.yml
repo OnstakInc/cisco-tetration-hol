@@ -484,8 +484,12 @@ Resources:
           Clear-DnsClientCache
           Add-DnsServerPrimaryZone -NetworkId "${ASAvInsideSubnet}/24" -ReplicationScope Forest
           Add-DnsServerResourceRecordA -Name tet-edge -ZoneName hol.local -IPv4Address ${CiscoHOLEC2TetEdge.PrivateIp}
+          Add-DnsServerResourceRecordA -Name edge -ZoneName hol.local -IPv4Address ${CiscoHOLEC2TetEdge.PrivateIp}
           Add-DnsServerResourceRecordA -Name tet-data -ZoneName hol.local -IPv4Address ${CiscoHOLEC2TetData.PrivateIp}
+          Add-DnsServerResourceRecordA -Name tet-data-ingest -ZoneName hol.local -IPv4Address ${CiscoHOLEC2TetData.PrivateIp}
+          Add-DnsServerResourceRecordA -Name data-ingest -ZoneName hol.local -IPv4Address ${CiscoHOLEC2TetData.PrivateIp}
           Add-DnsServerResourceRecordA -Name isev-small-2-4 -ZoneName hol.local -IPv4Address ${ISEIPAddress}
+          Add-DnsServerResourceRecordA -Name ise -ZoneName hol.local -IPv4Address ${ISEIPAddress}
           </powershell>
       NetworkInterfaces:
         - AssociatePublicIpAddress: "true"
@@ -1730,15 +1734,25 @@ Resources:
       PolicyDocument:
         Version: 2012-10-17
         Statement:
+        - Sid: ListObjectsInBucket
+          Effect: Allow
+          Action: s3:ListBucket
+          Resource:
+          - !Sub "arn:aws:s3:::${CiscoHOLVPCFlowLogS3Bucket}"
+        - Sid: AllObjectActions
+          Effect: Allow
+          Action: s3:*Object
+          Resource:
+          - !Sub "arn:aws:s3:::${CiscoHOLVPCFlowLogS3Bucket}/*"
         - Effect: Allow
-          Action: ec2:Describe*
+          Action: ec2:DescribeInstances
           Resource: "*"
+          Condition:
+            StringEquals:
+              ec2:ResourceTag/aws:cloudformation:stack-name: !Ref StudentName
         - Effect: Allow
           Action: elasticloadbalancing:Describe*
           Resource: "*"
-        # - Effect: Allow
-        #   Action: subnet:Describe*
-        #   Resource: "*"
           
   CiscoHOLIAMUserAccessKey:
     Type: AWS::IAM::AccessKey
