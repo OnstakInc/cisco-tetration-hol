@@ -8,7 +8,39 @@ Cisco Tetration is a powerful tool that allows organizations to easily define an
 
 ### Structure and Layout of this Lab Guide
 
-This lab is structured in a way that allows the learner to follow along 
+This lab is structured in a way that allows the learner to follow along a consistent path on the journey of designing and configuring Cisco Tetration to an effective working state. Throughout this guide, each module will begin with a video that walks through every task that the learner will accomplish. Following the video, screenshots along with instructions will highlight the important steps that the learner is intended to perform. It is important to note that while the screens should appear quite consistent with what the learner will experience in their own environment, the *values* input into those screens, such as IP addresses and even perhaps AWS regions may (and will likely, though not always) be quite different than those seen in the videos and accompanying screenshots. While hostnames are not always usually very important in this lab, for the most part they should remain the same, with the possible exception of ISE. 
+
+> NOTE: Values such as IP addresses **WILL** be different from student to student, and the learner **MUST** always refer to their own CSV or Excel spreadsheet for any IP addressing, public URLs, unique AWS credentials (Access & Secret keys), EKS cluster endpoints, etc. 
+
+Every student will be provided with an Excel or CSV file and is encouraged open a browser window to our choice here for an [online CSV/Excel viewer](https://sheet.zoho.com/sheet/excelviewer), drop your CSV/XLS file there, and continue to reference that file throughout your interaction with this lab environment, as seen here in the short video below.
+
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_001.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_001.png" style="width:50%;height:50%;"></a>  
+
+
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01a_online_csv_viewer.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of interaction with the student CSV and online viewer.</a>
+
+
+
+PASSWORDS
+`tet123$$!`
+
+GUAC
+
+
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01b_guac_user_access.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of interaction with the student Guacamole webUI console.</a>
+
+
+### Integrations with Tetration
+
+Included in this lab are multiple integrations with Tetration, including:
+
+* Cisco Identity Services Engine (ISE) for user-based authentication with TrustSec SGTs
+* Cisco ASAv Firewall with NAT Flow Stiching
+* Windows Active Directory LDAP (currently via Tet Edge & ISE)
+* AWS VPC Flow Logs (for visibility outside of agent communication)
+* AWS Tags (for dynamic VM-based policy)
+* Kubernetes Labels (for dynamic container-based policy)
 
 ### Lab Environment
 
@@ -69,8 +101,8 @@ Your complete lab environment consists of the following assets:
 ##### "External/Internet" Subnet (outside firewall)
 
 ###### End Users (on internet outside firewall)
-   * Employee (Win10)
-   * SysAdmin (Win10)
+   * Employee (Win10 or Ubuntu18 Desktop)
+   * SysAdmin (Win10 or Ubuntu18 Desktop)
 
 
 ##### Straddling Internal Corporate & External Internet Subnets
@@ -84,8 +116,6 @@ Your complete lab environment consists of the following assets:
 
 
 
-
-### Steps for this Module  
 
 
 
