@@ -15,7 +15,7 @@ This lab is structured in a way that allows the learner to follow along a consis
 Every student will be provided with an Excel or CSV file and is encouraged open a browser window to our choice here for an [online CSV/Excel viewer](https://sheet.zoho.com/sheet/excelviewer), drop your CSV/XLS file there, and continue to reference that file throughout your interaction with this lab environment, as seen here in the short video below.
 
 
-<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_001.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/images/module02_001.png" style="width:50%;height:50%;"></a>  
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_001.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_001.png" style="width:50%;height:50%;"></a>  
 
 
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01a_online_csv_viewer.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of interaction with the student CSV and online viewer.</a>
