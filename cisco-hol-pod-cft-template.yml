@@ -1745,11 +1745,11 @@ Resources:
           Resource:
           - !Sub "arn:aws:s3:::${CiscoHOLVPCFlowLogS3Bucket}/*"
         - Effect: Allow
-          Action: ec2:DescribeInstances
+          Action: ec2:Describe*
           Resource: "*"
-          Condition:
-            StringEquals:
-              ec2:ResourceTag/aws:cloudformation:stack-name: !Ref StudentName
+          #Condition:
+          #  StringEquals:
+          #    ec2:ResourceTag/StudentName: !Ref StudentName
         - Effect: Allow
           Action: elasticloadbalancing:Describe*
           Resource: "*"

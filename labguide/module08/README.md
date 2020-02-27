@@ -1,7 +1,8 @@
 # Cisco Tetration - Hands-On Lab
   
 ## Module08: Ingest Appliance - AWS VPC Flow Logs and ASA NAT Stitching
-  
+
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/09a_Comissioning_Tetration_Edge_Appliance.mp4" style="font-weight:bold" title="Data Ingest Appliance and ASAv NAT Flow Stiching"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video showing the necessary tasks to comission the Tetration Data Ingest appliance to prepare for integration with ASA and AWS (note this video shows the Tetration Edge appliance, however Data Ingest appliance is nearly identical with exception of three IP addresses rather than one).</a>
 
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/08a_Tetration_Data_Ingest_-_ASAv.mp4" style="font-weight:bold" title="Data Ingest Appliance and ASAv NAT Flow Stiching"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video showing the necessary tasks to configure the ASAv to send NetFlow to the Tetration Data Ingest appliance and allow Tetration stich NAT'd flows together.</a>
 

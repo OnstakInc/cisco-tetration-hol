@@ -1,7 +1,12 @@
 # Cisco Tetration - Hands-On Lab
   
 ## Module09: Edge Appliance - ISE
-  
+
+
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/09a_Comissioning_Tetration_Edge_Appliance.mp4" style="font-weight:bold" title="Data Ingest Appliance and ASAv NAT Flow Stiching"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video showing the necessary tasks to comission the Tetration Edge appliance to prepare for integration with Cisco ISE.</a>
+
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/09b_ISE_Integration.mp4" style="font-weight:bold" title="Data Ingest Appliance and ASAv NAT Flow Stiching"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video showing the necessary tasks to integrate Cisco ISE with Tetration to prepare to support user-based policy in Module 16.</a>
+
 
 ### Steps for this Module  
 
