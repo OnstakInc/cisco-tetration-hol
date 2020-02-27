@@ -33,13 +33,13 @@ Credentials, specifically the *usernames* and *passwords* used in this lab are q
 2. Credentials used once *inside the lab environment*
    * Once inside the environment, __*ALL*__ usernames and passwords are the same:
      * Username: `ciscolab`
-     * Password: `tet123$$!`
+     * Password:  `tet123$$!`
 
 
 <div class="link" id="CSV"><a href="#CSV" style="font-weight:bold">Student/Pod-Specific Information - CSV File</a></div>
 
 
-> NOTE: Values such as IP addresses **WILL** be different from student to student, and the learner **MUST** always refer to their own CSV or Excel spreadsheet for any IP addressing, public URLs, unique AWS credentials (Access & Secret keys), EKS cluster endpoints, etc. 
+> NOTE: Values such as IP addresses **WILL be different** from student to student, and the learner **MUST always** refer to their own CSV or Excel spreadsheet for any IP addressing, public URLs, unique AWS credentials (Access & Secret keys), EKS cluster endpoints, etc. 
 
 Every student will be provided with an Excel or CSV file from which to derive all pod-specific values from such as those noted in the NOTE section just above. 
 
