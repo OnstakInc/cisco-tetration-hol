@@ -43,7 +43,7 @@ Credentials, specifically the *usernames* and *passwords* used in this lab are q
 
 Every student will be provided with an Excel or CSV file from which to derive all pod-specific values from such as those noted in the NOTE section just above. 
 
-<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_001.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_001.png" style="width:50%;height:50%;"></a>  
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_001.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_001.png" style="width:100%;height:100%;"></a>  
 
 A list of what you will find in this CSV file is as follows:
 
@@ -83,13 +83,13 @@ This diagram depicts how you will gain access to the workloads running in your l
   
 The "Home" screen of Guac should look something like this:
 
-<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_002.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_002.png" style="width:50%;height:50%;"></a>  
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_002.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_002.png" style="width:100%;height:100%;"></a>  
 
 From here you will be able to simply click on any one of the hosts in the "Connections" menu to connect to that virtual machine. If you would like to open each new connection in a new window, either right-click and choose "Open in New Tab/Window", or you may press `Ctrl-click` on Windows, or `Cmd-click` (`⌘ click`) on a Mac. 
 
 If you do happen to find yourself seemingly *stuck* inside a single host connection to an RDP desktop or SSH shell session, you may always get back to the "Home" screen by pressing `Ctrl-Alt-Shift` on Windows, or `Ctrl-Option-Shift` (`⌃ ⌥ ⇧`) on a Mac, which should bring up a sidebar menu where you can then click on your student name (`cisco-student-xx`) at the top-right of that menu. This will then present you with an option to click "Home" and should look something like this:
 
-<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_003.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_003.png" style="width:50%;height:50%;"></a>  
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_003.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_003.png" style="width:100%;height:100%;"></a>  
 
 
 Throughout this lab, there will come times when you must get files from your local workstation over to one of the hosts in your lab environment. The ability to copy files directly to and from the remote desktop or even to any linux shell session can be accomplished quite easily by simply dragging them from your local workstation desktop over to the web browser where Guac is already signed into a remote host and just dropping them there. For Windows or even Ubuntu Desktop this will use the native RDP copy/paste functionality, and for a linux shell session this will seemlessly instantiate a direct SFTP session. No further work is necessary on your part. Note that for Windows files may appear on the desktop or wherever you dragged and released them to. For Linux files will __*always*__ appear in `/home/ciscolab/`, no matter what directory you may be `cd` into. 
