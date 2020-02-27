@@ -24,7 +24,7 @@
 
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  
 
-First we will create an Inventory Filter to describe the Internet.  It will then be used to define policy to allow access from internal resources to the Internet.  
+First we will create an Inventory Filter to describe IP address space external from the organization.  It will then be used to define policy to allow access from internal resources to the Internet.  
 
 Click on Visibility and select Inventory Filters.
 
