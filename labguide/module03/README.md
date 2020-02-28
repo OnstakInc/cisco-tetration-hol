@@ -1,11 +1,45 @@
 # Cisco Tetration - Hands-On Lab
 
-## Module03 - Sensor Installation
-Tetration sensor installation can be performed manually using a shell script for Linux and a Powershell script (.ps1) for Windows. These scripts can also be leveraged by 3rd party software configuration management systems such as Ansible, Puppet, Microsoft SCCM, etc. to automate deployment across multiple machines.  The installation does not require any modification to run unattended, the scripts run without any interaction required from the administrator. It is important that the scripts be downloaded from the Tetration cluster, as they have specific information embedded to connect to the cluster.  When the script is executed, it will pull down the required software from the Tetration cluster based on the Operating System in use. This means that outbound connectivity from each server to the Tetration cluster is a requirement.
+## Module03 - Agent Installation
+Tetration agent (also called sensor) installation can be performed manually using a shell script for Linux and a Powershell script (.ps1) for Windows. These scripts can also be leveraged by 3rd party software configuration management systems such as Ansible, Puppet, Microsoft SCCM, etc. to automate deployment across multiple machines. The installation does not require any modification to run unattended, the scripts run without any interaction required from the administrator. It is important that the scripts be downloaded from the Tetration cluster, as they have specific information embedded to connect to the cluster.  When the script is executed, it will pull down the required software from the Tetration cluster based on the Operating System in use. This means that outbound connectivity from each server to the Tetration cluster is a requirement.
 
 In this module, we'll download the installation scripts for Windows and Linux from the Tetration cluster and use Ansible to perform automated rollout of the sensors.
 
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/03_agent_installation.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of the tasks being performed to install Tetration sensors.</a>  
+---
+
+This diagram depicts how you will deploy Tetration Agents out to each of your workloads in your lab environment. Deployment will occur by performing the following tasks:
+   1. Connect to the Guac server via HTTPS
+   2. Click on and connecting to the Ansible machine
+   3. Verify and, if necessary, edit the inventory for deployment by first changing directories with `cd /opt/ansible-tetration-sensor/` running `sudo nano inventory/hosts` and when prompted with `[sudo] password for ciscolab:`, entering the standard lab password of `tet123$$!`. 
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_007.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_007.png" style="width:100%;height:100%;"></a>  
+
+The Ansible machine is already configured to deploy agents out to the following workloads by OS:
+
+   * Windows 2019
+      * nopCommerce IIS server
+      * nopCommerce MSSQL server
+      * Active Directory server
+   * CentOS 7
+      * OpenCart Apache server
+      * OpenCart MySQL server
+      * Ansible Automation server (itself)
+   * Ubuntu 16.04
+      * EKS Worker Node
+
+---
+
+
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/03a_agent_installation_manual.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of demonstrating how to install Tetration sensors manually (this is for demo only - these tasks will not be performed in this module).</a>  
+
+
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/03b_firewalld_ipsets_iptables.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of demonstrating how to disable firewalld and install ipsets and iptables in linux prior to sensor install (this is for demo only - these tasks will not be performed in this module).</a>  
+
+
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/03c_agent_installation_w_ansible.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of the tasks being performed to install Tetration sensors using Ansible (tasks covered in this module).</a>  
+
+
+---
 
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Navigate to Agent Config</a>  

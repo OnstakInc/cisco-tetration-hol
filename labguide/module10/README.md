@@ -2,8 +2,35 @@
 
 ## Module10: ATTACK! & Post Attack Forensic Analysis
 
+---
+
+
+This diagram depicts the flow of traffic that will be used during the lab that calls for you to initiate a live attack from the Kali Linux server running the Metasploit toolkit. This will demonstrate the [MITRE ATT&CK Framework](https://attack.mitre.org/){:target="_blank"} that has been defined by the not-for-profit organization called Mitre Corporation - whose charters and funding come from (among other places) [NIST](https://www.nist.gov/){:target="_blank"}. This is also the organization that maintains ["CVEs" or "Common Vulnerabilities and Exposures"](https://cve.mitre.org/){:target="_blank"} as a part of the ["NVD" or "National Vulnerability Database"](https://nvd.nist.gov/){:target="_blank"}. This framework articulates the systematic approach that virtually every breach consists of. 
+
+This consists of:
+1. Initial Access
+2. Execution
+3. Persistence
+4. Privilege Escalation
+5. Defense Evasion
+6. Credential Access
+7. Discovery
+8. Lateral Movement
+9. Collection
+10. Command and Control
+11. Exfiltration
+12. Impact
+
+You will use this diagram when performing the lab that will have you attack a known vulnerability running on the server hosting the OpenCart webapp tier and then continuing on to accomplish lateral movement to other higher-value targets, such as the DB containing customer info with PII. 
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_010.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/diagrams_010.png" style="width:100%;height:100%;"></a>  
+
+
+---
+
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/10_forensics.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video that demonstrates a live attack and the ability to detect the attack and perform Forensic analysis.</a>
 
+---
 
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Navigate to Agent Config</a>  
@@ -27,6 +54,7 @@
 <a href="#step-019" style="font-weight:bold">Step 019 - View process tree</a>  
 <a href="#step-020" style="font-weight:bold">Step 020 - View detailed process info</a>  
 
+---
 
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  
 
