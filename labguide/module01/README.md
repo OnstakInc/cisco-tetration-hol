@@ -194,7 +194,7 @@ Your complete lab environment consists of the following assets:
 
 <div class="link" id="LabGuide"><a href="#LabGuide" style="font-weight:bold">Lab Assets</a></div>
 
-It's time to get started on the lab, and that warrents a very brief discussion on how to get the most out of using this lab guide. In every module you will find three essential sections
+It's time to get started on the lab, and that warrants a very brief discussion on how to get the most out of using this lab guide. In every module you will find three essential sections
 
 1. Introduction and Background
 2. Video of Tasks Being Performed
