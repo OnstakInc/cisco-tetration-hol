@@ -2,7 +2,7 @@
 
 ## Module12: Policy Creation - Hierarchical Policy - Global Services
 
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/12_policy_creation_global_services.mp4" style="font-weight:bold" title="Policy Analysis - Global Services"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of the tasks necessary to perform policy analysis for the services provided at the hierarchical Global level.</a>
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/12_policy_creation_global_services.mp4" style="font-weight:bold" title="Policy Analysis - Global Services"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of the tasks necessary to create hierarchical policy that will later be enforced at a Global level.</a>
 
 
 ### Steps for this Module  
