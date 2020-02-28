@@ -1,6 +1,6 @@
 # Cisco Tetration - Hands-On Lab
 
-## Module10: ATTACK! & Post Attack Forensic Analysis
+## Module10: ATT&CK! & Post Attack Forensic Analysis
 
 ---
 

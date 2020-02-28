@@ -11,7 +11,7 @@
 [Module07: Scopes](https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/)  
 [Module08: Ingest Appliance - AWS VPC Flow Logs and ASA NAT Stitching](https://onstakinc.github.io/cisco-tetration-hol/labguide/module08/)  
 [Module09: Edge Appliance - ISE](https://onstakinc.github.io/cisco-tetration-hol/labguide/module09/)  
-[Module10: ATTACK! & Post Attack Forensic Analysis](https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/)  
+[Module10: ATT&CK! & Post Attack Forensic Analysis](https://onstakinc.github.io/cisco-tetration-hol/labguide/module10/)  
 [Module11: Policy Creation - Inventory Filters](https://onstakinc.github.io/cisco-tetration-hol/labguide/module11/)  
 [Module12: Policy Creation - Hierarchical Policy - Global Services](https://onstakinc.github.io/cisco-tetration-hol/labguide/module12/)  
 [Module13: Policy Creation - ADM and Clusters - Common Policies](https://onstakinc.github.io/cisco-tetration-hol/labguide/module13/)  
