@@ -5,11 +5,16 @@ In this module we will configure Collection Rules.  Collection Rules govern what
 
 When configuring Collection rules, we must first delete the IPv6 and IPv4 rules that are configured by default in a new Tetration deployment. Then we can create our own specific rules to match the internal IP space. In the lab,  we'll assume the customer uses all RFC1918 private address space inside their organization.
 
-Perform the following tasks to configure Collection Rules.  
+---
 
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/02_collection_rules.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of the tasks being performed to configure Collection Rules.</a>
 
+---
+
 ### Steps for this Module  
+
+Perform the following tasks to configure Collection Rules.  
+
 <a href="#step-001" style="font-weight:bold">Step 001 - Navigate to Collection Rules</a>  
 <a href="#step-002" style="font-weight:bold">Step 002 - Edit the Collection Rules</a>  
 <a href="#step-003" style="font-weight:bold">Step 003 - Delete the default IPv6 rule</a>  

@@ -15,6 +15,7 @@ Cisco Tetration is a powerful tool that allows organizations to easily define an
 <a href="#Integrations" style="font-weight:bold">Integrations with Tetration</a>  
 <a href="#Environment" style="font-weight:bold">Lab Environment</a>  
 <a href="#Assets" style="font-weight:bold">Lab Assets</a>  
+<a href="#LabGuide" style="font-weight:bold">Using the Lab Guide</a>  
 
 ---
 
@@ -94,7 +95,7 @@ If you do happen to find yourself seemingly *stuck* inside a single host connect
 
 Throughout this lab, there will come times when you must get files from your local workstation over to one of the hosts in your lab environment. The ability to copy files directly to and from the remote desktop or even to any linux shell session can be accomplished quite easily by simply dragging them from your local workstation desktop over to the web browser where Guac is already signed into a remote host and just dropping them there. For Windows or even Ubuntu Desktop this will use the native RDP copy/paste functionality, and for a linux shell session this will seemlessly instantiate a direct SFTP session. No further work is necessary on your part. Note that for Windows files may appear on the desktop or wherever you dragged and released them to. For Linux files will __*always*__ appear in `/home/ciscolab/`, no matter what directory you may be `cd` into. 
 
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01b_guac_user_access.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of interaction with the student Guacamole webUI console.</a>
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01b_guac_user_access.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png">Click here to view a video of interaction with the student Guacamole webUI console.</a>
 
 
 <div class="link" id="Integrations"><a href="#Integrations" style="font-weight:bold">Integrations with Tetration</a></div>
@@ -188,6 +189,24 @@ Your complete lab environment consists of the following assets:
 
 
 
-  
+<div class="link" id="LabGuide"><a href="#LabGuide" style="font-weight:bold">Lab Assets</a></div>
+
+It's time to get started on the lab, and that warrents a very brief discussion on how to get the most out of using this lab guide. In every module you will find three essential sections
+
+1. Introduction and Background
+2. Video of Tasks Being Performed
+3. Tasks, Instructions, and Screenshots to Perform Tasks
+
+This image shows the three sections for a given module:
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_004.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_004.png" style="width:100%;height:100%;"></a>  
+
+
+We highly recommend having a quick read on the intro, then possibly a quick watch of the video, followed by beginning to perform the tasks yourself in your own instance of TaaS. However, you may find it more adventageous to go ahead and begin following the instructions and perfoming the tasks yourself with the aid of the screenshots once you've reviewed the intro. Should you choose this method, you may at times find it nice to watch along as someone performs those tasks along side you. To accomplish this you can choose to use the picture-in-picture method to watch the video while you simultaneously perform the necessary tasks in TaaS. For this we highly recommend using [Google Chrome](https://www.google.com/chrome/){:target="_blank"} for the best browsing experience.
+
+To use this method, simply click on the video you wish to watch, pause the video, click the virtical elipses at the bottom right of the player, click "Picture in Picture", switch to the browser tab or window logged into TaaS, resize as desired, unpause, and begin your task while watching along as we perform the same task. Pause as desired. Scrubbing the playhead to Rewind is only supported by going back full screen, although once you get the hang of it you should be able to do this rather quickly, when needed. 
+
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01c_pip_w_taas.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png">Click here to watch a short video on how to perform tasks with picture-in-picture video.</a>
+
 
 | [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/) |
