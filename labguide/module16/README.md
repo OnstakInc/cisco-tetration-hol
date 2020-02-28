@@ -25,22 +25,24 @@ In this lab diagram, SysAdmins not only get standard access to the app front-end
 
 
 ### Steps for this Module  
-<a href="#step-001" style="font-weight:bold">Step 001</a>  
-<a href="#step-002" style="font-weight:bold">Step 002</a>  
-<a href="#step-003" style="font-weight:bold">Step 003</a>  
-<a href="#step-004" style="font-weight:bold">Step 004</a>  
-<a href="#step-005" style="font-weight:bold">Step 005</a>  
-<a href="#step-006" style="font-weight:bold">Step 006</a>  
-<a href="#step-007" style="font-weight:bold">Step 007</a>  
-<a href="#step-008" style="font-weight:bold">Step 008</a>  
-<a href="#step-009" style="font-weight:bold">Step 009</a>  
-<a href="#step-010" style="font-weight:bold">Step 010</a>  
-<a href="#step-011" style="font-weight:bold">Step 011</a>  
-<a href="#step-012" style="font-weight:bold">Step 012</a>  
-<a href="#step-013" style="font-weight:bold">Step 013</a>  
+<a href="#step-001" style="font-weight:bold">Step 001 - Navigate to Inventory Filters</a>  
+<a href="#step-002" style="font-weight:bold">Step 002 - Create a new Inventory filter for SysAdmins"</a>  
+<a href="#step-003" style="font-weight:bold">Step 003 - Review workloads and create</a>  
+<a href="#step-004" style="font-weight:bold">Step 004 - Create an new Inventory Filter for Employees</a>  
+<a href="#step-005" style="font-weight:bold">Step 005 - Review workloads and create</a>  
+<a href="#step-006" style="font-weight:bold">Step 006 - Navigate to the nopCommerce App Workspace and Add Default Policy</a>  
+<a href="#step-007" style="font-weight:bold">Step 007 - Add SysAdmins to nopCommerce rule</a>  
+<a href="#step-008" style="font-weight:bold">Step 008 - Add TCP 3389 service to the rule</a>  
+<a href="#step-009" style="font-weight:bold">Step 009 - Review the new rule</a>  
+<a href="#step-010" style="font-weight:bold">Step 010 - Navigate to the OpenCart App Workspace and add a Default Policy</a>  
+<a href="#step-011" style="font-weight:bold">Step 011 - Add a rule from SysAdmins to the OpenCart Scope</a>  
+<a href="#step-012" style="font-weight:bold">Step 012 - Add a rule from Employees to the OpenCart-App cluster</a>  
+<a href="#step-013" style="font-weight:bold">Step 013 - Add TCP port 8080 to the Employees to OpenCart-App rule</a>  
 
 
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  
+
+Navigate to Inventory Filters and create a new filter.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_001.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_001.png" style="width:100%;height:100%;"></a>  
 
@@ -48,11 +50,15 @@ In this lab diagram, SysAdmins not only get standard access to the app front-end
 
 <div class="step" id="step-002"><a href="#step-002" style="font-weight:bold">Step 002</a></div>  
 
+Enter the name SysAdmin for the Inventory Filter and the query `* ISE_ctsSecurityGroup = SysAdmins`.  This query will match on the ISE Security Group Tag called SysAdmins,  which is in turn mapped to a group in Active Directory called SysAdmins.  
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_002.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_002.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-003"><a href="#step-003" style="font-weight:bold">Step 003</a></div>  
+
+There will most likely not be any inventory items returned yet on this screen. Later we will demonstrate a user who is a member of SysAdmins logging into a workstation using the Cisco AnyConnect VPN Client.  At that point, Tetration will receive the required information from ISE to annotate the IP address of the workstation the user logged into with the ISE security group tag SysAdmins.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_003.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_003.png" style="width:100%;height:100%;"></a>  
 
@@ -60,11 +66,16 @@ In this lab diagram, SysAdmins not only get standard access to the app front-end
 
 <div class="step" id="step-004"><a href="#step-004" style="font-weight:bold">Step 004</a></div>  
 
+Create another Inventory Filter for Employees.  Enter the name Employees and set the query to `* ISE_ctsSecurityGroup = Employees`.  
+
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_004.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_004.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-005"><a href="#step-005" style="font-weight:bold">Step 005</a></div>  
+
+Click Create.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_005.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_005.png" style="width:100%;height:100%;"></a>  
 
@@ -72,17 +83,23 @@ In this lab diagram, SysAdmins not only get standard access to the app front-end
 
 <div class="step" id="step-006"><a href="#step-006" style="font-weight:bold">Step 006</a></div>  
 
+Navigate to the nopCommerce App Workspace and add a Default Policy.  
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_006.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_006.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-007"><a href="#step-007" style="font-weight:bold">Step 007</a></div>  
+In the new rule, configure SysAdmin as the Consumer and set the Provider to the nopCommerce scope.  We are using the scope here as the provider because SysAdmins should be able to manage any workloads in the nopCommerce scope, regardless of their cluster membership.  
+
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_007.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_007.png" style="width:100%;height:100%;"></a>  
 
 
 
-<div class="step" id="step-008"><a href="#step-008" style="font-weight:bold">Step 008</a></div>  
+<div class="step" id="step-008"><a href="#step-008" style="font-weight:bold">Step 008</a></div>
+
+Add the service TCP 3389 to the rule to allow SysAdmins to be able to Remote Desktop to the servers.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_008.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_008.png" style="width:100%;height:100%;"></a>  
 
@@ -90,11 +107,15 @@ In this lab diagram, SysAdmins not only get standard access to the app front-end
 
 <div class="step" id="step-009"><a href="#step-009" style="font-weight:bold">Step 009</a></div>  
 
+The below image shows the new rule once completed.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_009.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_009.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-010"><a href="#step-010" style="font-weight:bold">Step 010</a></div>  
+
+Navigate to the OpenCart Application Workspace and create a new Default Policy.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_010.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_010.png" style="width:100%;height:100%;"></a>  
 
@@ -102,11 +123,15 @@ In this lab diagram, SysAdmins not only get standard access to the app front-end
 
 <div class="step" id="step-011"><a href="#step-011" style="font-weight:bold">Step 011</a></div>  
 
+Enter SysAdmin for the Consumer and the OpenCart scope as the provider.  Then add TCP 3306 and 22 to the list of Services.  
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_011.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_011.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-012"><a href="#step-012" style="font-weight:bold">Step 012</a></div>  
+
+Add another Default Policy with Employees as the Consumer and OpenCart-App as the Provider.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_012.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_012.png" style="width:100%;height:100%;"></a>  
 
@@ -114,10 +139,13 @@ In this lab diagram, SysAdmins not only get standard access to the app front-end
 
 <div class="step" id="step-013"><a href="#step-013" style="font-weight:bold">Step 013</a></div>  
 
+Add TCP 8080 as a service on the new rule.  Recall that previously the attacker had exploited the Apache Struts application running on TCP port 8080 remotely. This rule will make the application available to internal employees,  while still disallowing the application from being accessed externally.  We will validate this later when we move into enforcement.
+
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_013.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/images/module16_013.png" style="width:100%;height:100%;"></a>  
 
 
-
+YOU HAVE COMPLETED THIS MODULE
 
 
 | [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/module17/) |
