@@ -8,20 +8,36 @@ Cisco Tetration is a powerful tool that allows organizations to easily define an
 
 
 ### Introduction - Table of Contents
-<a href="#Structure" style="font-weight:bold">Structure and Layout of this Lab Guide</a>  
+<a href="#Structure" style="font-weight:bold">How to Use This Lab Guide</a>  
 <a href="#Credentials" style="font-weight:bold">Lab Environment Credentials</a>  
 <a href="#CSV" style="font-weight:bold">Student/Pod-Specific Information - CSV File</a>  
 <a href="#Access" style="font-weight:bold">Access to the Lab Environment - Guacamole</a>  
 <a href="#Integrations" style="font-weight:bold">Integrations with Tetration</a>  
 <a href="#Environment" style="font-weight:bold">Lab Environment</a>  
 <a href="#Assets" style="font-weight:bold">Lab Assets</a>  
-<a href="#LabGuide" style="font-weight:bold">Using the Lab Guide</a>  
 
 ---
 
 <div class="link" id="Structure"><a href="#Structure" style="font-weight:bold">Structure and Layout of this Lab Guide</a></div>
 
 This lab is structured in a way that allows the learner to follow along a consistent path on the journey of designing and configuring Cisco Tetration to an effective working state. Throughout this guide, each module will begin with a video that walks through every task that the learner will accomplish. Following the video, screenshots along with instructions will highlight the important steps that the learner is intended to perform. It is important to note that while the screens should appear quite consistent with what the learner will experience in their own environment, the *values* input into those screens, such as IP addresses and even perhaps AWS regions may (and will likely, though not always) be quite different than those seen in the videos and accompanying screenshots. While hostnames are not usually very important in this lab, for the most part they should remain the same, with the possible exception of ISE. 
+
+It's almost time to get started on the lab, and that warrants a very brief discussion on how to get the most out of using this lab guide. In every module you will find three essential sections
+
+1. Introduction and Background
+2. Video of Tasks Being Performed
+3. Tasks, Instructions, and Screenshots to Perform Tasks
+
+This image shows the three sections for a given module:
+
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_004.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_004.png" style="width:100%;height:100%;"></a>  
+
+
+We highly recommend having a quick read on the intro, then possibly a quick watch of the video, followed by beginning to perform the tasks yourself in your own instance of TaaS. However, you may find it more adventageous to go ahead and begin following the instructions and perfoming the tasks yourself with the aid of the screenshots once you've reviewed the intro. Should you choose this method, you may at times find it nice to watch along as someone performs those tasks with you. To accomplish this you can choose to use the 'picture-in-picture' method which allows you to watch the video while you simultaneously perform the necessary tasks in TaaS. For this we highly recommend using [Google Chrome](https://www.google.com/chrome/){:target="_blank"} for the best browsing experience.
+
+To use this method, simply click on the video you wish to watch, pause the video, click the virtical elipses at the bottom right of the player, click "Picture in Picture", switch to the browser tab or window logged into TaaS, resize as desired, unpause, and begin your task while watching along as we perform the same task. Pause as desired. Scrubbing the playhead to Rewind is only supported by going back full screen, although once you get the hang of it you should be able to do this rather quickly, when needed. 
+
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01c_pip_w_taas.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png">Click here to watch a short video on how to perform tasks with picture-in-picture video.</a>
 
 
 <div class="link" id="Credentials"><a href="#Credentials" style="font-weight:bold">Lab Environment Credentials</a></div>
@@ -190,26 +206,6 @@ Your complete lab environment consists of the following assets:
 ###### Lab Environment Access
    * Apache Guacamole server (CentOS 7)
 
-
-
-<div class="link" id="LabGuide"><a href="#LabGuide" style="font-weight:bold">Lab Assets</a></div>
-
-It's time to get started on the lab, and that warrants a very brief discussion on how to get the most out of using this lab guide. In every module you will find three essential sections
-
-1. Introduction and Background
-2. Video of Tasks Being Performed
-3. Tasks, Instructions, and Screenshots to Perform Tasks
-
-This image shows the three sections for a given module:
-
-<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_004.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_004.png" style="width:100%;height:100%;"></a>  
-
-
-We highly recommend having a quick read on the intro, then possibly a quick watch of the video, followed by beginning to perform the tasks yourself in your own instance of TaaS. However, you may find it more adventageous to go ahead and begin following the instructions and perfoming the tasks yourself with the aid of the screenshots once you've reviewed the intro. Should you choose this method, you may at times find it nice to watch along as someone performs those tasks with you. To accomplish this you can choose to use the 'picture-in-picture' method which allows you to watch the video while you simultaneously perform the necessary tasks in TaaS. For this we highly recommend using [Google Chrome](https://www.google.com/chrome/){:target="_blank"} for the best browsing experience.
-
-To use this method, simply click on the video you wish to watch, pause the video, click the virtical elipses at the bottom right of the player, click "Picture in Picture", switch to the browser tab or window logged into TaaS, resize as desired, unpause, and begin your task while watching along as we perform the same task. Pause as desired. Scrubbing the playhead to Rewind is only supported by going back full screen, although once you get the hang of it you should be able to do this rather quickly, when needed. 
-
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01c_pip_w_taas.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png">Click here to watch a short video on how to perform tasks with picture-in-picture video.</a>
 
 
 | [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/module02/) |
