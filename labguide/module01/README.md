@@ -39,6 +39,7 @@ To use this method, simply click on the video you wish to watch, pause the video
 
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01c_pip_w_taas.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png">Click here to watch a short video on how to perform tasks with picture-in-picture video.</a>
 
+---
 
 <div class="link" id="Credentials"><a href="#Credentials" style="font-weight:bold">Lab Environment Credentials</a></div>
 
@@ -52,6 +53,8 @@ Credentials, specifically the *usernames* and *passwords* used in this lab are q
      * Username: `ciscolab`
      * Password:  `tet123$$!`
 
+
+---
 
 <div class="link" id="CSV"><a href="#CSV" style="font-weight:bold">Student/Pod-Specific Information - CSV File</a></div>
 
@@ -87,6 +90,7 @@ You are highly encouraged open a browser window to this [online CSV/Excel viewer
 
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01a_online_csv_viewer.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of interaction with the student CSV and online viewer.</a>
 
+---
 
 <div class="link" id="Access"><a href="#Access" style="font-weight:bold">Access to the Lab Environment - Guacamole</a></div>
 
@@ -113,6 +117,7 @@ Throughout this lab, there will come times when you must get files from your loc
 
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01b_guac_user_access.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png">Click here to view a video of interaction with the student Guacamole webUI console.</a>
 
+---
 
 <div class="link" id="Integrations"><a href="#Integrations" style="font-weight:bold">Integrations with Tetration</a></div>
 
@@ -126,7 +131,7 @@ Included in this lab are multiple integrations with Tetration, including:
 * AWS Tags (for dynamic VM-based policy)
 * Kubernetes Labels (for dynamic container-based policy)
 
-
+---
 
 <div class="link" id="Environment"><a href="#Environment" style="font-weight:bold">Lab Environment</a></div>
 
