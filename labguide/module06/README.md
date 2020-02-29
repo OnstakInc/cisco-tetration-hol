@@ -6,7 +6,11 @@ In this section we will configure External Orchestrators.  Tetration provides th
 
 Follow the below steps to deploy AWS and Kubernetes as External Orchestrators in Tetration.
 
+---
+
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/06_external_orchestrators.mp4" style="font-weight:bold" title="Collection Rules Title"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video highlighting the creation of two External Orchestrators providing the ability to drive dynamic policy - namely AWS tags and Kubernetes labels.</a>
+
+---
 
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Navigate to External Orchestrators</a>  
@@ -35,6 +39,7 @@ Follow the below steps to deploy AWS and Kubernetes as External Orchestrators in
 <a href="#step-024" style="font-weight:bold">Step 024 - Search for Sock Shop namespace</a>  
 <a href="#step-025" style="font-weight:bold">Step 025 - Search for Sock Shop front-end container</a>  
 
+---
 
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  
 
@@ -235,7 +240,7 @@ Enter the search criteria `* orchestrator_system/namespace = sock-shop` and pres
 
 <div class="step" id="step-025"><a href="#step-025" style="font-weight:bold">Step 025</a></div>  
 
-Enter the search criteria `* orchestrator_AppCluster` = front-end and select Search.  This query matches the Kubernetes label placed on the pod providing front-end web services for the application.  Notice that in addition to being a Kubernetes label, the name AppCluster is also an AWS tag. The name overlap between the Kubernetes labels and AWS tags does not cause any issues.
+Enter the search criteria `* orchestrator_AppCluster = front-end` and select Search.  This query matches the Kubernetes label placed on the pod providing front-end web services for the application.  Notice that in addition to being a Kubernetes label, the name AppCluster is also an AWS tag. The name overlap between the Kubernetes labels and AWS tags does not cause any issues.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module06/images/module06_025.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module06/images/module06_025.png" style="width:100%;height:100%;"></a>  
 
