@@ -23,31 +23,34 @@ Another common place you may find RPC in use is with NFS. You will likely encoun
 
 
 ### Steps for this Module  
-<a href="#step-001" style="font-weight:bold">Step 001</a>  
-<a href="#step-002" style="font-weight:bold">Step 002</a>  
-<a href="#step-003" style="font-weight:bold">Step 003</a>  
-<a href="#step-004" style="font-weight:bold">Step 004</a>  
-<a href="#step-005" style="font-weight:bold">Step 005</a>  
-<a href="#step-006" style="font-weight:bold">Step 006</a>  
-<a href="#step-007" style="font-weight:bold">Step 007</a>  
-<a href="#step-008" style="font-weight:bold">Step 008</a>  
-<a href="#step-009" style="font-weight:bold">Step 009</a>  
-<a href="#step-010" style="font-weight:bold">Step 010</a>  
-<a href="#step-011" style="font-weight:bold">Step 011</a>  
-<a href="#step-012" style="font-weight:bold">Step 012</a>  
-<a href="#step-013" style="font-weight:bold">Step 013</a>  
-<a href="#step-014" style="font-weight:bold">Step 014</a>  
-<a href="#step-015" style="font-weight:bold">Step 015</a>  
-<a href="#step-016" style="font-weight:bold">Step 016</a>  
-<a href="#step-017" style="font-weight:bold">Step 017</a>  
-<a href="#step-018" style="font-weight:bold">Step 018</a>  
-<a href="#step-019" style="font-weight:bold">Step 019</a>  
-<a href="#step-020" style="font-weight:bold">Step 020</a>  
-<a href="#step-021" style="font-weight:bold">Step 021</a>  
+<a href="#step-001" style="font-weight:bold">Step 001 - Navigate to the nopCommerce App Workspace</a>  
+<a href="#step-002" style="font-weight:bold">Step 002 - Click on Policy Analysis</a>  
+<a href="#step-003" style="font-weight:bold">Step 003 - Filter on a MISDROPPED: PERMITTED flow</a>  
+<a href="#step-004" style="font-weight:bold">Step 004 - Filter out flows with TCP RST or FIN</a>  
+<a href="#step-005" style="font-weight:bold">Step 005 - View filtered results</a>  
+<a href="#step-006" style="font-weight:bold">Step 006 - Delete TCP 1433 from the policies</a>  
+<a href="#step-007" style="font-weight:bold">Step 007 - Filter for flows with TCP port 1433</a>  
+<a href="#step-008" style="font-weight:bold">Step 008 - View current flows for TCP port 1433</a>  
+<a href="#step-009" style="font-weight:bold">Step 009 - Run Quick Policy Analysis on a flow</a>  
+<a href="#step-010" style="font-weight:bold">Step 010 - Observe Quick Policy Analysis results</a>  
+<a href="#step-011" style="font-weight:bold">Step 011 - Click on Analyze Latest Policies</a>  
+<a href="#step-012" style="font-weight:bold">Step 012 - Enter a reason</a>  
+<a href="#step-013" style="font-weight:bold">Step 013 - View the revision history</a>  
+<a href="#step-014" style="font-weight:bold">Step 014 - Filter for Escaped flows</a>  
+<a href="#step-015" style="font-weight:bold">Step 015 - Run Quick Policy Analysis </a>  
+<a href="#step-016" style="font-weight:bold">Step 016 - View Quick Policy Analysis results</a>  
+<a href="#step-017" style="font-weight:bold">Step 017 - Add TCP port 1433 back to the policy</a>  
+<a href="#step-018" style="font-weight:bold">Step 018 - Analyze latest policies</a>  
+<a href="#step-019" style="font-weight:bold">Step 019 - Enter a reason</a>  
+<a href="#step-020" style="font-weight:bold">Step 020 - Click on the point in the graph where we had escaped flows</a>  
+<a href="#step-021" style="font-weight:bold">Step 021 - Perform Quick Policy Analysis</a>  
 
 ---
 
-<div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  
+<div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>
+
+Navigate to the nopCommerce application workspace.
+
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_001.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_001.png" style="width:100%;height:100%;"></a>  
 
@@ -55,11 +58,15 @@ Another common place you may find RPC in use is with NFS. You will likely encoun
 
 <div class="step" id="step-002"><a href="#step-002" style="font-weight:bold">Step 002</a></div>  
 
+Click on Policy Analysis and click to filter out Permitted flows.  Hover your mouse over points in the graph.  A popup will be displaced showing how many Misdropped, Escaped, and Rejected flows were detected at that point on the graph.  
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_002.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_002.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-003"><a href="#step-003" style="font-weight:bold">Step 003</a></div>  
+
+You should see some flows that have a disposition of MISDROPPED:PERMITTED.  Click on one of those flows.  This is seen typically on Windows machines and occurs during the end of a connection.  Notice the TCP flags of FIN and RST in the flow details.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_003.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_003.png" style="width:100%;height:100%;"></a>  
 
@@ -67,11 +74,16 @@ Another common place you may find RPC in use is with NFS. You will likely encoun
 
 <div class="step" id="step-004"><a href="#step-004" style="font-weight:bold">Step 004</a></div>  
 
+The flows with TCP RST and/or FIN flags set can be ignored,  so let's filter them out.  In the Filters field,  enter the following: `not Fwd TCP Flags contain RST` `not Rev TCP Flags contains RST`.  Then click Filter Flows.
+
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_004.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_004.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-005"><a href="#step-005" style="font-weight:bold">Step 005</a></div>  
+
+Click on the graph on a point past the point that we last analyzed policy,  and observe any rejected or misdropped flows.  There should be minimal, if any misdropped and some rejected for Netbios traffic.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_005.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_005.png" style="width:100%;height:100%;"></a>  
 
@@ -79,11 +91,19 @@ Another common place you may find RPC in use is with NFS. You will likely encoun
 
 <div class="step" id="step-006"><a href="#step-006" style="font-weight:bold">Step 006</a></div>  
 
+Click on Policies.  To show how Escaped flows can be seen based on changes in the policy, we are going to cause some Escaped flows to show up by deleting TCP port 1433 from the nopCommerce-App to nopCommerce-DB rule.  
+
+> Note that this would break the application under normal circumstances if this was a live version of the polciies. We aren't in enforcement yet so we aren't affecting the application.  In addition, even if we were in enforcement we can safely experiment with policies by modifying them and then analyzing via Policy Analysis.  The changes would not be implemented until we enforced the new version of the policy.  
+
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_006.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_006.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-007"><a href="#step-007" style="font-weight:bold">Step 007</a></div>  
+
+Return to Policy Analysis and enter the filter enter `Provider Port = 1433`, then click Filter Flows.  Click the Permitted button to enable viewing of permitted flows.  
+
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_007.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_007.png" style="width:100%;height:100%;"></a>  
 
@@ -91,11 +111,16 @@ Another common place you may find RPC in use is with NFS. You will likely encoun
 
 <div class="step" id="step-008"><a href="#step-008" style="font-weight:bold">Step 008</a></div>  
 
+Click on a point in the graph and then click on one of the flows under Flow Observations.  
+
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_008.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_008.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-009"><a href="#step-009" style="font-weight:bold">Step 009</a></div>  
+
+Click on Quick Policy Analysis.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_009.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_009.png" style="width:100%;height:100%;"></a>  
 
@@ -103,11 +128,15 @@ Another common place you may find RPC in use is with NFS. You will likely encoun
 
 <div class="step" id="step-010"><a href="#step-010" style="font-weight:bold">Step 010</a></div>  
 
+Click on Find Matching Policies.  Notice that although the graph is currently showing permitted,  the current policies will Deny the traffic as expected.  This allows us to examine previous traffic against current policy.     
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_010.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_010.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-011"><a href="#step-011" style="font-weight:bold">Step 011</a></div>  
+
+Click on Policy Analysis and select Analyze Latest Policies.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_011.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_011.png" style="width:100%;height:100%;"></a>  
 
@@ -115,11 +144,16 @@ Another common place you may find RPC in use is with NFS. You will likely encoun
 
 <div class="step" id="step-012"><a href="#step-012" style="font-weight:bold">Step 012</a></div>  
 
+Enter a reason.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_012.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_012.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-013"><a href="#step-013" style="font-weight:bold">Step 013</a></div>  
+
+In a few minutes, we should begin to see Escaped flows over on the right side of the graph.  Click on the clock icon and note the time you enabled Policy Analysis.
+
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_013.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_013.png" style="width:100%;height:100%;"></a>  
 
@@ -127,11 +161,18 @@ Another common place you may find RPC in use is with NFS. You will likely encoun
 
 <div class="step" id="step-014"><a href="#step-014" style="font-weight:bold">Step 014</a></div>  
 
+Click back on the graph and filter for Escaped flows by turning off the Permitted,  Misdropped, and Rejected buttons. Set the time range to the last 1 hr.  
+
+> You may have to wait a few minutes to see the escaped flows indicated on the graph.  It usually takes the graph about 5 minutes to catch up from the time you publish new policies (by clicking Analyze Latest Policies).  
+
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_014.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_014.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-015"><a href="#step-015" style="font-weight:bold">Step 015</a></div>  
+
+Click on the escaped flow for TCP port 1433.  Notice that this time the Consumer Outbound Policy indicates DENY.  Click Quick Policy Analysis.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_015.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_015.png" style="width:100%;height:100%;"></a>  
 
@@ -139,11 +180,15 @@ Another common place you may find RPC in use is with NFS. You will likely encoun
 
 <div class="step" id="step-016"><a href="#step-016" style="font-weight:bold">Step 016</a></div>  
 
+Click Find Matching Policies,  and the Policy Decision should be DENY.  The rule denying the traffic is the Catch-All, since we removed TCP 1433 from the ruleset.
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_016.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_016.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-017"><a href="#step-017" style="font-weight:bold">Step 017</a></div>  
+
+Return to Default Policies and re-add TCP port 1433 to the nopCommerce-App to nopCommerce-DB rule.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_017.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_017.png" style="width:100%;height:100%;"></a>  
 
@@ -151,11 +196,15 @@ Another common place you may find RPC in use is with NFS. You will likely encoun
 
 <div class="step" id="step-018"><a href="#step-018" style="font-weight:bold">Step 018</a></div>  
 
+Click on Policy Analysis, and Analyze Latest Policies.  
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_018.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_018.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-019"><a href="#step-019" style="font-weight:bold">Step 019</a></div>  
+
+Add a reason.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_019.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_019.png" style="width:100%;height:100%;"></a>  
 
@@ -163,15 +212,20 @@ Another common place you may find RPC in use is with NFS. You will likely encoun
 
 <div class="step" id="step-020"><a href="#step-020" style="font-weight:bold">Step 020</a></div>  
 
+Click on the Escaped flow in the diagram.  
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_020.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_020.png" style="width:100%;height:100%;"></a>  
 
 
 
 <div class="step" id="step-021"><a href="#step-021" style="font-weight:bold">Step 021</a></div>  
 
+Click on the flow and do a Quick Policy Analysis.  The Policy Decision should now be ALLOW.  
+
+
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_021.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module19/images/module19_021.png" style="width:100%;height:100%;"></a>  
 
-
+YOU HAVE FINISHED THIS MODULE
 
 
 
