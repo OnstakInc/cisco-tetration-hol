@@ -8,12 +8,12 @@
 
 
 ### Steps for this Module  
-<a href="#step-001" style="font-weight:bold">Step 001</a>  
-<a href="#step-002" style="font-weight:bold">Step 002</a>  
-<a href="#step-003" style="font-weight:bold">Step 003</a>  
-<a href="#step-004" style="font-weight:bold">Step 004</a>  
-<a href="#step-005" style="font-weight:bold">Step 005</a>  
-<a href="#step-006" style="font-weight:bold">Step 006</a>  
+<a href="#step-001" style="font-weight:bold">Step 001 - Open a session to the MS Active Directory server</a>  
+<a href="#step-002" style="font-weight:bold">Step 002 - Search for and open Windows Firewall</a>  
+<a href="#step-003" style="font-weight:bold">Step 003 - View Inbound Rules</a>  
+<a href="#step-004" style="font-weight:bold">Step 004 - Examine Tetration rules</a>  
+<a href="#step-005" style="font-weight:bold">Step 005 - Navigate to Inventory Search</a>
+<a href="#step-006" style="font-weight:bold">Step 006 - </a>  
 <a href="#step-007" style="font-weight:bold">Step 007</a>  
 <a href="#step-008" style="font-weight:bold">Step 008</a>  
 <a href="#step-009" style="font-weight:bold">Step 009</a>  
@@ -26,9 +26,7 @@
 <a href="#step-016" style="font-weight:bold">Step 016</a>  
 <a href="#step-017" style="font-weight:bold">Step 017</a>  
 <a href="#step-018" style="font-weight:bold">Step 018</a>  
-<a href="#step-019" style="font-weight:bold">Step 019</a>  
 
----
 
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  
 
@@ -135,12 +133,6 @@
 <div class="step" id="step-018"><a href="#step-018" style="font-weight:bold">Step 018</a></div>  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module22/images/module22_018.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module22/images/module22_018.png" style="width:100%;height:100%;"></a>  
-
-
-
-<div class="step" id="step-019"><a href="#step-019" style="font-weight:bold">Step 019</a></div>  
-
-<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module22/images/module22_019.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module22/images/module22_019.png" style="width:100%;height:100%;"></a>  
 
 
 
