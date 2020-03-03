@@ -8,19 +8,19 @@
 
 
 ### Steps for this Module  
-<a href="#step-001" style="font-weight:bold">Step 001</a>  
-<a href="#step-002" style="font-weight:bold">Step 002</a>  
-<a href="#step-003" style="font-weight:bold">Step 003</a>  
-<a href="#step-004" style="font-weight:bold">Step 004</a>  
-<a href="#step-005" style="font-weight:bold">Step 005</a>  
-<a href="#step-006" style="font-weight:bold">Step 006</a>  
-<a href="#step-007" style="font-weight:bold">Step 007</a>  
-<a href="#step-008" style="font-weight:bold">Step 008</a>  
-<a href="#step-009" style="font-weight:bold">Step 009</a>  
-<a href="#step-010" style="font-weight:bold">Step 010</a>  
-<a href="#step-011" style="font-weight:bold">Step 011</a>  
-<a href="#step-012" style="font-weight:bold">Step 012</a>  
-<a href="#step-013" style="font-weight:bold">Step 013</a>  
+<a href="#step-001" style="font-weight:bold">Step 001 - Navigate to Inventory Search</a>  
+<a href="#step-002" style="font-weight:bold">Step 002 - Search for the IIS web server</a>  
+<a href="#step-003" style="font-weight:bold">Step 003 - Click on Policies</a>  
+<a href="#step-004" style="font-weight:bold">Step 004 - Note the current number of Policies</a>  
+<a href="#step-005" style="font-weight:bold">Step 005 - Navigate to the nopCommerce app workspace</a>  
+<a href="#step-006" style="font-weight:bold">Step 006 - Enter enforcement for the nopCommerce app</a>  
+<a href="#step-007" style="font-weight:bold">Step 007 - Choose the version of policy to enforce</a>  
+<a href="#step-008" style="font-weight:bold">Step 008 - Navigate to Agent Config</a>  
+<a href="#step-009" style="font-weight:bold">Step 009 - Select the IIS server from Software Agents</a>  
+<a href="#step-010" style="font-weight:bold">Step 010 - View the Policies</a>  
+<a href="#step-011" style="font-weight:bold">Step 011 - Examine the increased number of policies</a>  
+<a href="#step-012" style="font-weight:bold">Step 012 - Test public access to the IIS server</a>  
+<a href="#step-013" style="font-weight:bold">Step 013 - Open sessions to the Employee and SysAdmin desktops </a>  
 <a href="#step-014" style="font-weight:bold">Step 014</a>  
 <a href="#step-015" style="font-weight:bold">Step 015</a>  
 <a href="#step-016" style="font-weight:bold">Step 016</a>  
@@ -51,7 +51,9 @@
 <a href="#step-041" style="font-weight:bold">Step 041</a>  
 <a href="#step-042" style="font-weight:bold">Step 042</a>  
 <a href="#step-043" style="font-weight:bold">Step 043</a>  
+
 ---
+
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module23/images/module23_001.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module23/images/module23_001.png" style="width:100%;height:100%;"></a>  
