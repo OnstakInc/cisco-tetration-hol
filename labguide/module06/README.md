@@ -2,7 +2,7 @@
 
 ## Module06 - External Orchestrators
 
-In this section we will configure External Orchestrators.  Tetration provides the ability to pull in annotations from various external sources such as VMware vCenter, AWS, Kubernetes, F5 Big-IP, Citrix Netscaler, Infoblox, DNS, and AVI Vantage.  These are in addition to static annotations which we configured in the previous module.  
+In this section we will configure External Orchestrators.  Tetration provides the ability to pull in metadata such as tags and labels from various external sources such as VMware vCenter, AWS, Kubernetes, F5 Big-IP, Citrix Netscaler, Infoblox, DNS, and AVI Vantage.  The metadata from the External Orchestrators are then utilized to annotate the associated workloads in Tetration. These are in addition to static annotations which we configured in the previous module.  We'll be configuring AWS as an External Orchestrator since all of our lab instances are deployed there. Each workload is deployed with a series of tags that will be propagated into Tetration as annotations which will be used throughout the remainder of the exercises. In addition, we'll be configuring Kubernetes as an External Orchestrator to pull in the labels that are assigned to the microservices application as annotations. 
 
 Follow the below steps to deploy AWS and Kubernetes as External Orchestrators in Tetration.
 
