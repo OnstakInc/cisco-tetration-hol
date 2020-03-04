@@ -38,6 +38,7 @@ In this lab diagram, SysAdmins not only get standard access to the app front-end
 <a href="#step-012" style="font-weight:bold">Step 012 - Add a rule from Employees to the OpenCart-App cluster</a>  
 <a href="#step-013" style="font-weight:bold">Step 013 - Add TCP port 8080 to the Employees to OpenCart-App rule</a>  
 
+---
 
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  
 
