@@ -1,10 +1,14 @@
 # Cisco Tetration - Hands-On Lab
 
 ## Module17: Policy Analysis - Global Services
+In this module we will begin performing Policy Analysis. Policy Analysis is a powerful feature of Tetration that allows you to determine what the impact of implementing a ruleset would be based on current and historical traffic flows. Policy Analysis is helpful prior to initially enabling enforcement, as well as to gauge the impact of ongoing policy changes.  It greatly reduces the chances of creating business-impacting outages caused by missing or incorrect policy rules, and decreases the need to roll back ruleset changes.  Implemented policies are also versioned, and rollback to a previous policy can be done easily if needed.
 
+In this module we will first enable Policy Analysis for each workspace,  and then in each of the sub-sequent modules we will use Policy Analysis to determine the impact of our ruleset and make required changes based on the findings.  
 
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/17_policy_analysis_global_services.mp4" style="font-weight:bold" title="Policy Analysis - OpenCart Policies"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of the tasks necessary to perform policy analysis for the Global policy.</a>
+---
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/17_policy_analysis_global_services.mp4" style="font-weight:bold" title="Policy Analysis - OpenCart Policies"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of the tasks necessary to perform policy analysis for the Global policy.</a>  
 
+---
 
 
 ### Steps for this Module  
@@ -189,7 +193,7 @@ Notice that in the image below,  the data isn't yet available on the graph at th
 
 <div class="step" id="step-019"><a href="#step-019" style="font-weight:bold">Step 019</a></div>  
 
-Once the time horizon on the chart has caught up to when you enabled Policy Analysis,  click on the point in the graph when you enabled Policy Analysis.  Observe the Permitted flows,  and then filter out the Permitted flows by clicking on the Permitted button.  Are there any Misdropped,  Escaped, or Rejected flows?  We should see at least a few Rejected flows because we have not defined policy for Netbios (UDP 138). 
+Once the time horizon on the chart has caught up to when you enabled Policy Analysis,  click on the point in the graph when you enabled Policy Analysis.  Observe the Permitted flows,  and then filter out the Permitted flows by clicking on the Permitted button.  Are there any Misdropped,  Escaped, or Rejected flows?  We should see at least a few Rejected flows because we have not defined policy for Netbios (UDP 138).
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module17/images/module17_019.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module17/images/module17_019.png" style="width:100%;height:100%;"></a>  
 

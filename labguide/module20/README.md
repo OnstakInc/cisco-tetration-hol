@@ -1,11 +1,13 @@
 # Cisco Tetration - Hands-On Lab
 
 ## Module20: Policy Analysis - OpenCart
+In this module we will perform Policy Analysis for the OpenCart application and adjust policy as necessary based on the results. We will also run an Experiment which analyzes the current policy against historical flows that occurred during a specified time range. This can be useful to see what the policy results would have been over a period of weeks or even months based on the traffic observed during that time frame, even before Policy Analysis was enabled for the application.  
 
-
+---
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/20_policy_analysis_opencart.mp4
 " style="font-weight:bold" title="Enforcement - OpenCart"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video showing the necessary tasks to perform Policy Analysis for the Linux-based OpenCart.</a>
 
+---
 
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Navigate to the OpenCart application workspace</a>  

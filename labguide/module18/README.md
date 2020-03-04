@@ -1,10 +1,12 @@
 # Cisco Tetration - Hands-On Lab
 
-## Module18: Policy Analysis - Common Policies
+## Module18: Policy Analysis - Common Policies  
+In this module we will perform Policy Analysis for the Common Policy workspace which contains the Active Directory and Ansible server workloads. We will identify any errors in our ruleset that might have caused disruption had we put the workspace into enforcement,  and make corrections as necessary.  
 
-
+---
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/18_policy_analysis_common_policy.mp4" style="font-weight:bold" title="Pre-Enforcement Checks"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of the tasks necessary to perform policy analysis for the Common apps.</a>
 
+---
 
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Navigate to the Common Policy app workspace</a>  

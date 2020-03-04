@@ -14,7 +14,7 @@ This diagram depicts the flow of traffic used by various devices to utimately in
 
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/09b_ise_integration.mp4" style="font-weight:bold" title="Data Ingest Appliance and ASAv NAT Flow Stiching"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video showing the necessary tasks to integrate Cisco ISE with Tetration to prepare to support user-based policy in Module 16.</a>
 
-
+---
 
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Navigate to Connectors</a>  

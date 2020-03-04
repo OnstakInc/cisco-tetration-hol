@@ -1,11 +1,13 @@
 # Cisco Tetration - Hands-On Lab
 
 ## Module26: Security Visibility & Monitoring
+In this module we will review key security visibility and monitoring features of Tetration such as the Security dashboard, Vulnerability dashboard, and others. We'll also investigate configuration of Alert triggers and the multiple alert destinations that can be configured.   
 
 
+---
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/26_security_visibility_monitoring.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video reviewing the Security and Vulnerability Dashboards.</a>
 
-
+---
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Examine Vulerability Score</a>  
 <a href="#step-002" style="font-weight:bold">Step 002 - Review Vulnerability Score Help</a>  
@@ -300,7 +302,7 @@ Click on Alerts and then Configuration.
 
 <div class="step" id="step-033"><a href="#step-033" style="font-weight:bold">Step 033</a></div>  
 
-Here you can configure alert destinations for each type of alert.  The internal Kafka data tap is where the alerts we just viewed are stored.  Alerts can also be sent to an External Kafka data tap,  Syslog, E-Mail,  Slack, Pager Duty or Kinesis. 
+Here you can configure alert destinations for each type of alert.  The internal Kafka data tap is where the alerts we just viewed are stored.  Alerts can also be sent to an External Kafka data tap,  Syslog, E-Mail,  Slack, Pager Duty or Kinesis.
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module26/images/module26_033.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module26/images/module26_033.png" style="width:100%;height:100%;"></a>  
 

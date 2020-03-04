@@ -1,11 +1,13 @@
 # Cisco Tetration - Hands-On Lab
 
 ## Module22: Policy Enforcement - Global Services and Common Policies
+In this module we will enable Enforcement on the Global Services and Common Policies application workspaces. This will cause rules to be generated on the hosts in Windows Firewall in the case of Windows and iptables on the Linux hosts. 
 
-
+---
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/22_policy_enforcement_global_and_common.mp4
 " style="font-weight:bold" title="Enforcement - nopCommerce"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video showing the necessary tasks to be performed to take the hierarchical Global Policy as well as Common App Policy into full enforcement mode.</a>
 
+---
 
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Open a session to the MS Active Directory server</a>  

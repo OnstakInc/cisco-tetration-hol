@@ -1,11 +1,12 @@
 # Cisco Tetration - Hands-On Lab
 
 ## Module24: Policy Enforcement - OpenCart
+In this module we will enable enforcement for the OpenCart application.  We will review the deployed policies both before and after enabling enforcement to compare the results,  and then once in enforcement test access to the application.  We will also test the user-based policy as defined in <a href=https://onstakinc.github.io/cisco-tetration-hol/labguide/module16/>Module 16</a> 
 
+---
+<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/24_policy_enforcement_opencart.mp4" style="font-weight:bold" title="Enforcement - OpenCart"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video showing the necessary tasks to be performed to take the Linux-based OpenCart into full enforcement mode with micro-segmentation.</a>
 
-<a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/24_policy_enforcement_opencart.mp4
-" style="font-weight:bold" title="Enforcement - OpenCart"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video showing the necessary tasks to be performed to take the Linux-based OpenCart into full enforcement mode with micro-segmentation.</a>
-
+---
 
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Navigate to Inventory Search</a>  

@@ -1,11 +1,12 @@
 # Cisco Tetration - Hands-On Lab
 
 ## Module15: Policy Creation - ADM and Clusters - OpenCart
+In this module we will create an Application Workspace for the OpenCart application which consists of a Linux server running Apache web server as the front end talking to a Linux server running MySQL for the back-end database.  We will run ADM,  change the cluster queries,  and tune the discovered policies as needed.  We will also accept any Policy Requests made from the OpenCart application workspace to the Common Policy workspace.  
 
-
+---
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/15_policy_creation_adm_clusters_opencart.mp4" style="font-weight:bold" title="OpenCart ADM & Clusters"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of the tasks necessary to setup an Workspace, run ADM, configure Clusters, and customize the security Policy for the Linux-based app called OpenCart.</a>
 
-
+---
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Create a new App Workspace</a>  
 <a href="#step-002" style="font-weight:bold">Step 002 - Configure the OpenCart Workspace</a>  

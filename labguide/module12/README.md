@@ -1,9 +1,14 @@
 # Cisco Tetration - Hands-On Lab
 
 ## Module12: Policy Creation - Hierarchical Policy - Global Services
+In this module we will begin creating policies that will apply across all of the applications. We will accomplish this by creating an Application Workspace called Global Services and associating it with the Cloud Scope. The remaining Application Workspaces will be assigned to child scopes of the Cloud scope, and therefore will inherit the policies that we define in the Global Services workspace.  There are two types of policies that can be created; Default or Absolute.  Default policies can be overridden by rules in application workspaces that are defined at a lower level of the scope tree.  For example,  if we defined Default policies in Global Services, an administrator of an application workspace that is associated with a child of the Cloud scope could create Default policies that override the policy we created in Global Services.  Absolute policies cannot be overridden by policies defined in workspaces that are associated with child scopes.  This allows a security administrator to set a broad policy at a higher level of the scope tree, such as "Dev app can't talk to Prod database",  and that policy cannot be accidentally or purposely overridden in a child workspace.
 
+In this module we'll be creating Absolute policies in the Global Services application workspace to permit common traffic that will apply across all applications.   
+
+---
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/12_policy_creation_global_services.mp4" style="font-weight:bold" title="Policy Analysis - Global Services"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png"> Click here to view a video of the tasks necessary to create hierarchical policy that will later be enforced at a Global level.</a>
 
+---
 
 ### Steps for this Module  
 <a href="#step-001" style="font-weight:bold">Step 001 - Navigate to Inventory Filters</a>  
