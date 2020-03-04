@@ -43,7 +43,7 @@ In this module we will review key security visibility and monitoring features of
 <a href="#step-032" style="font-weight:bold">Step 032 - Navigate to alert configuration</a>  
 <a href="#step-033" style="font-weight:bold">Step 033 - View alert destinations</a>    
 
-
+---
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  
 
 Click on the Vulnerability Score on the main dashboard to view Vulnerability Score Help.
