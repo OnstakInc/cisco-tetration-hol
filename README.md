@@ -39,25 +39,25 @@ internet_gateway_id: igw-0dbfdfc228666cee0   # << This IGW needs to exist alread
 subnet_range_primary: 10.0.0.0/16   # << This will be the "Internal" subnet (inside the ASA FW) for most workloads, including apps
 subnet_range_secondary: 198.18.0.0/16   # << This will be the "Internet" subnet (outside the ASA FW) for users and attacker
 
-s3_bucket: 'tetration-hol-cft-template'   # << S3 Bucket is global DNS unique name - change to any arbitrary desired non-overlapping name
+s3_bucket: tetration-hol-cft-template   # << S3 Bucket is global DNS unique name - change to any arbitrary desired non-overlapping name
 
-ise_server_ip: '172.16.171.49'   # << This is your own private on-prem ISE instance - needs VPN with AWS VGW
+ise_server_ip: 172.16.171.49   # << This is your own private on-prem ISE instance - needs VPN with AWS VGW
 
 asav_ami: ami-0f3cca6491d987102   # << This is the ASAv, is a region-specific image ID, and requires a subscription from AWS Marketplace (search for ASAv BYOL)
 ldap_ami: ami-0b416df717b448667   # << This is for MS Active Directory and is a private image that requires a simple copy
 mssql_ami: ami-09782396834215732   # << This is for MS Win19 SQL and is a private image that requires a simple copy
 iis_ami: ami-091df3f67b36e2250   # << This is for MS Win19 IIS and is a private image that requires a simple copy
-mysql_ami: ami-051ba5822fc02da4b   # <<  This is for CentOS7 MySQL and is a private image that requires Lanuch, you to Accept Subscription, then create the AMI
-apache_ami: ami-0c85d8851d66cd9f9   # <<  This is for CentOS7 Apache and is a private image that requires Lanuch, you to Accept Subscription, then create the AMI
-ansible_ami: ami-0083b10a007c92d2d   # << This is for CentOS7 Ansible and is a private image that requires Lanuch, you to Accept Subscription, then create the AMI
+mysql_ami: ami-051ba5822fc02da4b   # <<  This is for CentOS7 MySQL and is a private image that requires launch from shared AMI, you to Accept Subscription, then create the AMI
+apache_ami: ami-0c85d8851d66cd9f9   # <<  This is for CentOS7 Apache and is a private image that requires launch from shared AMI, you to Accept Subscription, then create the AMI
+ansible_ami: ami-0083b10a007c92d2d   # << This is for CentOS7 Ansible and is a private image that requires launch from shared AMI, you to Accept Subscription, then create the AMI
 tet_data_ami: ami-0cf7fd4e75d7d91ab   # << This is the Tetration Data Ingest appliance and is a private image that requires a simple copy
 tet_edge_ami: ami-05d08946ffda72d18   # << This is the Tetration Edge appliance and is a private image that requires a simple copy
 employee_ami: ami-032ca0586c1a78e1d   # << This is the Win10 image for both Employee and SysAdmin and is a private image that requires a simple copy, however due to licensing reboots every hour - will likely be removed
 sysadmin_ami: ami-032ca0586c1a78e1d   # << Simple AMI copy but most likely remove
 employee_ubuntu_ami: ami-0af925e340025c9f9   # << This is the Ubuntu 18.04 desktop image for both Employee and SysAdmin and is a private image that requires a simple copy
 sysadmin_ubuntu_ami: ami-0af925e340025c9f9   # << Simple AMI copy 
-attack_server_ami: ami-04f958d48e22e185c   # << This is for Ubuntu Kali Linux with Metasploit and is a private image that requires Lanuch, you to Accept Subscription, then create the AMI
-guacamole_ami: ami-007f96a1ed0595540   # << This is for CentOS7 Guacamole and is a private image that requires Lanuch, you to Accept Subscription, then create the AMI
+attack_server_ami: ami-04f958d48e22e185c   # << This is for Ubuntu Kali Linux with Metasploit and is a private image that requires launch, you to Accept Subscription, then create the AMI
+guacamole_ami: ami-007f96a1ed0595540   # << This is for CentOS7 Guacamole and is a private image that requires launch from shared AMI, you to Accept Subscription, then create the AMI
 eks_worker_ami: ami-0c4c60006aa81c29b   # << Global AWS Marketplace - will change with region - https://cloud-images.ubuntu.com/docs/aws/eks/
 
 ```
@@ -72,8 +72,11 @@ eks_worker_ami: ami-0c4c60006aa81c29b   # << Global AWS Marketplace - will chang
 It is important to note that prior to running `launch.py`, you must have a few things already created in your AWS environment - namely a VPC, an IGW, and a S3 bucket.
 1. VPC: This probably goes without saying, but we recommend a non-default VPC. Place your VPC ID in `parameters.yml` in the `vpc_id:` line (no quotes surounding the value). This VPC must have at least two CIDR blocks, one for `subnet_range_primary` and one for `subnet_range_secondary`. It is important that **no** subnets be created in this VPC whatsoever, else the script will error out. `launch.py` will create the subnets and we have a brief discussion about them below. 
 2. IGW: You must have one IGW created in your `vpc_id` and designated in the `parameters.yml` in the `internet_gateway_id:` lin (no quotes surounding the value).
-3. S3 Bucket: Due to the size of the CFT, AWS requires that we first upload it to an S3 bucket prior to calling it and executing against it. It is required that you have already created the empty S3 bucket and placed the name of the bucket in the `parameters.yml` in the `internet_gateway_id:` lin (no quotes surounding the value).
+3. S3 Bucket: Due to the size of the CFT, AWS requires that we first upload it to an S3 bucket prior to calling it and executing against it. It is required that you have already created the empty S3 bucket and placed the name of the bucket in the `parameters.yml` in the `s3_bucket:` line (no quotes surounding the value).
 4. Two (2) Elastic IPs per student pod. These must be already *allocated* to your region, but not yet *assigned* to any ENIs. This requirement exists due to AWS not allowing a Public IP to be assigned to any EC2 instance with more than a single ENI. There are currently three instances that have multiple ENIs, including Guacamole, Tet Data Ingest, and ASAv. Guac requires one so that students can access the environment from the public internet, and Tet Data Ingest requires the ability to communicate out to the internet to reach the TaaS cluster. ASAv only communicates internally, even if you have ISE running on-prem, assuming you have a VGW back to your CGW. If you need ASAv to speak externally, there is some code that can be uncommented in the `cisco-hol-pod-cft-template.yml` file. 
+
+> NOTE: By default, [AWS limits you to five (5) Elastic IPs per region](https://docs.aws.amazon.com/general/latest/gr/vpc-service.html#w571aab9d325b7b3b5){:target="_blank"}. If you plan to deploy more than two (2) student pods, you will need to [submit a request for service quota increase](https://console.aws.amazon.com/support/home?#/case/create?issueType=service-limit-increase&limitType=vpc){:target="_blank"}. 
+
 
 #### Subnets
 

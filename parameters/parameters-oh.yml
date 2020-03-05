@@ -15,9 +15,9 @@ internet_gateway_id: igw-0fec2ea47e798ea86
 subnet_range_primary: 10.1.0.0/16
 subnet_range_secondary: 198.18.0.0/16
 
-s3_bucket: 'cisco-hol-cft-template'
+s3_bucket: cisco-hol-cft-template
 
-ise_server_ip: '172.16.171.49'
+ise_server_ip: 172.16.171.49
 
 asav_ami: ami-018637632d5e62976
 ldap_ami: ami-0273c11f1bc3fff82

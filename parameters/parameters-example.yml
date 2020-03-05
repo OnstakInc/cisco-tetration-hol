@@ -14,9 +14,9 @@ internet_gateway_id: igw-0dbfdfc228666cee0 # << This IGW needs to exist already 
 subnet_range_primary: 10.0.0.0/16 # << This will be the "Internal" subnet (inside the ASA FW) for most workloads, including apps
 subnet_range_secondary: 198.18.0.0/16 # << This will be the "Internet" subnet (outside the ASA FW) for users and attacker
 
-s3_bucket: 'tetration-hol-cft-template' # << S3 Bucket is global DNS unique name - change to any arbitrary desired non-overlapping name
+s3_bucket: tetration-hol-cft-template # << S3 Bucket is global DNS unique name - change to any arbitrary desired non-overlapping name
 
-ise_server_ip: '172.16.171.49' # << This is your own private on-prem ISE instance - needs VPN with AWS VGW
+ise_server_ip: 172.16.171.49 # << This is your own private on-prem ISE instance - needs VPN with AWS VGW
 
 asav_ami: ami-0f3cca6491d987102 # << Needs subscription from AWS Marketplace (search for ASAv BYOL)
 ldap_ami: ami-0b416df717b448667 # << Simple AMI copy
