@@ -304,7 +304,7 @@ for student in STUDENTS_LIST:
         result = cloudformation.create_stack(
             StackName=student['account_name'],
             # TemplateBody=cloudformation_template,
-            TemplateURL=f"https://{S3_BUCKET}.s3.us-east-2.amazonaws.com/cisco-hol-pod-cft-template.yml",
+            TemplateURL=f"https://{S3_BUCKET}.s3.{REGION}.amazonaws.com/cisco-hol-pod-cft-template.yml",
             Parameters=aws_parameters,
             Capabilities=[
                 'CAPABILITY_IAM', 'CAPABILITY_NAMED_IAM',
