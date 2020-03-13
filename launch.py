@@ -463,8 +463,8 @@ try:
 
     header = [
         'Student Lab Access (Guac) Web Console URL',
-        'Student Lab Access (Guac) Password', 
         'Student Lab Access (Guac) Username',
+        'Student Lab Access (Guac) Password', 
         'nopCommerce Windows App URL',
         'OpenCart Linux App URL',
         'EKS SockShop App URL',

@@ -121,15 +121,17 @@ The AWS credentials used need to have permissions that allow them to create, upd
 * IAM User and API Keys with RO access to EC2 & ELB (for student external orchestrators) (this still needs tightening and S3 flow log access)
 
 (Region specific)
-* Lambda functions
-* CloudWatch events for Lambda
-* EKS Cluster and Node Group
+* CloudFormation
+* Lambda
+* CloudWatch
+* Eventbridge
+* EKS Cluster / EKS Node Groups
 
 (VPC specific)
 * Route Tables
 * Subnets
 * Security Groups
-* EC2 instances (12 or 14 per student/pod - depending on Win10 decision)
+* EC2 (including autoscaling)
 * ELB
 
 #### Deploying Lab Environment to AWS
