@@ -1709,7 +1709,7 @@ Resources:
   CiscoHOLVPCFlowLogS3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub "${VpcID}-cisco-hol-${StudentName}-vpc-flow-logs-${Region}${Subnet01AvailabilityZone}"
+      BucketName: !Sub "${VpcID}-cisco-hol-${StudentName}-vpc-flow-logs"
 
   CiscoHOLVPCFlowLog:
     Type: AWS::EC2::FlowLog
