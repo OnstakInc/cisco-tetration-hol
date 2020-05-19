@@ -53,7 +53,7 @@ In this module we will enable enforcement on the nopCommerce application workspa
 <a href="#step-041" style="font-weight:bold">Step 041 - Filter for the SysAdmin SGT </a>  
 <a href="#step-042" style="font-weight:bold">Step 042 - Examine annotations</a>  
 <a href="#step-043" style="font-weight:bold">Step 043 - Locate the SysAdmins security group</a>
-
+<br>
 <a href="#step-044" style="font-weight:bold">Step 044 - Validation of SGTs for User Segmentation</a>
 
 ---
