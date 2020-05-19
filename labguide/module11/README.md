@@ -106,7 +106,7 @@ The query matches only the internal IP of the Guacamole server.  Click Create.
 
 > The Guacamole server has both an external public IP which is indicated in your lab information under "Web Console URL", and an internal IP which is the one shown here.  
 
-<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module11/images/module11_011.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module11/images/module11_011.png" style="width:100%;height:100%;"></a>  
+<a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module11/images/module11_010.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module11/images/module11_010.png" style="width:100%;height:100%;"></a>  
 
 
 You have completed this module.
