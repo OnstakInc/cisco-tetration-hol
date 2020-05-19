@@ -48,8 +48,7 @@ In this module, we'll be configuring rules from the Windows IIS and MSSQL server
 </a>
 
 <a href="#step-035" style="font-weight:bold">Step 035 - View the rules and services created by accepting the Policy Requests - Common Policy
-</a>
-<br>
+</a>    
 <a href="#step-036" style="font-weight:bold">Step 036 - View the rules and services created by accepting the Policy Requests - nopCommerce
 </a>  
 
