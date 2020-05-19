@@ -44,9 +44,14 @@ In this module, we'll be configuring rules from the Windows IIS and MSSQL server
 <a href="#step-031" style="font-weight:bold">Step 031 - View Policy Requests</a>  
 <a href="#step-032" style="font-weight:bold">Step 032 - Accept all Policy Requests</a>  
 <a href="#step-033" style="font-weight:bold">Step 033 - View Policies</a>  
-<a href="#step-034" style="font-weight:bold">Step 034 - View the rules and services created by accepting the Policy Requests - Common Policy</a>  
-<a href="#step-035" style="font-weight:bold">Step 035 - View the rules and services created by accepting the Policy Requests - Common Policy</a>
-<a href="#step-036" style="font-weight:bold">Step 036 - View the rules and services created by accepting the Policy Requests - nopCommerce</a>  
+<a href="#step-034" style="font-weight:bold">Step 034 - View the rules and services created by accepting the Policy Requests - Common Policy
+</a>
+
+<a href="#step-035" style="font-weight:bold">Step 035 - View the rules and services created by accepting the Policy Requests - Common Policy
+</a>
+
+<a href="#step-036" style="font-weight:bold">Step 036 - View the rules and services created by accepting the Policy Requests - nopCommerce
+</a>  
 
 ---
 
