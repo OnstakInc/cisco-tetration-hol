@@ -33,7 +33,7 @@ This image shows the three sections for a given module:
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_004.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_004.png" style="width:100%;height:100%;"></a>  
 
 
-We highly recommend having a quick read on the intro, then possibly a quick watch of the video, followed by beginning to perform the tasks yourself in your own instance of TaaS. However, you may find it more adventageous to go ahead and begin following the instructions and perfoming the tasks yourself with the aid of the screenshots once you've reviewed the intro. Should you choose this method, you may at times find it nice to watch along as someone performs those tasks with you. To accomplish this you can choose to use the 'picture-in-picture' method which allows you to watch the video while you simultaneously perform the necessary tasks in TaaS. For this we highly recommend using [Google Chrome](https://www.google.com/chrome/){:target="_blank"} for the best browsing experience.
+We highly recommend having a quick read on the intro, then possibly a quick watch of the video, followed by beginning to perform the tasks yourself in your own instance of TaaS. However, you may find it more advantageous to go ahead and begin following the instructions and performing the tasks yourself with the aid of the screenshots once you've reviewed the intro. Should you choose this method, you may at times find it nice to watch along as someone performs those tasks with you. To accomplish this you can choose to use the 'picture-in-picture' method which allows you to watch the video while you simultaneously perform the necessary tasks in TaaS. For this we highly recommend using [Google Chrome](https://www.google.com/chrome/){:target="_blank"} for the best browsing experience.
 
 To use this method, simply click on the video you wish to watch, pause the video, click the virtical elipses at the bottom right of the player, click "Picture in Picture", switch to the browser tab or window logged into TaaS, resize as desired, unpause, and begin your task while watching along as we perform the same task. Pause as desired. Scrubbing the playhead to Rewind is only supported by going back full screen, although once you get the hang of it you should be able to do this rather quickly, when needed. 
 
@@ -94,9 +94,9 @@ You are highly encouraged open a browser window to this [online CSV/Excel viewer
 
 <div class="link" id="Access"><a href="#Access" style="font-weight:bold">Access to the Lab Environment - Guacamole</a></div>
 
-Access to this lab environment will be done entirely from your web browser using the open-source [Apache Guacamole](https://guacamole.apache.org/){:target="_blank"}. We may occaisonally refer to this sometimes as simply "Guac".
+Access to this lab environment will be done entirely from your web browser using the open-source [Apache Guacamole](https://guacamole.apache.org/){:target="_blank"}. We may occasionally refer to this sometimes as simply "Guac".
 
-This will be either to the desktop via RDP in the case of a Windows machine or to the shell via SSH in the case of a Linux machine or Tetration Appliance (also linux). Access will always be via your web browser where RDP and SSH will be proxied. Note that copy/paste will work from your local laptop/workstation to the remote desktop or shell. This goes for file transfer, as well. For copy/paste, simply copy something to your local workstation clipboard, navigate to the RDP desktop via the web browser, and paste the item as usual using `Ctrl + V`. Simalar functionality will exist for pasting to an SSH session via the browser, simply `right-click` to paste. Finally, to make a file transfer, simply drag a file from your local workstation over to the RDP or SSH session and the file should copy over remotely. 
+This will be either to the desktop via RDP in the case of a Windows machine or to the shell via SSH in the case of a Linux machine or Tetration Appliance (also linux). Access will always be via your web browser where RDP and SSH will be proxied. Note that copy/paste will work from your local laptop/workstation to the remote desktop or shell. This goes for file transfer, as well. For copy/paste, simply copy something to your local workstation clipboard, navigate to the RDP desktop via the web browser, and paste the item as usual using `Ctrl + V`. Similar functionality will exist for pasting to an SSH session via the browser, simply `right-click` to paste. Finally, to make a file transfer, simply drag a file from your local workstation over to the RDP or SSH session and the file should copy over remotely. 
 
 This diagram depicts how you will gain access to the workloads running in your lab environment. 
 
@@ -113,7 +113,7 @@ If you do happen to find yourself seemingly *stuck* inside a single host connect
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_003.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module01/images/module01_003.png" style="width:100%;height:100%;"></a>  
 
 
-Throughout this lab, there will come times when you must get files from your local workstation over to one of the hosts in your lab environment. The ability to copy files directly to and from the remote desktop or even to any linux shell session can be accomplished quite easily by simply dragging them from your local workstation desktop over to the web browser where Guac is already signed into a remote host and just dropping them there. For Windows or even Ubuntu Desktop this will use the native RDP copy/paste functionality, and for a linux shell session this will seemlessly instantiate a direct SFTP session. No further work is necessary on your part. Note that for Windows files may appear on the desktop or wherever you dragged and released them to. For Linux files will __*always*__ appear in `/home/ciscolab/`, no matter what directory you may be `cd` into. 
+Throughout this lab, there will come times when you must get files from your local workstation over to one of the hosts in your lab environment. The ability to copy files directly to and from the remote desktop or even to any linux shell session can be accomplished quite easily by simply dragging them from your local workstation desktop over to the web browser where Guac is already signed into a remote host and just dropping them there. For Windows or even Ubuntu Desktop this will use the native RDP copy/paste functionality, and for a linux shell session this will seamlessly instantiate a direct SFTP session. No further work is necessary on your part. Note that for Windows files may appear on the desktop or wherever you dragged and released them to. For Linux files will __*always*__ appear in `/home/ciscolab/`, no matter what directory you may be `cd` into. 
 
 <a href="https://cisco-tetration-hol-content.s3.amazonaws.com/videos/01b_guac_user_access.mp4" style="font-weight:bold"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/diagrams/images/video_icon_mini.png">Click here to view a video of interaction with the student Guacamole webUI console.</a>
 
@@ -125,7 +125,7 @@ Throughout this lab, there will come times when you must get files from your loc
 Included in this lab are multiple integrations with Tetration, including:
 
 * Cisco Identity Services Engine (ISE) for user-based authentication with TrustSec SGTs
-* Cisco ASAv Firewall with NAT Flow Stiching
+* Cisco ASAv Firewall with NAT Flow Stitching
 * Windows Active Directory LDAP (currently via Tet Edge & ISE)
 * AWS VPC Flow Logs (for visibility outside of agent communication)
 * AWS Tags (for dynamic VM-based policy)

@@ -251,4 +251,4 @@ The workloads listed here are the Linux machines running Apache and MySQL that m
 You have reached the end of this module.  
 
 
-| [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/) |
+| [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/module08/) |

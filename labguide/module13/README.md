@@ -298,7 +298,7 @@ Navigate back to Applications.
 
 <div class="step" id="step-028"><a href="#step-028" style="font-weight:bold">Step 028</a></div>  
 
-Modify the rule showing Common-GC-DC-DNS as a consumer to the Root scope as a provider.  Change the Prodier field to Internet and click OK.  
+Modify the rule showing Common-GC-DC-DNS as a consumer to the Root scope as a provider.  Change the provider field to Internet and click OK.  
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module13/images/module13_028.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module13/images/module13_028.png" style="width:100%;height:100%;"></a>  
 

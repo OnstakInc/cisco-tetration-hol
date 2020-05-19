@@ -15,31 +15,31 @@ In this module we will configure the policies and enable enforcement on a micros
 <a href="#step-002" style="font-weight:bold">Step 002 - Click to select the Linux Inventory Filter</a>  
 <a href="#step-003" style="font-weight:bold">Step 003 - Edit the Inventory Filter</a>  
 <a href="#step-004" style="font-weight:bold">Step 004 - Modify the Query to include Ubuntu</a>   
-<a href="#step-014" style="font-weight:bold">Step 005 - Create a new application workspace</a>  
-<a href="#step-015" style="font-weight:bold">Step 006 - Create the Sock Shop workspace</a>  
-<a href="#step-016" style="font-weight:bold">Step 007 - Create Cluster</a>  
-<a href="#step-017" style="font-weight:bold">Step 008 - Edit the Cluster details</a>  
-<a href="#step-018" style="font-weight:bold">Step 009 - Create the first cluster</a>  
-<a href="#step-019" style="font-weight:bold">Step 010 - Create the additional clusters</a>  
-<a href="#step-020" style="font-weight:bold">Step 011 - Add a manual policy</a>  
-<a href="#step-021" style="font-weight:bold">Step 012 - Add all policies</a>  
-<a href="#step-022" style="font-weight:bold">Step 013 - Test access to the Sock Shop application</a>  
-<a href="#step-023" style="font-weight:bold">Step 014 - Navigate to Inventory Search</a>  
-<a href="#step-024" style="font-weight:bold">Step 015 - Filter for OS contains Ubuntu</a>  
-<a href="#step-025" style="font-weight:bold">Step 016 - Examine Container Policies</a>  
-<a href="#step-026" style="font-weight:bold">Step 017 - Navigate to the Sock Shop application</a>  
-<a href="#step-027" style="font-weight:bold">Step 018 - Click on Policy Analysis </a>  
-<a href="#step-028" style="font-weight:bold">Step 019 - Start Policy Analysis </a>  
-<a href="#step-029" style="font-weight:bold">Step 020 - Analyze policies</a>  
-<a href="#step-030" style="font-weight:bold">Step 021 - Move the application into enforcement</a>  
-<a href="#step-031" style="font-weight:bold">Step 022 - Enforce the latest policy</a>  
-<a href="#step-032" style="font-weight:bold">Step 023 - Navigate to Inventory Search</a>  
-<a href="#step-033" style="font-weight:bold">Step 024 - Click the link to the EKS worker node</a>  
-<a href="#step-034" style="font-weight:bold">Step 025 - Examine the message regarding policies</a>  
-<a href="#step-035" style="font-weight:bold">Step 026 - Review Container Policies</a>  
-<a href="#step-036" style="font-weight:bold">Step 027 - Filter Container Policies</a>  
-<a href="#step-037" style="font-weight:bold">Step 028 - Filter Container Policies</a>  
-<a href="#step-038" style="font-weight:bold">Step 029 - Test the application</a>    
+<a href="#step-005" style="font-weight:bold">Step 005 - Create a new application workspace</a>  
+<a href="#step-006" style="font-weight:bold">Step 006 - Create the Sock Shop workspace</a>  
+<a href="#step-007" style="font-weight:bold">Step 007 - Create Cluster</a>  
+<a href="#step-008" style="font-weight:bold">Step 008 - Edit the Cluster details</a>  
+<a href="#step-009" style="font-weight:bold">Step 009 - Create the first cluster</a>  
+<a href="#step-010" style="font-weight:bold">Step 010 - Create the additional clusters</a>  
+<a href="#step-011" style="font-weight:bold">Step 011 - Add a manual policy</a>  
+<a href="#step-012" style="font-weight:bold">Step 012 - Add all policies</a>  
+<a href="#step-013" style="font-weight:bold">Step 013 - Test access to the Sock Shop application</a>  
+<a href="#step-014" style="font-weight:bold">Step 014 - Navigate to Inventory Search</a>  
+<a href="#step-015" style="font-weight:bold">Step 015 - Filter for OS contains Ubuntu</a>  
+<a href="#step-016" style="font-weight:bold">Step 016 - Examine Container Policies</a>  
+<a href="#step-017" style="font-weight:bold">Step 017 - Navigate to the Sock Shop application</a>  
+<a href="#step-018" style="font-weight:bold">Step 018 - Click on Policy Analysis </a>  
+<a href="#step-019" style="font-weight:bold">Step 019 - Start Policy Analysis </a>  
+<a href="#step-020" style="font-weight:bold">Step 020 - Analyze policies</a>  
+<a href="#step-021" style="font-weight:bold">Step 021 - Move the application into enforcement</a>  
+<a href="#step-022" style="font-weight:bold">Step 022 - Enforce the latest policy</a>  
+<a href="#step-023" style="font-weight:bold">Step 023 - Navigate to Inventory Search</a>  
+<a href="#step-024" style="font-weight:bold">Step 024 - Click the link to the EKS worker node</a>  
+<a href="#step-025" style="font-weight:bold">Step 025 - Examine the message regarding policies</a>  
+<a href="#step-026" style="font-weight:bold">Step 026 - Review Container Policies</a>  
+<a href="#step-027" style="font-weight:bold">Step 027 - Filter Container Policies</a>  
+<a href="#step-028" style="font-weight:bold">Step 028 - Filter Container Policies</a>  
+<a href="#step-029" style="font-weight:bold">Step 029 - Test the application</a>    
 
 
 <div class="step" id="step-001"><a href="#step-001" style="font-weight:bold">Step 001</a></div>  

@@ -172,7 +172,7 @@ Here we provide the path to the Kubernetes API running on the master node. Click
 
 <div class="step" id="step-017"><a href="#step-017" style="font-weight:bold">Step 017</a></div>  
 
-The Connection Status will initiall report Failure.  Click on the red Failure status and it should display status of "Waiting to connect".
+The Connection Status will initial report Failure.  Click on the red Failure status and it should display status of "Waiting to connect".
 
 <a href="https://onstakinc.github.io/cisco-tetration-hol/labguide/module06/images/module06_017.png"><img src="https://onstakinc.github.io/cisco-tetration-hol/labguide/module06/images/module06_017.png" style="width:100%;height:100%;"></a>  
 
@@ -248,4 +248,4 @@ Enter the search criteria `* orchestrator_AppCluster = front-end` and select Sea
 YOU HAVE COMPLETED THIS MODULE
 
 
-| [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module06/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/module08/) |
+| [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module06/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/module07/) |

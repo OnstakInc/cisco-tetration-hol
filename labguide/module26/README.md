@@ -310,4 +310,4 @@ Here you can configure alert destinations for each type of alert.  The internal 
 YOU HAVE FINISHED THIS MODULE
 
 
-| [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module26/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/module27/) |
+| [Return to Table of Contents](https://onstakinc.github.io/cisco-tetration-hol/labguide/) | [Go to Top of the Page](https://onstakinc.github.io/cisco-tetration-hol/labguide/module26/) | [Continue to the Next Module](https://onstakinc.github.io/cisco-tetration-hol/labguide/z-appendix-legacy-policy/) |
